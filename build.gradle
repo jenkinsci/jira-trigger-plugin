@@ -1,0 +1,71 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'http://repo.jenkins-ci.org/releases/'
+        }
+
+    }
+    dependencies {
+        classpath 'org.jenkins-ci.tools:gradle-jpi-plugin:0.14.1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.jenkins-ci.jpi'
+
+repositories {
+    jcenter()
+    maven {
+        url "http://repo.jenkins-ci.org/releases/"
+    }
+}
+
+group = 'org.jenkins-ci.plugins'
+version = '0.1.0-SNAPSHOT'
+description = 'JIRA Builder'
+
+dependencies {
+    jenkinsPlugins 'org.jenkins-ci.plugins:jira:2.0.3@jar'
+}
+
+jenkinsPlugin {
+    coreVersion = '1.609.1'
+    shortName = 'jira-builder'
+    displayName = 'JIRA Builder'
+    url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Builder+Plugin'
+    gitHubUrl = 'https://github.com/ceilfors/jira-builder-plugin'
+    pluginFirstClassLoader = true
+
+    // optional list of package prefixes that your plugin doesn't want to see from core 
+    // maskClasses = 'groovy.grape org.apache.commons.codec'
+
+    // optional version number from which this plugin release is configuration-compatible
+    // compatibleSinceVersion = '1.1.0'
+
+    repoUrl = 'http://maven.jenkins-ci.org:8081/content/repositories/releases'
+    snapshotRepoUrl = 'http://maven.jenkins-ci.org:8081/content/repositories/snapshots'
+
+    // enable injection of additional tests for checking the syntax of Jelly and other things
+    disabledTestInjection = false
+
+    // the output directory for the localizer task relative to the project root, defaults to the value shown
+    localizerOutputDir = "${project.buildDir}/generated-src/localizer"
+
+    // disable configuration of Maven Central, the local Maven cache and the Jenkins Maven repository, defaults to true
+    configureRepositories = false
+
+    // skip configuration of publications and repositories for the Maven Publishing plugin, defaults to true
+    configurePublishing = false
+
+    fileExtension = 'jpi'
+
+    // the developers section is optional, and corresponds to the POM developers section
+    developers {
+        developer {
+            id 'ceilfors'
+            name 'Wisen Tanasa'
+            email 'wisen@ceilfors.com'
+        }
+    }
+}
