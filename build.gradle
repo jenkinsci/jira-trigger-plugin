@@ -26,7 +26,10 @@ version = '0.1.0-SNAPSHOT'
 description = 'JIRA Builder'
 
 dependencies {
-    jenkinsPlugins 'org.jenkins-ci.plugins:jira:2.0.3@jar'
+    compile 'net.rcarz:jira-client:0.5'
+    testCompile 'org.spockframework:spock-core:0.7-groovy-1.8'
+    testCompile 'cglib:cglib-nodep:2.2.2' // used by Spock
+    testCompile 'org.objenesis:objenesis:1.2' // used by Spock
 }
 
 jenkinsPlugin {
