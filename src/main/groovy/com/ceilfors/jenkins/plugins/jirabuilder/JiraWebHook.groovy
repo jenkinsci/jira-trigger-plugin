@@ -1,5 +1,7 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
+
 import hudson.Extension
+import hudson.model.AbstractBuild
 import hudson.model.AbstractProject
 import hudson.model.UnprotectedRootAction
 import hudson.model.queue.QueueTaskFuture
@@ -18,7 +20,8 @@ import java.util.concurrent.TimeUnit
 class JiraWebHook implements UnprotectedRootAction {
 
     public static final URLNAME = "jira-builder"
-    BlockingQueue<QueueTaskFuture> lastScheduledBuild = new ArrayBlockingQueue<>(1)
+    public static final WEBHOOK_EVENT = "comment_created"
+    BlockingQueue<QueueTaskFuture<? extends AbstractBuild>> lastScheduledBuild = new ArrayBlockingQueue<>(1)
 
     @Override
     String getIconFileName() {
@@ -41,8 +44,19 @@ class JiraWebHook implements UnprotectedRootAction {
         lastScheduledBuild.put(Jenkins.instance.getItemByFullName("simplejob", AbstractProject).scheduleBuild2(0))
     }
 
-    public QueueTaskFuture getLastScheduledBuild(long timeout, TimeUnit timeUnit) {
-        return lastScheduledBuild.poll(timeout, timeUnit)
+    private String getDescriptionFromCommentEvent(webhookEvent) {
+        // parse issue id from "self": "http://localhost:2990/jira/rest/api/2/issue/10003/comment/10000"
+        // Hit JIRA REST API to retrieve description
+        // Return description
+    }
+
+    public AbstractBuild getLastScheduledBuild(long timeout, TimeUnit timeUnit) {
+        def build = lastScheduledBuild.poll(timeout, timeUnit)
+        if (build) {
+            return build.get()
+        } else {
+            throw new RuntimeException("No build has been scheduled")
+        }
     }
 
     private String getRequestBody(StaplerRequest req) {

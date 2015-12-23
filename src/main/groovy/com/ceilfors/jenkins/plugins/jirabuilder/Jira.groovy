@@ -10,6 +10,8 @@ interface Jira {
 
     String createIssue()
 
+    String createIssue(String description)
+
     void addComment(String issueKey, String comment)
 
     void registerWebHook(String url)

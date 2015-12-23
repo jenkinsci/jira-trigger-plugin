@@ -17,7 +17,6 @@ class JiraWebHookCrumbExclusion extends CrumbExclusion {
     @Override
     boolean process(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String pathInfo = request.getPathInfo()
-        println pathInfo
         if (pathInfo != null && pathInfo.equals(getExclusionPath())) {
             chain.doFilter(request, response)
             return true

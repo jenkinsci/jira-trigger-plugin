@@ -26,6 +26,15 @@ class RcarzJira implements Jira {
     }
 
     @Override
+    String createIssue(String description) {
+        Issue issue = jiraClient.createIssue("TEST", "Task")
+                .field(Field.SUMMARY, "task summary")
+                .field(Field.DESCRIPTION, description)
+                .execute()
+        return issue.key
+    }
+
+    @Override
     void addComment(String issueKey, String comment) {
         jiraClient.getIssue(issueKey).addComment(comment)
     }
@@ -40,9 +49,9 @@ class RcarzJira implements Jira {
                     "name": "$WEBHOOK_NAME",
                     "url": "$url",
                     "events": [
-                        "comment_created"
+                        "${JiraWebHook.WEBHOOK_EVENT}"
                     ],
-                    "excludeIssueDetails": true
+                    "excludeIssueDetails": false
                 }
             """.toString()
             restClient.post(uri, JSONObject.fromObject(requestBody))
