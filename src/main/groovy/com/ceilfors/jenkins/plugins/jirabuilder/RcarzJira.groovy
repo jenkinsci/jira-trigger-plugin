@@ -47,7 +47,7 @@ class RcarzJira implements Jira {
             def requestBody = """
                 {
                     "name": "$WEBHOOK_NAME",
-                    "url": "$url",
+                    "url": "$url?issueKey=\${issue.key}",
                     "events": [
                         "${JiraWebHook.WEBHOOK_EVENT}"
                     ],
