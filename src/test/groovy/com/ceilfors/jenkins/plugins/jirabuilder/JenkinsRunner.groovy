@@ -1,18 +1,15 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
-import hudson.model.AbstractBuild
-import hudson.model.AbstractProject
-import hudson.model.FreeStyleProject
-import hudson.model.ParametersAction
-import hudson.model.ParametersDefinitionProperty
-import hudson.model.StringParameterDefinition
+import com.gargoylesoftware.htmlunit.html.HtmlButton
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput
+import com.gargoylesoftware.htmlunit.html.HtmlForm
+import com.gargoylesoftware.htmlunit.html.HtmlPage
+import hudson.model.*
 import org.jvnet.hudson.test.JenkinsRule
 
 import java.util.concurrent.TimeUnit
 
-import static org.junit.Assert.assertThat
 import static org.hamcrest.Matchers.*
-
+import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
  */
@@ -35,8 +32,18 @@ class JenkinsRunner extends JenkinsRule {
 
     FreeStyleProject createJiraTriggeredProject(String name, String... parameters) {
         FreeStyleProject project = createFreeStyleProject(name)
-        project.addProperty(new ParametersDefinitionProperty(parameters.collect {new StringParameterDefinition(it, "")}))
-        project.addTrigger(new JiraBuilderTrigger())
+        project.addProperty(new ParametersDefinitionProperty(parameters.collect {
+            new StringParameterDefinition(it, "")
+        }))
+
+        HtmlPage configPage = this.createWebClient().goTo("job/$project.name/configure")
+        HtmlCheckBoxInput triggerCheckBox = configPage.getFirstByXPath('//input[contains(@name, "JiraBuilderTrigger")]')
+        triggerCheckBox.setChecked(true)
+
+        HtmlForm form = configPage.getFormByName("config")
+        form.submit((HtmlButton) last(form.getHtmlElementsByTagName("button")))
+
+        assertThat(project.triggers.values(), hasItem(instanceOf(JiraBuilderTrigger)))
         return project
     }
 
