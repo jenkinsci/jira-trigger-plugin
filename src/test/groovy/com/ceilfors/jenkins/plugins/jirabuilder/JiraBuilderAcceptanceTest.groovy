@@ -28,7 +28,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("simplejob")
     }
 
-    def 'Trigger job with parameter when a comment is created'() {
+    def 'Trigger job with built-in field when a comment is created'() {
         given:
         jira.registerWebHook(jenkins.webHookUrl)
         def issueKey = jira.createIssue("Dummy issue description")
@@ -44,9 +44,9 @@ class JiraBuilderAcceptanceTest extends Specification {
 
 
     // Incremental features:
+    // Trigger a job with custom field in JIRA to a parameter
     // Trigger a job when a comment matches a pattern
     // Trigger a job with parameter with a comment is created
-    // Trigger a job with custom field in JIRA to a parameter
     // Trigger a job when matches JQL
     // Updated comment ?
     // Duplicate issue in jql configuration
