@@ -1,6 +1,9 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 import org.junit.Rule
 import spock.lang.Specification
+import spock.lang.Unroll
+
+import java.util.logging.Level
 /**
  * @author ceilfors
  */
@@ -8,31 +11,37 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     def Jira jira = new RcarzJira()
 
-    @Rule
-    def JenkinsRunner jenkins = new JenkinsRunner()
+    @Rule JenkinsRunner jenkins = new JenkinsRunner()
+    @Rule JulLogLevelRule julLogLevelRule = new JulLogLevelRule(Level.FINEST)
 
     def setup() {
         jira.deleteAllWebHooks()
     }
 
+    @Unroll
     def 'Trigger simple job when a comment is created'() {
         given:
         jira.registerWebHook(jenkins.webHookUrl)
         def issueKey = jira.createIssue()
-        jenkins.createFreeStyleProject("simplejob")
+        jenkins.createJiraTriggeredProject(jobName)
 
         when:
-        jira.addComment(issueKey, "a comment")
+        jira.addComment(issueKey, comment)
 
         then:
-        jenkins.buildShouldBeScheduled("simplejob")
+        jenkins.buildShouldBeScheduled(jobName)
+
+        where:
+        jobName      | comment
+        "simplejob"  | "a comment"
+        "other job"  | "arbitrary comment"
     }
 
     def 'Trigger job with built-in field when a comment is created'() {
         given:
         jira.registerWebHook(jenkins.webHookUrl)
         def issueKey = jira.createIssue("Dummy issue description")
-        jenkins.createFreeStyleProjectWithParameter("simplejob", "description")
+        jenkins.createJiraTriggeredProject("simplejob", "description")
 
         when:
         jira.addComment(issueKey, "a comment")
@@ -41,7 +50,6 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("simplejob")
         jenkins.buildTriggeredWithParameter("simplejob", "Dummy issue description")
     }
-
 
     // Incremental features:
     // Trigger a job with custom field in JIRA to a parameter

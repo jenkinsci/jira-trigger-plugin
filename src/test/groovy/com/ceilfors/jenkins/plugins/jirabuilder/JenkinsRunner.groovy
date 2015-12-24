@@ -33,9 +33,10 @@ class JenkinsRunner extends JenkinsRule {
                 .replace("localhost", "10.0.2.2") // vagrant
     }
 
-    FreeStyleProject createFreeStyleProjectWithParameter(String name, String... parameters) {
+    FreeStyleProject createJiraTriggeredProject(String name, String... parameters) {
         FreeStyleProject project = createFreeStyleProject(name)
         project.addProperty(new ParametersDefinitionProperty(parameters.collect {new StringParameterDefinition(it, "")}))
+        project.addTrigger(new JiraBuilderTrigger())
         return project
     }
 

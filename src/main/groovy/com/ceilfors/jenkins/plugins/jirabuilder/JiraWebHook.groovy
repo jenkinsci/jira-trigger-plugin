@@ -14,12 +14,14 @@ import org.kohsuke.stapler.interceptor.RequirePOST
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
+import java.util.logging.Logger
 /**
  * @author ceilfors
  */
 @Extension
 class JiraWebHook implements UnprotectedRootAction {
 
+    private static final Logger LOGGER =  Logger.getLogger(JiraWebHook.name)
     public static final URLNAME = "jira-builder"
     public static final WEBHOOK_EVENT = "comment_created"
     BlockingQueue<QueueTaskFuture<? extends AbstractBuild>> lastScheduledBuild = new ArrayBlockingQueue<>(1)
@@ -44,10 +46,17 @@ class JiraWebHook implements UnprotectedRootAction {
     public void doIndex(StaplerRequest request, StaplerResponse response) {
         def webhookEvent = new JsonSlurper().parseText(getRequestBody(request))
         if (webhookEvent["webhookEvent"] == WEBHOOK_EVENT) {
-            lastScheduledBuild.put(Jenkins.instance.getItemByFullName("simplejob", AbstractProject)
-                    .scheduleBuild2(0, new JiraBuilderCause(), new ParametersAction(
-                    new StringParameterValue("description", getDescription(request))
-            )))
+            def jobs = Jenkins.instance.getAllItems(AbstractProject).findAll { it.getTrigger(JiraBuilderTrigger) }
+            if (jobs) {
+                LOGGER.info("Found jobs: ${jobs.collect{it.name}}")
+                jobs.each {
+                    lastScheduledBuild.put(it.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(), new ParametersAction(
+                            new StringParameterValue("description", getDescription(request)))))
+
+                }
+            } else {
+                LOGGER.fine("Couldn't find any jobs that have JiraBuildTrigger configured")
+            }
         }
     }
 
