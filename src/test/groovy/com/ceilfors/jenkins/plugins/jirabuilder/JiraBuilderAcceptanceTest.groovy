@@ -48,7 +48,7 @@ class JiraBuilderAcceptanceTest extends Specification {
 
         then:
         jenkins.buildShouldBeScheduled("simplejob")
-        jenkins.buildTriggeredWithParameter("simplejob", "Dummy issue description")
+        jenkins.buildTriggeredWithParameter("simplejob", ["description": "Dummy issue description"])
     }
 
     // Incremental features:

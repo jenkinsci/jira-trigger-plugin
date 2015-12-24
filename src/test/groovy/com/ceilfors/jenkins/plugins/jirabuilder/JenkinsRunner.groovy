@@ -40,9 +40,11 @@ class JenkinsRunner extends JenkinsRule {
         return project
     }
 
-    boolean buildTriggeredWithParameter(String jobName, String description) {
+    boolean buildTriggeredWithParameter(String jobName, Map<String, String> parameterMap) {
         def parametersAction = instance.getItemByFullName(jobName, AbstractProject).lastSuccessfulBuild.getAction(ParametersAction)
-        assertThat(parametersAction.getParameter("description").value as String, is(description))
+        parameterMap.each { key, value ->
+            assertThat(parametersAction.getParameter(key).value as String, is(value))
+        }
         return true
     }
 }

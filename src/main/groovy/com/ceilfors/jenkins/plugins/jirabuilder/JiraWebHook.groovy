@@ -24,7 +24,7 @@ class JiraWebHook implements UnprotectedRootAction {
     private static final Logger LOGGER =  Logger.getLogger(JiraWebHook.name)
     public static final URLNAME = "jira-builder"
     public static final WEBHOOK_EVENT = "comment_created"
-    BlockingQueue<QueueTaskFuture<? extends AbstractBuild>> lastScheduledBuild = new ArrayBlockingQueue<>(1)
+    private BlockingQueue<QueueTaskFuture<? extends AbstractBuild>> lastScheduledBuild = new ArrayBlockingQueue<>(1)
 
     @Override
     String getIconFileName() {
