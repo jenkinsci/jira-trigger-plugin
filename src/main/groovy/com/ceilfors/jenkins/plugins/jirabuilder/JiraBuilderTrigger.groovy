@@ -8,6 +8,7 @@ import hudson.model.Item
 import hudson.triggers.Trigger
 import hudson.triggers.TriggerDescriptor
 import org.kohsuke.stapler.DataBoundConstructor
+import org.kohsuke.stapler.DataBoundSetter
 
 /**
  * @author ceilfors
@@ -17,7 +18,7 @@ class JiraBuilderTrigger extends Trigger<AbstractProject> {
     private String commentPattern
 
     @DataBoundConstructor
-    public JiraBuilderTrigger() {
+    JiraBuilderTrigger() {
         this.commentPattern = ""
     }
 
@@ -25,8 +26,14 @@ class JiraBuilderTrigger extends Trigger<AbstractProject> {
         return commentPattern
     }
 
+    @DataBoundSetter
     void setCommentPattern(String commentPattern) {
         this.commentPattern = commentPattern
+    }
+
+    @Override
+    DescriptorImpl getDescriptor() {
+        return super.getDescriptor() as DescriptorImpl
     }
 
     @Extension

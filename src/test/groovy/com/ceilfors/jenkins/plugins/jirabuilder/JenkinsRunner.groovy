@@ -3,6 +3,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlButton
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput
 import com.gargoylesoftware.htmlunit.html.HtmlForm
 import com.gargoylesoftware.htmlunit.html.HtmlPage
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput
 import hudson.model.*
 import org.jvnet.hudson.test.JenkinsRule
 
@@ -16,17 +17,23 @@ import static org.junit.Assert.assertThat
 class JenkinsRunner extends JenkinsRule {
 
     AbstractBuild buildShouldBeScheduled(String jobName) {
-        def build = jiraBuilderAction.getLastScheduledBuild(15, TimeUnit.SECONDS)
+        def build = jiraWebHook.getLastScheduledBuild(5, TimeUnit.SECONDS)
+        assertThat("Build is scheduled", build, is(not(nullValue())))
         assertThat("Last scheduled build should be for the job matched", build.project.name, is(jobName))
         return build
     }
 
-    private JiraWebHook getJiraBuilderAction() {
+    void buildShouldNotBeScheduled(String jobName) {
+        def build = jiraWebHook.getLastScheduledBuild(5, TimeUnit.SECONDS)
+        assertThat("Build is not scheduled", build, is(nullValue()))
+    }
+
+    private JiraWebHook getJiraWebHook() {
         instance.getActions().find { it instanceof JiraWebHook } as JiraWebHook
     }
 
     String getWebHookUrl() {
-        return "${getURL().toString()}${jiraBuilderAction.urlName}/"
+        return "${getURL().toString()}${jiraWebHook.urlName}/"
                 .replace("localhost", "10.0.2.2") // vagrant
     }
 
@@ -37,7 +44,7 @@ class JenkinsRunner extends JenkinsRule {
         }))
 
         HtmlPage configPage = this.createWebClient().goTo("job/$project.name/configure")
-        HtmlCheckBoxInput triggerCheckBox = configPage.getFirstByXPath('//input[contains(@name, "JiraBuilderTrigger")]')
+        HtmlCheckBoxInput triggerCheckBox = configPage.getFirstByXPath("""//input[contains(@name, "${JiraBuilderTrigger.simpleName}")]""")
         triggerCheckBox.setChecked(true)
 
         HtmlForm form = configPage.getFormByName("config")
@@ -57,6 +64,8 @@ class JenkinsRunner extends JenkinsRule {
 
     def setJiraBuilderCommentFilter(String name, String commentPattern) {
         HtmlPage configPage = this.createWebClient().goTo("job/$name/configure")
+        HtmlTextInput commentPatternTextInput = configPage.getFirstByXPath('//input[contains(@name, "commentPattern")]')
+        commentPatternTextInput.setValueAttribute(commentPattern)
 
         HtmlForm form = configPage.getFormByName("config")
         form.submit((HtmlButton) last(form.getHtmlElementsByTagName("button")))

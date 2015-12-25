@@ -78,7 +78,7 @@ class JiraWebHook implements UnprotectedRootAction {
         if (build) {
             return build.get()
         } else {
-            throw new RuntimeException("No build has been scheduled")
+            return null
         }
     }
 
