@@ -14,8 +14,19 @@ import org.kohsuke.stapler.DataBoundConstructor
  */
 class JiraBuilderTrigger extends Trigger<AbstractProject> {
 
+    private String commentPattern
+
     @DataBoundConstructor
     public JiraBuilderTrigger() {
+        this.commentPattern = ""
+    }
+
+    String getCommentPattern() {
+        return commentPattern
+    }
+
+    void setCommentPattern(String commentPattern) {
+        this.commentPattern = commentPattern
     }
 
     @Extension

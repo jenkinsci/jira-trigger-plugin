@@ -54,4 +54,14 @@ class JenkinsRunner extends JenkinsRule {
         }
         return true
     }
+
+    def setJiraBuilderCommentFilter(String name, String commentPattern) {
+        HtmlPage configPage = this.createWebClient().goTo("job/$name/configure")
+
+        HtmlForm form = configPage.getFormByName("config")
+        form.submit((HtmlButton) last(form.getHtmlElementsByTagName("button")))
+
+        JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        assertThat(jiraBuilderTrigger.commentPattern, is(commentPattern))
+    }
 }

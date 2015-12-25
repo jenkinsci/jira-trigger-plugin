@@ -51,6 +51,24 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.buildTriggeredWithParameter("simplejob", ["description": "Dummy issue description"])
     }
 
+    def 'Job is triggered when comment does not match the filter'() {
+        given:
+        jira.registerWebHook(jenkins.webHookUrl)
+        def issueKey = jira.createIssue()
+        jenkins.createJiraTriggeredProject("job")
+        jenkins.setJiraBuilderCommentFilter("job", ".*jiratrigger.*")
+
+        when:
+        jira.addComment(issueKey, """bla jiratrigger bla""")
+
+        then:
+        jenkins.buildShouldBeScheduled("job")
+    }
+
+    def 'Job is not triggered when comment does not match the filter'() {
+
+    }
+
     // Incremental features:
     // Trigger a job with custom field in JIRA to a parameter
     // Trigger a job when a comment matches a pattern

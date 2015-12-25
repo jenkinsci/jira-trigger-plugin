@@ -49,8 +49,14 @@ class JiraWebHook implements UnprotectedRootAction {
             def jobs = Jenkins.instance.getAllItems(AbstractProject).findAll { it.getTrigger(JiraBuilderTrigger) }
             if (jobs) {
                 LOGGER.info("Found jobs: ${jobs.collect{it.name}}")
-                jobs.each {
-                    lastScheduledBuild.put(it.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(), new ParametersAction(
+                for (job in jobs) {
+                    JiraBuilderTrigger trigger = job.getTrigger(JiraBuilderTrigger)
+                    if (trigger.commentPattern) {
+                        if (!(webhookEvent.comment.body ==~ trigger.commentPattern)) {
+                            break
+                        }
+                    }
+                    lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(), new ParametersAction(
                             new StringParameterValue("description", getDescription(request)))))
 
                 }
