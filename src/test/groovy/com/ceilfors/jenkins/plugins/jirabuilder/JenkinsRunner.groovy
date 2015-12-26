@@ -1,9 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-import com.gargoylesoftware.htmlunit.html.HtmlButton
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput
-import com.gargoylesoftware.htmlunit.html.HtmlForm
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput
 import hudson.model.*
 import org.jvnet.hudson.test.JenkinsRule
 
@@ -43,12 +40,9 @@ class JenkinsRunner extends JenkinsRule {
             new StringParameterDefinition(it, "")
         }))
 
-        HtmlPage configPage = this.createWebClient().goTo("job/$project.name/configure")
-        HtmlCheckBoxInput triggerCheckBox = configPage.getFirstByXPath("""//input[contains(@name, "${JiraBuilderTrigger.simpleName}")]""")
-        triggerCheckBox.setChecked(true)
-
-        HtmlForm form = configPage.getFormByName("config")
-        form.submit((HtmlButton) last(form.getHtmlElementsByTagName("button")))
+        JiraBuilderConfigurePage configPage = configure(name)
+        configPage.trigger.setChecked(true)
+        configPage.save()
 
         assertThat(project.triggers.values(), hasItem(instanceOf(JiraBuilderTrigger)))
         return project
@@ -62,15 +56,17 @@ class JenkinsRunner extends JenkinsRule {
         return true
     }
 
-    def setJiraBuilderCommentFilter(String name, String commentPattern) {
-        HtmlPage configPage = this.createWebClient().goTo("job/$name/configure")
-        HtmlTextInput commentPatternTextInput = configPage.getFirstByXPath('//input[contains(@name, "commentPattern")]')
-        commentPatternTextInput.setValueAttribute(commentPattern)
-
-        HtmlForm form = configPage.getFormByName("config")
-        form.submit((HtmlButton) last(form.getHtmlElementsByTagName("button")))
+    def setJiraBuilderCommentPattern(String name, String commentPattern) {
+        JiraBuilderConfigurePage configPage = configure(name)
+        configPage.commentPattern.setValueAttribute(commentPattern)
+        configPage.save()
 
         JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
         assertThat(jiraBuilderTrigger.commentPattern, is(commentPattern))
+    }
+
+    JiraBuilderConfigurePage configure(String jobName) {
+        HtmlPage htmlPage = createWebClient().goTo("job/$jobName/configure")
+        return new JiraBuilderConfigurePage(htmlPage)
     }
 }

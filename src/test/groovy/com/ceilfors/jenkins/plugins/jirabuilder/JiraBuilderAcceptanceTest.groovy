@@ -56,7 +56,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jira.registerWebHook(jenkins.webHookUrl)
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
-        jenkins.setJiraBuilderCommentFilter("job", ".*jiratrigger.*")
+        jenkins.setJiraBuilderCommentPattern("job", ".*jiratrigger.*")
 
         when:
         jira.addComment(issueKey, "bla jiratrigger bla")
@@ -70,7 +70,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jira.registerWebHook(jenkins.webHookUrl)
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
-        jenkins.setJiraBuilderCommentFilter("job", ".*jiratrigger.*")
+        jenkins.setJiraBuilderCommentPattern("job", ".*jiratrigger.*")
 
         when:
         jira.addComment(issueKey, "bla bla bla")
@@ -81,7 +81,6 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     // Incremental features:
     // Trigger a job with custom field in JIRA to a parameter
-    // Trigger a job when a comment matches a pattern
     // Trigger a job with parameter with a comment is created
     // Trigger a job when matches JQL
     // Updated comment ?
