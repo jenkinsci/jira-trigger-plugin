@@ -1,0 +1,144 @@
+{
+  "expand": "renderedFields,names,schema,transitions,operations,editmeta,changelog,versionedRepresentations",
+  "id": "11120",
+  "self": "http://localhost:2990/jira/rest/api/2/issue/11120",
+  "key": "TEST-136",
+  "fields": {
+    "issuetype": {
+      "self": "http://localhost:2990/jira/rest/api/2/issuetype/10000",
+      "id": "10000",
+      "description": "A task that needs to be done.",
+      "iconUrl": "http://localhost:2990/jira/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+      "name": "Task",
+      "subtask": false,
+      "avatarId": 10318
+    },
+    "components": [],
+    "timespent": null,
+    "timeoriginalestimate": 300,
+    "description": "description body",
+    "project": {
+      "self": "http://localhost:2990/jira/rest/api/2/project/10000",
+      "id": "10000",
+      "key": "TEST",
+      "name": "TEST",
+      "avatarUrls": {
+        "48x48": "http://localhost:2990/jira/secure/projectavatar?avatarId=10011",
+        "24x24": "http://localhost:2990/jira/secure/projectavatar?size=small&avatarId=10011",
+        "16x16": "http://localhost:2990/jira/secure/projectavatar?size=xsmall&avatarId=10011",
+        "32x32": "http://localhost:2990/jira/secure/projectavatar?size=medium&avatarId=10011"
+      }
+    },
+    "fixVersions": [],
+    "aggregatetimespent": null,
+    "resolution": null,
+    "timetracking": {
+      "originalEstimate": "5m",
+      "remainingEstimate": "10m",
+      "originalEstimateSeconds": 300,
+      "remainingEstimateSeconds": 600
+    },
+    "attachment": [],
+    "aggregatetimeestimate": 600,
+    "resolutiondate": null,
+    "workratio": 0,
+    "summary": "summary content",
+    "lastViewed": "2015-12-26T12:00:43.169+0000",
+    "watches": {
+      "self": "http://localhost:2990/jira/rest/api/2/issue/TEST-136/watchers",
+      "watchCount": 1,
+      "isWatching": true
+    },
+    "creator": {
+      "self": "http://localhost:2990/jira/rest/api/2/user?username=admin",
+      "name": "admin",
+      "key": "admin",
+      "emailAddress": "admin@admin.com",
+      "avatarUrls": {
+        "48x48": "http://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028?d=mm&s=48",
+        "24x24": "http://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028?d=mm&s=24",
+        "16x16": "http://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028?d=mm&s=16",
+        "32x32": "http://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028?d=mm&s=32"
+      },
+      "displayName": "admin",
+      "active": true,
+      "timeZone": "UTC"
+    },
+    "subtasks": [],
+    "created": "2015-12-26T12:00:38.891+0000",
+    "reporter": {
+      "self": "http://localhost:2990/jira/rest/api/2/user?username=admin",
+      "name": "admin",
+      "key": "admin",
+      "emailAddress": "admin@admin.com",
+      "avatarUrls": {
+        "48x48": "http://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028?d=mm&s=48",
+        "24x24": "http://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028?d=mm&s=24",
+        "16x16": "http://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028?d=mm&s=16",
+        "32x32": "http://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028?d=mm&s=32"
+      },
+      "displayName": "admin",
+      "active": true,
+      "timeZone": "UTC"
+    },
+    "customfield_10000": "customer name",
+    "aggregateprogress": {
+      "progress": 0,
+      "total": 600,
+      "percent": 0
+    },
+    "priority": {
+      "self": "http://localhost:2990/jira/rest/api/2/priority/3",
+      "iconUrl": "http://localhost:2990/jira/images/icons/priorities/medium.svg",
+      "name": "Medium",
+      "id": "3"
+    },
+    "labels": [
+      "testlabel"
+    ],
+    "environment": null,
+    "timeestimate": 600,
+    "aggregatetimeoriginalestimate": 300,
+    "versions": [],
+    "duedate": "2015-12-01",
+    "progress": {
+      "progress": 0,
+      "total": 600,
+      "percent": 0
+    },
+    "comment": {
+      "startAt": 0,
+      "maxResults": 0,
+      "total": 0,
+      "comments": []
+    },
+    "issuelinks": [],
+    "votes": {
+      "self": "http://localhost:2990/jira/rest/api/2/issue/TEST-136/votes",
+      "votes": 0,
+      "hasVoted": false
+    },
+    "worklog": {
+      "startAt": 0,
+      "maxResults": 20,
+      "total": 0,
+      "worklogs": []
+    },
+    "assignee": null,
+    "updated": "2015-12-26T12:00:38.891+0000",
+    "status": {
+      "self": "http://localhost:2990/jira/rest/api/2/status/10000",
+      "description": "",
+      "iconUrl": "http://localhost:2990/jira/images/icons/status_generic.gif",
+      "name": "To Do",
+      "id": "10000",
+      "statusCategory": {
+        "self": "http://localhost:2990/jira/rest/api/2/statuscategory/2",
+        "id": 2,
+        "key": "new",
+        "colorName": "blue-gray",
+        "name": "To Do"
+      }
+    }
+  }
+}
