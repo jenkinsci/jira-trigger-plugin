@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
+import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebHook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.*
 import org.jvnet.hudson.test.JenkinsRule
@@ -14,15 +15,19 @@ import static org.junit.Assert.assertThat
 class JenkinsRunner extends JenkinsRule {
 
     AbstractBuild buildShouldBeScheduled(String jobName) {
-        def build = jiraWebHook.getLastScheduledBuild(5, TimeUnit.SECONDS)
+        def build = jiraBuilder.getLastScheduledBuild(5, TimeUnit.SECONDS)
         assertThat("Build is scheduled", build, is(not(nullValue())))
         assertThat("Last scheduled build should be for the job matched", build.project.name, is(jobName))
         return build
     }
 
     void buildShouldNotBeScheduled(String jobName) {
-        def build = jiraWebHook.getLastScheduledBuild(5, TimeUnit.SECONDS)
+        def build = jiraBuilder.getLastScheduledBuild(5, TimeUnit.SECONDS)
         assertThat("Build is not scheduled", build, is(nullValue()))
+    }
+
+    private JiraBuilder getJiraBuilder() {
+        instance.getInjector().getInstance(JiraBuilder)
     }
 
     private JiraWebHook getJiraWebHook() {

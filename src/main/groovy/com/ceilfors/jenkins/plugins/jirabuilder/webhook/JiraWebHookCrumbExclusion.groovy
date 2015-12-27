@@ -1,4 +1,4 @@
-package com.ceilfors.jenkins.plugins.jirabuilder
+package com.ceilfors.jenkins.plugins.jirabuilder.webhook
 import hudson.Extension
 import hudson.security.csrf.CrumbExclusion
 

@@ -25,7 +25,6 @@ class JiraBuilderConfigurePage {
         configPage.getFirstByXPath('//input[contains(@name, "commentPattern")]')
     }
 
-
     void save() {
         HtmlForm form = configPage.getFormByName("config")
         form.submit((HtmlButton) (form.getHtmlElementsByTagName("button")).last())

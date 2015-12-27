@@ -1,4 +1,4 @@
-package com.ceilfors.jenkins.plugins.jirabuilder
+package com.ceilfors.jenkins.plugins.jirabuilder.jira
 
 /**
  * Adapter layer to communicate with JIRA. There are too many
@@ -17,4 +17,6 @@ interface Jira {
     void registerWebHook(String url)
 
     def deleteAllWebHooks()
+
+    Map getIssueMap(String issueKey)
 }

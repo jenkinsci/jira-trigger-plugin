@@ -1,4 +1,7 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
+
+import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
+import com.ceilfors.jenkins.plugins.jirabuilder.jira.RcarzJira
 import org.junit.Rule
 import spock.lang.Specification
 import spock.lang.Unroll

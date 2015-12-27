@@ -1,5 +1,7 @@
-package com.ceilfors.jenkins.plugins.jirabuilder
+package com.ceilfors.jenkins.plugins.jirabuilder.jira
 
+import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebHook
+import groovy.json.JsonSlurper
 import net.rcarz.jiraclient.*
 import net.sf.json.JSONObject
 
@@ -73,6 +75,17 @@ class RcarzJira implements Jira {
             }
         } catch (Exception ex) {
             throw new JiraException("Failed to unregister webhook", ex);
+        }
+    }
+
+    @Override
+    Map getIssueMap(String issueKey) {
+        try {
+            def restClient = jiraClient.restClient
+            URI uri = restClient.buildURI(Issue.baseUri + "issue/" + issueKey);
+            return new JsonSlurper().parseText(restClient.get(uri).toString()) as Map
+        } catch (Exception ex) {
+            throw new JiraException("Failed to get issue map", ex);
         }
     }
 }
