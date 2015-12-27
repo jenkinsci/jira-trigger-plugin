@@ -4,4 +4,9 @@
         <f:textbox />
     </f:entry>
 
+    <f:entry title="Parameter mappings">
+        <f:hetero-list name="parameterMappings" items="${instance.parameterMappings}" hasHeader="true"
+                       descriptors="${descriptor.parameterMappingDescriptors}"
+                       targetType="com.ceilfors.jenkins.plugins.jirabuilder.parameter.ParameterMapping" />
+    </f:entry>
 </j:jelly>

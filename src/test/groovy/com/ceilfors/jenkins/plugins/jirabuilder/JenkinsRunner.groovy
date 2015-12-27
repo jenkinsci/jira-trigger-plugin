@@ -46,7 +46,7 @@ class JenkinsRunner extends JenkinsRule {
         }))
 
         JiraBuilderConfigurePage configPage = configure(name)
-        configPage.trigger.setChecked(true)
+        configPage.activateJiraBuilderTrigger()
         configPage.save()
 
         assertThat(project.triggers.values(), hasItem(instanceOf(JiraBuilderTrigger)))
@@ -56,6 +56,7 @@ class JenkinsRunner extends JenkinsRule {
     boolean buildTriggeredWithParameter(String jobName, Map<String, String> parameterMap) {
         def parametersAction = instance.getItemByFullName(jobName, AbstractProject).lastSuccessfulBuild.getAction(ParametersAction)
         parameterMap.each { key, value ->
+            assertThat(parametersAction.getParameter(key), is(notNullValue()))
             assertThat(parametersAction.getParameter(key).value as String, is(value))
         }
         return true
@@ -63,7 +64,7 @@ class JenkinsRunner extends JenkinsRule {
 
     def setJiraBuilderCommentPattern(String name, String commentPattern) {
         JiraBuilderConfigurePage configPage = configure(name)
-        configPage.commentPattern.setValueAttribute(commentPattern)
+        configPage.setCommentPattern(commentPattern)
         configPage.save()
 
         JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
@@ -73,5 +74,16 @@ class JenkinsRunner extends JenkinsRule {
     JiraBuilderConfigurePage configure(String jobName) {
         HtmlPage htmlPage = createWebClient().goTo("job/$jobName/configure")
         return new JiraBuilderConfigurePage(htmlPage)
+    }
+
+    void addParameterMapping(String name, String jenkinsParameter, String jiraAttributePath) {
+        JiraBuilderConfigurePage configPage = configure(name)
+        configPage.addParameterMapping(jenkinsParameter, jiraAttributePath)
+        configPage.save()
+
+        JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        assertThat("Parameter mapping is added", jiraBuilderTrigger.parameterMappings.size(), is(1))
+        assertThat(jiraBuilderTrigger.parameterMappings.first().jenkinsParameter, is(jenkinsParameter))
+        assertThat(jiraBuilderTrigger.parameterMappings.first().jiraAttributePath, is(jiraAttributePath))
     }
 }

@@ -1,5 +1,5 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
+import com.ceilfors.jenkins.plugins.jirabuilder.parameter.ParameterMapping
 import hudson.Extension
 import hudson.model.AbstractProject
 import hudson.model.BuildableItem
@@ -7,8 +7,11 @@ import hudson.model.Cause
 import hudson.model.Item
 import hudson.triggers.Trigger
 import hudson.triggers.TriggerDescriptor
+import jenkins.model.Jenkins
 import org.kohsuke.stapler.DataBoundConstructor
 import org.kohsuke.stapler.DataBoundSetter
+
+import javax.inject.Inject
 
 /**
  * @author ceilfors
@@ -16,6 +19,7 @@ import org.kohsuke.stapler.DataBoundSetter
 class JiraBuilderTrigger extends Trigger<AbstractProject> {
 
     private String commentPattern
+    private List<ParameterMapping> parameterMappings = []
 
     @DataBoundConstructor
     JiraBuilderTrigger() {
@@ -31,6 +35,15 @@ class JiraBuilderTrigger extends Trigger<AbstractProject> {
         this.commentPattern = commentPattern
     }
 
+    List<ParameterMapping> getParameterMappings() {
+        return Collections.unmodifiableList(parameterMappings)
+    }
+
+    @DataBoundSetter
+    void setParameterMappings(List<ParameterMapping> parameterMappings) {
+        this.parameterMappings = parameterMappings
+    }
+
     @Override
     DescriptorImpl getDescriptor() {
         return super.getDescriptor() as DescriptorImpl
@@ -39,12 +52,19 @@ class JiraBuilderTrigger extends Trigger<AbstractProject> {
     @Extension
     static class DescriptorImpl extends TriggerDescriptor {
 
+        @Inject
+        private Jenkins jenkins
+
         public boolean isApplicable(Item item) {
             return item instanceof BuildableItem
         }
 
         public String getDisplayName() {
             return "JIRA Builder"
+        }
+
+        public List<ParameterMapping.ParameterMappingDescriptor> getParameterMappingDescriptors() {
+            return jenkins.getDescriptorList(ParameterMapping)
         }
     }
 

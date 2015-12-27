@@ -1,0 +1,9 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
+    <f:entry field="jenkinsParameter" title="Jenkins Parameter">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="jiraAttributePath" title="JIRA Attribute Path">
+        <f:textbox/>
+    </f:entry>
+</j:jelly>
