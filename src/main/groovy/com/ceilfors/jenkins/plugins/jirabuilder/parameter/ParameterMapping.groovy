@@ -6,10 +6,14 @@ import hudson.model.Descriptor
  */
 abstract class ParameterMapping extends AbstractDescribableImpl<ParameterMapping> {
 
-    String jenkinsParameter
+    private String jenkinsParameter
 
     ParameterMapping(String jenkinsParameter) {
         this.jenkinsParameter = jenkinsParameter
+    }
+
+    String getJenkinsParameter() {
+        return jenkinsParameter
     }
 
     static abstract class ParameterMappingDescriptor extends Descriptor<ParameterMapping> {

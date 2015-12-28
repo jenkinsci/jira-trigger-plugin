@@ -3,7 +3,7 @@
     <f:entry field="jenkinsParameter" title="Jenkins Parameter">
         <f:textbox/>
     </f:entry>
-    <f:entry field="jiraAttributePath" title="JIRA Attribute Path">
+    <f:entry field="issueAttributePath" title="Issue Attribute Path">
         <f:textbox/>
     </f:entry>
 </j:jelly>

@@ -1,6 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
-import com.ceilfors.jenkins.plugins.jirabuilder.parameter.AttributePathParameterMapping
+import com.ceilfors.jenkins.plugins.jirabuilder.parameter.IssueAttributePathParameterMapping
 import com.gargoylesoftware.htmlunit.html.*
 
 /**
@@ -27,7 +27,7 @@ class JiraBuilderConfigurePage {
         addButton.click()
 
         HtmlDivision parameterMappingDiv = addButton.parentNode.parentNode.parentNode as HtmlDivision
-        HtmlAnchor attribute = parameterMappingDiv.getFirstByXPath("""//a[contains(text(), "Attribute Path")]""")
+        HtmlAnchor attribute = parameterMappingDiv.getFirstByXPath("""//a[contains(text(), "Issue Attribute Path")]""")
         attribute.click()
 
         lastJenkinsParameterText.setValueAttribute(jenkinsParameter)
@@ -49,12 +49,12 @@ class JiraBuilderConfigurePage {
     private HtmlTextInput getLastAttributePathText() {
         def parameterMappingDiv = lastParameterMappingDiv
         throwIfNotFound("attributePath in last parameterMapping div") {
-            parameterMappingDiv.getFirstByXPath('//input[contains(@name, "jiraAttributePath")]')
+            parameterMappingDiv.getFirstByXPath('//input[contains(@name, "issueAttributePath")]')
         }
     }
 
     private HtmlDivision getLastParameterMappingDiv() {
-        configPage.getByXPath("""//div[contains(@descriptorId, "${AttributePathParameterMapping.simpleName}")]""").last()
+        configPage.getByXPath("""//div[contains(@descriptorId, "${IssueAttributePathParameterMapping.simpleName}")]""").last()
     }
 
     private HtmlCheckBoxInput getJiraBuilderTriggerCheckBox() {
