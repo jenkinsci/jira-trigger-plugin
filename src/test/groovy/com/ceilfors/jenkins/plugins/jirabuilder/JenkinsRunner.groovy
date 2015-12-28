@@ -16,14 +16,14 @@ class JenkinsRunner extends JenkinsRule {
 
     AbstractBuild buildShouldBeScheduled(String jobName) {
         def build = jiraBuilder.getLastScheduledBuild(5, TimeUnit.SECONDS)
-        assertThat("Build is scheduled", build, is(not(nullValue())))
-        assertThat("Last scheduled build should be for the job matched", build.project.name, is(jobName))
+        assertThat("Build is not scheduled!", build, is(not(nullValue())))
+        assertThat("Last build scheduled doesn't match the job name asserted", build.project.name, is(jobName))
         return build
     }
 
     void buildShouldNotBeScheduled(String jobName) {
         def build = jiraBuilder.getLastScheduledBuild(5, TimeUnit.SECONDS)
-        assertThat("Build is not scheduled", build, is(nullValue()))
+        assertThat("Build is scheduled", build, is(nullValue()))
     }
 
     private JiraBuilder getJiraBuilder() {
@@ -82,7 +82,7 @@ class JenkinsRunner extends JenkinsRule {
         configPage.save()
 
         JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
-        assertThat("Parameter mapping is added", jiraBuilderTrigger.parameterMappings.size(), is(1))
+        assertThat("Parameter mapping is not added", jiraBuilderTrigger.parameterMappings.size(), is(1))
         assertThat(jiraBuilderTrigger.parameterMappings.first().jenkinsParameter, is(jenkinsParameter))
         assertThat(jiraBuilderTrigger.parameterMappings.first().jiraAttributePath, is(jiraAttributePath))
     }
