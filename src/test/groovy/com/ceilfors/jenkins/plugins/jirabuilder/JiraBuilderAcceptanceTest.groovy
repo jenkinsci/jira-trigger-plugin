@@ -44,15 +44,19 @@ class JiraBuilderAcceptanceTest extends Specification {
         given:
         jira.registerWebHook(jenkins.webHookUrl)
         def issueKey = jira.createIssue("Dummy issue description")
-        jenkins.createJiraTriggeredProject("simplejob", "jenkins_description")
+        jenkins.createJiraTriggeredProject("simplejob", "jenkins_description", "jenkins_key")
         jenkins.addParameterMapping("simplejob", "jenkins_description", "fields.description")
+        jenkins.addParameterMapping("simplejob", "jenkins_key", "key")
 
         when:
         jira.addComment(issueKey, "a comment")
 
         then:
         jenkins.buildShouldBeScheduled("simplejob")
-        jenkins.buildTriggeredWithParameter("simplejob", ["jenkins_description": "Dummy issue description"])
+        jenkins.buildTriggeredWithParameter("simplejob", [
+                "jenkins_description": "Dummy issue description",
+                "jenkins_key": issueKey
+        ])
     }
 
     def 'Job is triggered when a comment matches the comment pattern'() {

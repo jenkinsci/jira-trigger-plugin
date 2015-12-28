@@ -74,13 +74,16 @@ class JenkinsRunner extends JenkinsRule {
     }
 
     void addParameterMapping(String name, String jenkinsParameter, String issueAttributePath) {
+        JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        def originalParameterMappingSize = jiraBuilderTrigger.parameterMappings.size()
+
         JiraBuilderConfigurePage configPage = configure(name)
         configPage.addParameterMapping(jenkinsParameter, issueAttributePath)
         configPage.save()
 
-        JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
-        assertThat("Parameter mapping is not added", jiraBuilderTrigger.parameterMappings.size(), is(1))
-        assertThat(jiraBuilderTrigger.parameterMappings.first().jenkinsParameter, is(jenkinsParameter))
-        assertThat(jiraBuilderTrigger.parameterMappings.first().issueAttributePath, is(issueAttributePath))
+        jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        assertThat("Parameter mapping is not added", jiraBuilderTrigger.parameterMappings.size(), equalTo(originalParameterMappingSize + 1))
+        assertThat(jiraBuilderTrigger.parameterMappings.last().jenkinsParameter, is(jenkinsParameter))
+        assertThat(jiraBuilderTrigger.parameterMappings.last().issueAttributePath, is(issueAttributePath))
     }
 }

@@ -42,14 +42,14 @@ class JiraBuilderConfigurePage {
     private HtmlTextInput getLastJenkinsParameterText() {
         def parameterMappingDiv = lastParameterMappingDiv
         throwIfNotFound("jenkinsParameter in last parameterMapping div") {
-            parameterMappingDiv.getFirstByXPath('//input[contains(@name, "jenkinsParameter")]')
+            parameterMappingDiv.getFirstByXPath('.//input[contains(@name, "jenkinsParameter")]')
         }
     }
 
     private HtmlTextInput getLastAttributePathText() {
         def parameterMappingDiv = lastParameterMappingDiv
         throwIfNotFound("attributePath in last parameterMapping div") {
-            parameterMappingDiv.getFirstByXPath('//input[contains(@name, "issueAttributePath")]')
+            parameterMappingDiv.getFirstByXPath('.//input[contains(@name, "issueAttributePath")]')
         }
     }
 
