@@ -34,7 +34,7 @@ dependencies {
 }
 
 jenkinsPlugin {
-    coreVersion = '1.609.1'
+    coreVersion = '1.565.3'
     shortName = 'jira-builder'
     displayName = 'JIRA Builder Plugin'
     url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Builder+Plugin'
