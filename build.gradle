@@ -36,7 +36,7 @@ dependencies {
 jenkinsPlugin {
     coreVersion = '1.609.1'
     shortName = 'jira-builder'
-    displayName = 'JIRA Builder'
+    displayName = 'JIRA Builder Plugin'
     url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Builder+Plugin'
     gitHubUrl = 'https://github.com/ceilfors/jira-builder-plugin'
     pluginFirstClassLoader = true
