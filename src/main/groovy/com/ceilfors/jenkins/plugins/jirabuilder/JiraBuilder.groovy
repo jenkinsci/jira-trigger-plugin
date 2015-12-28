@@ -1,11 +1,9 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
+import com.ceilfors.jenkins.plugins.jirabuilder.parameter.IssueAttributePathParameterMapping
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebHookListener
 import com.google.inject.Singleton
-import hudson.model.AbstractBuild
-import hudson.model.AbstractProject
-import hudson.model.ParametersAction
-import hudson.model.StringParameterValue
+import hudson.model.*
 import hudson.model.queue.QueueTaskFuture
 import jenkins.model.Jenkins
 
@@ -39,13 +37,31 @@ class JiraBuilder implements JiraWebHookListener {
                         break
                     }
                 }
-                lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(), new ParametersAction(
-                        new StringParameterValue("description", issue.fields.description))))
+                lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(),
+                        new ParametersAction(collectParameterValues(trigger, issue))))
 
             }
         } else {
             LOGGER.fine("Couldn't find any jobs that have JiraBuildTrigger configured")
         }
+    }
+
+    private List<ParameterValue> collectParameterValues(JiraBuilderTrigger jiraBuilderTrigger, Map issue) {
+        jiraBuilderTrigger.parameterMappings.collect {
+            if (it instanceof IssueAttributePathParameterMapping) {
+                IssueAttributePathParameterMapping parameterMapping = it
+
+                def attributeValue = GroovyUtils.resolveProperty(issue, parameterMapping.issueAttributePath)
+                if (attributeValue) {
+                    return new StringParameterValue(parameterMapping.jenkinsParameter, attributeValue as String)
+                } else {
+                    LOGGER.warning("Can't resolve attribute ${parameterMapping.issueAttributePath} from JIRA issue. Example: fields.description, key, fields.project.key")
+                    return null
+                }
+            } else {
+                throw new UnsupportedOperationException("Unsupported parameter mapping ${it.class}")
+            }
+        } - null
     }
 
     public AbstractBuild getLastScheduledBuild(long timeout, TimeUnit timeUnit) {

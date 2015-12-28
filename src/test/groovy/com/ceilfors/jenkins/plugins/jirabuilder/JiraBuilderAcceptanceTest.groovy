@@ -45,7 +45,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jira.registerWebHook(jenkins.webHookUrl)
         def issueKey = jira.createIssue("Dummy issue description")
         jenkins.createJiraTriggeredProject("simplejob", "jenkins_description")
-        jenkins.addParameterMapping("simplejob", "jenkins_description", "issue.fields.description")
+        jenkins.addParameterMapping("simplejob", "jenkins_description", "fields.description")
 
         when:
         jira.addComment(issueKey, "a comment")
