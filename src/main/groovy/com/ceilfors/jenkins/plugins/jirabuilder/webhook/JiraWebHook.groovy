@@ -29,11 +29,6 @@ class JiraWebHook implements UnprotectedRootAction {
         this.jiraWebHookListener = jiraWebHookListener
     }
 
-    @Inject
-    void setJira(Jira jira) {
-        this.jira = jira
-    }
-
     @Override
     String getIconFileName() {
         return null
@@ -51,15 +46,20 @@ class JiraWebHook implements UnprotectedRootAction {
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     @RequirePOST
-    public void doIndex(StaplerRequest request, @QueryParameter(required = true) String issueKey) {
+    public void doIndex(StaplerRequest request, @QueryParameter(required = true) String issue_key) {
         Map webhookEvent = new JsonSlurper().parseText(getRequestBody(request)) as Map
-        processEvent(webhookEvent, issueKey)
+        processEvent(request, issue_key, webhookEvent)
     }
 
-    public void processEvent(Map webhookEvent, String issueKey) {
+    public void processEvent(StaplerRequest request, String issueKey, Map webhookEvent) {
         if (webhookEvent["webhookEvent"] == WEBHOOK_EVENT) {
-            def issue = jira.getIssueMap(issueKey)
-            jiraWebHookListener.commentCreated(issue, webhookEvent.comment as Map)
+            JiraWebHookContext jiraWebHookContext = new JiraWebHookContext(
+                    issueKey,
+                    webhookEvent.comment as Map
+            )
+            jiraWebHookContext.userId = request.getParameter("user_id")
+            jiraWebHookContext.userKey = request.getParameter("user_key")
+            jiraWebHookListener.commentCreated(jiraWebHookContext)
         }
     }
 

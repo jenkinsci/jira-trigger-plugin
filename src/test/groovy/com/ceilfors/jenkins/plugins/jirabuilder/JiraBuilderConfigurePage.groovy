@@ -22,6 +22,10 @@ class JiraBuilderConfigurePage {
         commentPatternText.setValueAttribute(commentPattern)
     }
 
+    void setJqlFilter(String jqlFilter) {
+        jqlFilterText.setValueAttribute(jqlFilter)
+    }
+
     void addParameterMapping(String jenkinsParameter, String attributePath) {
         HtmlButton addButton = configPage.getFirstByXPath('//button[contains(@suffix, "parameterMappings")]')
         addButton.click()
@@ -66,6 +70,12 @@ class JiraBuilderConfigurePage {
     private HtmlTextInput getCommentPatternText() {
         throwIfNotFound("commentPatternText") {
             configPage.getFirstByXPath('//input[contains(@name, "commentPattern")]')
+        }
+    }
+
+    private HtmlTextInput getJqlFilterText() {
+        throwIfNotFound("commentPatternText") {
+            configPage.getFirstByXPath('//input[contains(@name, "jqlFilter")]')
         }
     }
 

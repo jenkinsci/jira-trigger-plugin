@@ -49,7 +49,7 @@ class RcarzJira implements Jira {
             def requestBody = """
                 {
                     "name": "$WEBHOOK_NAME",
-                    "url": "$url?issueKey=\${issue.key}",
+                    "url": "$url?issue_key=\${issue.key}",
                     "events": [
                         "${JiraWebHook.WEBHOOK_EVENT}"
                     ],
@@ -87,5 +87,11 @@ class RcarzJira implements Jira {
         } catch (Exception ex) {
             throw new JiraException("Failed to get issue map", ex);
         }
+    }
+
+    @Override
+    boolean validateIssueKey(String issueKey, String jqlFilter) {
+        def searchResult = jiraClient.searchIssues("issueKey=$issueKey and ($jqlFilter)")
+        searchResult.total != 0
     }
 }

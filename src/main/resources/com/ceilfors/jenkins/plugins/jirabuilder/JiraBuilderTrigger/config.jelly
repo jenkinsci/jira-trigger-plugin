@@ -1,10 +1,14 @@
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
 
-    <f:entry title="Comment pattern" field="commentPattern">
+    <f:entry title="Comment Pattern" field="commentPattern">
         <f:textbox />
     </f:entry>
 
-    <f:entry title="Parameter mappings">
+    <f:entry title="JQL Filter" field="jqlFilter">
+        <f:textbox />
+    </f:entry>
+
+    <f:entry title="Parameter Mapping">
         <f:hetero-list name="parameterMappings" items="${instance.parameterMappings}" hasHeader="true"
                        descriptors="${descriptor.parameterMappingDescriptors}"
                        targetType="com.ceilfors.jenkins.plugins.jirabuilder.parameter.ParameterMapping" />

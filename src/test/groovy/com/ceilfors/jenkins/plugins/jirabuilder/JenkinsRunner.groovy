@@ -68,6 +68,16 @@ class JenkinsRunner extends JenkinsRule {
         assertThat(jiraBuilderTrigger.commentPattern, is(commentPattern))
     }
 
+
+    void setJiraBuilderJqlFilter(String name, String jqlFilter) {
+        JiraBuilderConfigurePage configPage = configure(name)
+        configPage.setJqlFilter(jqlFilter)
+        configPage.save()
+
+        JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        assertThat(jiraBuilderTrigger.jqlFilter, is(jqlFilter))
+    }
+
     JiraBuilderConfigurePage configure(String jobName) {
         HtmlPage htmlPage = createWebClient().goTo("job/$jobName/configure")
         return new JiraBuilderConfigurePage(htmlPage)

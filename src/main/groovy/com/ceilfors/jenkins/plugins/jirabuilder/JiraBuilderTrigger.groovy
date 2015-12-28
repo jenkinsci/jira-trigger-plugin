@@ -18,12 +18,12 @@ import javax.inject.Inject
  */
 class JiraBuilderTrigger extends Trigger<AbstractProject> {
 
-    private String commentPattern
+    private String commentPattern = ""
+    private String jqlFilter = ""
     private List<ParameterMapping> parameterMappings = []
 
     @DataBoundConstructor
     JiraBuilderTrigger() {
-        this.commentPattern = ""
     }
 
     String getCommentPattern() {
@@ -42,6 +42,15 @@ class JiraBuilderTrigger extends Trigger<AbstractProject> {
     @DataBoundSetter
     void setParameterMappings(List<ParameterMapping> parameterMappings) {
         this.parameterMappings = parameterMappings
+    }
+
+    String getJqlFilter() {
+        return jqlFilter
+    }
+
+    @DataBoundSetter
+    void setJqlFilter(String jqlFilter) {
+        this.jqlFilter = jqlFilter
     }
 
     @Override

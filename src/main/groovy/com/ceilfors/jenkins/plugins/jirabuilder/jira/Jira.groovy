@@ -19,4 +19,6 @@ interface Jira {
     def deleteAllWebHooks()
 
     Map getIssueMap(String issueKey)
+
+    boolean validateIssueKey(String issueKey, String jqlFilter)
 }

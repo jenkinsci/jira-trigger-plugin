@@ -1,6 +1,8 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
+import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
 import com.ceilfors.jenkins.plugins.jirabuilder.parameter.IssueAttributePathParameterMapping
+import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebHookContext
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebHookListener
 import com.google.inject.Singleton
 import hudson.model.*
@@ -25,18 +27,29 @@ class JiraBuilder implements JiraWebHookListener {
     @Inject
     Jenkins jenkins
 
+    @Inject
+    Jira jira
+
     @Override
-    void commentCreated(Map issue, Map comment) {
+    void commentCreated(JiraWebHookContext jiraWebHookContext) {
         def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraBuilderTrigger) }
         if (jobs) {
             LOGGER.info("Found jobs: ${jobs.collect { it.name }}")
             for (job in jobs) {
                 JiraBuilderTrigger trigger = job.getTrigger(JiraBuilderTrigger)
                 if (trigger.commentPattern) {
-                    if (!(comment.body ==~ trigger.commentPattern)) {
+                    if (!(jiraWebHookContext.eventBody.body ==~ trigger.commentPattern)) {
+                        LOGGER.fine("[${job.fullName}] commentPattern doesn't match with the comment body, not scheduling build")
                         break
                     }
                 }
+                if (trigger.jqlFilter) {
+                    if (!jira.validateIssueKey(jiraWebHookContext.issueKey, trigger.jqlFilter)) {
+                        LOGGER.fine("[${job.fullName}] jqlFilter doesn't match with the JQL filter, not scheduling build")
+                        break
+                    }
+                }
+                def issue = jira.getIssueMap(jiraWebHookContext.issueKey)
                 lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(),
                         new ParametersAction(collectParameterValues(trigger, issue))))
 

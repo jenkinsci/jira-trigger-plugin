@@ -87,11 +87,36 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.buildShouldNotBeScheduled("job")
     }
 
-    // Incremental features:
-    // Trigger a job with custom field in JIRA to a parameter
-    // Trigger a job with parameter with a comment is created
-    // Trigger a job when matches JQL
+    def 'Job is triggered when the issue matches JQL filter'() {
+        given:
+        jira.registerWebHook(jenkins.webHookUrl)
+        def issueKey = jira.createIssue("dummy description")
+        jenkins.createJiraTriggeredProject("job")
+        jenkins.setJiraBuilderJqlFilter("job", 'type=task and description~"dummy description" and status="To Do"')
+
+        when:
+        jira.addComment(issueKey, "comment body")
+
+        then:
+        jenkins.buildShouldBeScheduled("job")
+    }
+
+    def 'Job is not triggered when the issue does not match JQL filter'() {
+        given:
+        jira.registerWebHook(jenkins.webHookUrl)
+        def issueKey = jira.createIssue("dummy description")
+        jenkins.createJiraTriggeredProject("job")
+        jenkins.setJiraBuilderJqlFilter("job", 'type=task and status="Done"')
+
+        when:
+        jira.addComment(issueKey, "comment body")
+
+        then:
+        jenkins.buildShouldNotBeScheduled("job")
+    }
+
+    // ** Incremental features: **
+    // Help message
     // Updated comment ?
-    // Duplicate issue in jql configuration
     // Should JiraWebHook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
 }

@@ -5,5 +5,5 @@ package com.ceilfors.jenkins.plugins.jirabuilder.webhook
  */
 interface JiraWebHookListener {
 
-    void commentCreated(Map issue, Map comment)
+    void commentCreated(JiraWebHookContext jiraWebHookContext)
 }
