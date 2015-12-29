@@ -1,5 +1,4 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.RcarzJira
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebHookListener
@@ -7,7 +6,6 @@ import com.google.inject.AbstractModule
 import com.google.inject.Scopes
 import hudson.Extension
 import jenkins.model.Jenkins
-
 /**
  * @author ceilfors
  */
@@ -19,5 +17,6 @@ class JiraBuilderModule extends AbstractModule {
         bind(JiraWebHookListener).to(JiraBuilder).in(Scopes.SINGLETON)
         bind(Jira).to(RcarzJira).in(Scopes.SINGLETON)
         bind(Jenkins).toInstance(Jenkins.instance)
+//        bind(JiraBuilderGlobalConfiguration).toInstance(GlobalConfiguration.all().get(JiraBuilderGlobalConfiguration))
     }
 }

@@ -17,6 +17,10 @@ class JiraBuilderAcceptanceTest extends Specification {
     @Rule JenkinsRunner jenkins = new JenkinsRunner()
     @Rule JulLogLevelRule julLogLevelRule = new JulLogLevelRule(Level.FINEST)
 
+    def setupSpec() {
+        // Initialize JIRA in Jenkins Global Configuration
+    }
+
     def setup() {
         jira.deleteAllWebHooks()
     }
@@ -116,6 +120,7 @@ class JiraBuilderAcceptanceTest extends Specification {
     }
 
     // ** Incremental features: **
+    // Make JIRA configurable including the webhook URL from Jenkins
     // Help message
     // Updated comment ?
     // Should JiraWebHook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
