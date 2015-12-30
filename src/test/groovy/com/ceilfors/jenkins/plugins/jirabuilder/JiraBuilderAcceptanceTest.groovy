@@ -1,7 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
-import com.ceilfors.jenkins.plugins.jirabuilder.jira.RcarzJira
+import com.ceilfors.jenkins.plugins.jirabuilder.jira.JrjcJiraClient
 import org.junit.Rule
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -12,7 +11,7 @@ import java.util.logging.Level
  */
 class JiraBuilderAcceptanceTest extends Specification {
 
-    def Jira jira = new RcarzJira()
+    def Jira jira = new JrjcJiraClient()
 
     @Rule JenkinsRunner jenkins = new JenkinsRunner()
     @Rule JulLogLevelRule julLogLevelRule = new JulLogLevelRule(Level.FINEST)
@@ -122,6 +121,7 @@ class JiraBuilderAcceptanceTest extends Specification {
     // ** Incremental features: **
     // Make JIRA configurable including the webhook URL from Jenkins
     // Help message
+    // Webhook 'h' is small letter.
     // Updated comment ?
     // Should JiraWebHook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
 }

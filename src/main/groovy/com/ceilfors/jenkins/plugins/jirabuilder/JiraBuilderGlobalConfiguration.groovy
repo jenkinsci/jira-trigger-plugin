@@ -1,12 +1,13 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
+import hudson.Extension
 import jenkins.model.GlobalConfiguration
 import net.sf.json.JSONObject
 import org.kohsuke.stapler.StaplerRequest
 /**
  * @author ceilfors
  */
-//@Extension
+@Extension
 class JiraBuilderGlobalConfiguration extends GlobalConfiguration {
 
     private String jiraRootUrl

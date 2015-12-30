@@ -1,6 +1,5 @@
 package com.ceilfors.jenkins.plugins.jirabuilder.webhook
 
-import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
 import groovy.json.JsonSlurper
 import hudson.Extension
 import hudson.model.UnprotectedRootAction
@@ -9,7 +8,6 @@ import org.kohsuke.stapler.StaplerRequest
 import org.kohsuke.stapler.interceptor.RequirePOST
 
 import javax.inject.Inject
-
 /**
  * @author ceilfors
  */
@@ -18,7 +16,6 @@ class JiraWebHook implements UnprotectedRootAction {
 
     public static final URLNAME = "jira-builder"
     public static final WEBHOOK_EVENT = "comment_created"
-    private Jira jira
     private JiraWebHookListener jiraWebHookListener
 
     JiraWebHook() {
