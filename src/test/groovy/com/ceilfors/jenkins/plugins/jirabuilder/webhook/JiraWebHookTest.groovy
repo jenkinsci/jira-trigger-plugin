@@ -1,5 +1,5 @@
 package com.ceilfors.jenkins.plugins.jirabuilder.webhook
-import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
+
 import net.sf.json.JSONObject
 import org.kohsuke.stapler.StaplerRequest
 import spock.lang.Specification
@@ -27,7 +27,7 @@ class JiraWebHookTest extends Specification {
 
         given:
         def listener = Mock(JiraWebHookListener)
-        JiraWebHook jiraWebHook = new JiraWebHook(jira: Mock(Jira))
+        JiraWebHook jiraWebHook = new JiraWebHook()
         jiraWebHook.setJiraWebHookListener(listener)
 
         when:
@@ -47,7 +47,7 @@ class JiraWebHookTest extends Specification {
         def staplerRequest = Mock(StaplerRequest)
         staplerRequest.getParameter("user_id") >> "adminId"
         staplerRequest.getParameter("user_key") >> "adminKey"
-        JiraWebHook jiraWebHook = new JiraWebHook(jira: Mock(Jira))
+        JiraWebHook jiraWebHook = new JiraWebHook()
         jiraWebHook.setJiraWebHookListener(listener)
 
         when:
@@ -61,7 +61,7 @@ class JiraWebHookTest extends Specification {
 
     def "Should not notify listener when the event type is not comment_created"() {
         given:
-        JiraWebHook jiraWebHook = new JiraWebHook(jira: Mock(Jira))
+        JiraWebHook jiraWebHook = new JiraWebHook()
 
         def listener = Mock(JiraWebHookListener)
         jiraWebHook.setJiraWebHookListener(listener)
