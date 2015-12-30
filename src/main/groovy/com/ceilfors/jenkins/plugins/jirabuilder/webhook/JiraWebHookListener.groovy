@@ -3,7 +3,7 @@ package com.ceilfors.jenkins.plugins.jirabuilder.webhook
 /**
  * @author ceilfors
  */
-interface JiraWebHookListener {
+interface JiraWebhookListener {
 
-    void commentCreated(JiraWebHookContext jiraWebHookContext)
+    void commentCreated(JiraWebhookContext jiraWebhookContext)
 }

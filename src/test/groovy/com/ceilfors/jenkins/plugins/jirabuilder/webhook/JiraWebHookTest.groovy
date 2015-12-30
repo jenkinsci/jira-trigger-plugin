@@ -10,7 +10,7 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * @author ceilfors
  */
-class JiraWebHookTest extends Specification {
+class JiraWebhookTest extends Specification {
 
     Map createCommentCreatedEvent() {
         JSONObject o = JSONObject.fromObject(this.class.getResourceAsStream("/webhook-request-sample/comment_created.json").text)
@@ -23,15 +23,15 @@ class JiraWebHookTest extends Specification {
     }
 
     def "Should notify listener when a comment event is received"() {
-        JiraWebHookContext context = null
+        JiraWebhookContext context = null
 
         given:
-        def listener = Mock(JiraWebHookListener)
-        JiraWebHook jiraWebHook = new JiraWebHook()
-        jiraWebHook.setJiraWebHookListener(listener)
+        def listener = Mock(JiraWebhookListener)
+        JiraWebhook jiraWebhook = new JiraWebhook()
+        jiraWebhook.setJiraWebhookListener(listener)
 
         when:
-        jiraWebHook.processEvent(Mock(StaplerRequest), "TEST-123", createCommentCreatedEvent())
+        jiraWebhook.processEvent(Mock(StaplerRequest), "TEST-123", createCommentCreatedEvent())
 
         then:
         1 * listener.commentCreated(_) >> { args -> context = args[0] }
@@ -40,18 +40,18 @@ class JiraWebHookTest extends Specification {
     }
 
     def "Should get store request parameter in context"() {
-        JiraWebHookContext context = null
+        JiraWebhookContext context = null
 
         given:
-        def listener = Mock(JiraWebHookListener)
+        def listener = Mock(JiraWebhookListener)
         def staplerRequest = Mock(StaplerRequest)
         staplerRequest.getParameter("user_id") >> "adminId"
         staplerRequest.getParameter("user_key") >> "adminKey"
-        JiraWebHook jiraWebHook = new JiraWebHook()
-        jiraWebHook.setJiraWebHookListener(listener)
+        JiraWebhook jiraWebhook = new JiraWebhook()
+        jiraWebhook.setJiraWebhookListener(listener)
 
         when:
-        jiraWebHook.processEvent(staplerRequest, "TEST-123", createCommentCreatedEvent())
+        jiraWebhook.processEvent(staplerRequest, "TEST-123", createCommentCreatedEvent())
 
         then:
         1 * listener.commentCreated(_) >> { args -> context = args[0] }
@@ -61,13 +61,13 @@ class JiraWebHookTest extends Specification {
 
     def "Should not notify listener when the event type is not comment_created"() {
         given:
-        JiraWebHook jiraWebHook = new JiraWebHook()
+        JiraWebhook jiraWebhook = new JiraWebhook()
 
-        def listener = Mock(JiraWebHookListener)
-        jiraWebHook.setJiraWebHookListener(listener)
+        def listener = Mock(JiraWebhookListener)
+        jiraWebhook.setJiraWebhookListener(listener)
 
         when:
-        jiraWebHook.processEvent(Mock(StaplerRequest), "TEST-123", createIssueCreatedEvent())
+        jiraWebhook.processEvent(Mock(StaplerRequest), "TEST-123", createIssueCreatedEvent())
 
         then:
         0 * listener.commentCreated(_)

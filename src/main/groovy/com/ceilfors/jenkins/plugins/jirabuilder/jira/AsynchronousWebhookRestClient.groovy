@@ -10,7 +10,7 @@ import javax.ws.rs.core.UriBuilder
 /**
  * @author ceilfors
  */
-class AsynchronousWebhookRestClient extends AbstractAsynchronousRestClient implements WebHookRestClient {
+class AsynchronousWebhookRestClient extends AbstractAsynchronousRestClient implements WebhookRestClient {
 
     private final URI baseUri
     private final JsonParser<?, Iterable<Webhook>> webhooksJsonParser = new WebhooksJsonParser()

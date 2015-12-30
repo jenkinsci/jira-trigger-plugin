@@ -4,7 +4,7 @@ import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory
-import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebHook
+import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhook
 import groovy.json.JsonSlurper
 
 import javax.ws.rs.core.UriBuilder
@@ -47,20 +47,20 @@ class JrjcJiraClient implements Jira {
     }
 
     @Override
-    void registerWebHook(String url) {
-        jiraRestClient.webHookRestClient.registerWebhook(new WebhookInput(
+    void registerWebhook(String url) {
+        jiraRestClient.webhookRestClient.registerWebhook(new WebhookInput(
                 url: "$url?issue_key=\${issue.key}",
                 name: WEBHOOK_NAME,
-                events: [JiraWebHook.WEBHOOK_EVENT],
+                events: [JiraWebhook.WEBHOOK_EVENT],
         )).claim()
     }
 
     @Override
-    def deleteAllWebHooks() {
-        Iterable<Webhook> webhooks = jiraRestClient.webHookRestClient.getWebhooks().claim()
+    def deleteAllWebhooks() {
+        Iterable<Webhook> webhooks = jiraRestClient.webhookRestClient.getWebhooks().claim()
         def webhook = webhooks.find { it.name == WEBHOOK_NAME } as Webhook
         if (webhook) {
-            jiraRestClient.webHookRestClient.unregisterWebhook(webhook.selfUri).claim()
+            jiraRestClient.webhookRestClient.unregisterWebhook(webhook.selfUri).claim()
         }
     }
 

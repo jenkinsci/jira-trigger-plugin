@@ -12,18 +12,18 @@ import javax.inject.Inject
  * @author ceilfors
  */
 @Extension
-class JiraWebHook implements UnprotectedRootAction {
+class JiraWebhook implements UnprotectedRootAction {
 
     public static final URLNAME = "jira-builder"
     public static final WEBHOOK_EVENT = "comment_created"
-    private JiraWebHookListener jiraWebHookListener
+    private JiraWebhookListener jiraWebhookListener
 
-    JiraWebHook() {
+    JiraWebhook() {
     }
 
     @Inject
-    void setJiraWebHookListener(JiraWebHookListener jiraWebHookListener) {
-        this.jiraWebHookListener = jiraWebHookListener
+    void setJiraWebhookListener(JiraWebhookListener jiraWebhookListener) {
+        this.jiraWebhookListener = jiraWebhookListener
     }
 
     @Override
@@ -50,13 +50,13 @@ class JiraWebHook implements UnprotectedRootAction {
 
     public void processEvent(StaplerRequest request, String issueKey, Map webhookEvent) {
         if (webhookEvent["webhookEvent"] == WEBHOOK_EVENT) {
-            JiraWebHookContext jiraWebHookContext = new JiraWebHookContext(
+            JiraWebhookContext jiraWebhookContext = new JiraWebhookContext(
                     issueKey,
                     webhookEvent.comment as Map
             )
-            jiraWebHookContext.userId = request.getParameter("user_id")
-            jiraWebHookContext.userKey = request.getParameter("user_key")
-            jiraWebHookListener.commentCreated(jiraWebHookContext)
+            jiraWebhookContext.userId = request.getParameter("user_id")
+            jiraWebhookContext.userKey = request.getParameter("user_key")
+            jiraWebhookListener.commentCreated(jiraWebhookContext)
         }
     }
 

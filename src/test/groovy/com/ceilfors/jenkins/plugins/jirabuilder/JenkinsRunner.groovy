@@ -1,6 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
-import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebHook
+import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.*
 import org.jvnet.hudson.test.JenkinsRule
@@ -30,12 +30,12 @@ class JenkinsRunner extends JenkinsRule {
         instance.getInjector().getInstance(JiraBuilder)
     }
 
-    private JiraWebHook getJiraWebHook() {
-        instance.getActions().find { it instanceof JiraWebHook } as JiraWebHook
+    private JiraWebhook getJiraWebhook() {
+        instance.getActions().find { it instanceof JiraWebhook } as JiraWebhook
     }
 
-    String getWebHookUrl() {
-        return "${getURL().toString()}${jiraWebHook.urlName}/"
+    String getWebhookUrl() {
+        return "${getURL().toString()}${jiraWebhook.urlName}/"
                 .replace("localhost", "10.0.2.2") // vagrant
     }
 

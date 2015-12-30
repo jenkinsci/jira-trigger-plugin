@@ -5,7 +5,7 @@ import com.atlassian.util.concurrent.Promise
 /**
  * @author ceilfors
  */
-interface WebHookRestClient {
+interface WebhookRestClient {
 
 
     Promise<Void> registerWebhook(WebhookInput webhook)

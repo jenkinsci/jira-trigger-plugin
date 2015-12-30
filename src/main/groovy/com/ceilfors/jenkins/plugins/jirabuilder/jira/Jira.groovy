@@ -14,9 +14,9 @@ interface Jira {
 
     void addComment(String issueKey, String comment)
 
-    void registerWebHook(String url)
+    void registerWebhook(String url)
 
-    def deleteAllWebHooks()
+    def deleteAllWebhooks()
 
     Map getIssueMap(String issueKey)
 

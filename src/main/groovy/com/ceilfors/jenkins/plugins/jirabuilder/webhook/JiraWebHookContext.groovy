@@ -3,14 +3,14 @@ package com.ceilfors.jenkins.plugins.jirabuilder.webhook
 /**
  * @author ceilfors
  */
-class JiraWebHookContext {
+class JiraWebhookContext {
 
     private final String issueKey
     private final Map eventBody
     private String userId
     private String userKey
 
-    JiraWebHookContext(String issueKey, Map eventBody) {
+    JiraWebhookContext(String issueKey, Map eventBody) {
         this.issueKey = issueKey
         this.eventBody = eventBody
     }

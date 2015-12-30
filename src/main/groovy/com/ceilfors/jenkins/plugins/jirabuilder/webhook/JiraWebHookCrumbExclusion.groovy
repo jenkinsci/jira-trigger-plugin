@@ -11,9 +11,9 @@ import java.util.logging.Logger
  * @author ceilfors
  */
 @Extension
-class JiraWebHookCrumbExclusion extends CrumbExclusion {
+class JiraWebhookCrumbExclusion extends CrumbExclusion {
 
-    private static final Logger LOGGER = Logger.getLogger(JiraWebHookCrumbExclusion.name)
+    private static final Logger LOGGER = Logger.getLogger(JiraWebhookCrumbExclusion.name)
 
     @Override
     boolean process(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -22,14 +22,14 @@ class JiraWebHookCrumbExclusion extends CrumbExclusion {
             chain.doFilter(request, response)
             return true
         } else {
-            if (pathInfo.contains(JiraWebHook.URLNAME)) {
-                LOGGER.finest("Ignoring pathInfo $pathInfo even when it contains $JiraWebHook.URLNAME")
+            if (pathInfo.contains(JiraWebhook.URLNAME)) {
+                LOGGER.finest("Ignoring pathInfo $pathInfo even when it contains $JiraWebhook.URLNAME")
             }
             return false
         }
     }
 
     String getExclusionPath() {
-        return "/" + JiraWebHook.URLNAME + "/"
+        return "/" + JiraWebhook.URLNAME + "/"
     }
 }

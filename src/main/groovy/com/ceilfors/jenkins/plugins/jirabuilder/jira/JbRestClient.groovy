@@ -8,14 +8,14 @@ import javax.ws.rs.core.UriBuilder
  */
 class JbRestClient extends AsynchronousJiraRestClient {
 
-    private WebHookRestClient webHookRestClient
+    private WebhookRestClient webhookRestClient
 
     JbRestClient(URI serverUri, DisposableHttpClient httpClient) {
         super(serverUri, httpClient)
-        this.webHookRestClient = new AsynchronousWebhookRestClient(UriBuilder.fromUri(serverUri).path("/rest/webhooks/latest").build(), httpClient)
+        this.webhookRestClient = new AsynchronousWebhookRestClient(UriBuilder.fromUri(serverUri).path("/rest/webhooks/latest").build(), httpClient)
     }
 
-    WebHookRestClient getWebHookRestClient() {
-        return webHookRestClient
+    WebhookRestClient getWebhookRestClient() {
+        return webhookRestClient
     }
 }
