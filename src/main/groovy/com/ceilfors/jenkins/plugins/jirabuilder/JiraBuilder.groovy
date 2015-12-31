@@ -6,13 +6,9 @@ import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookListener
 import com.google.inject.Singleton
 import groovy.util.logging.Log
 import hudson.model.*
-import hudson.model.queue.QueueTaskFuture
 import jenkins.model.Jenkins
 
 import javax.inject.Inject
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.TimeUnit
 /**
  * @author ceilfors
  */
@@ -20,10 +16,10 @@ import java.util.concurrent.TimeUnit
 @Log
 class JiraBuilder implements JiraWebhookListener {
 
-    private BlockingQueue<QueueTaskFuture<? extends AbstractBuild>> lastScheduledBuild = new ArrayBlockingQueue<>(1)
-
     private Jenkins jenkins
     private JiraClient jira
+    private List<JiraBuilderListener> jiraBuilderListeners = []
+    private int quietPeriod = 0
 
     @Inject
     public JiraBuilder(Jenkins jenkins, JiraClient jira) {
@@ -31,15 +27,25 @@ class JiraBuilder implements JiraWebhookListener {
         this.jira = jira
     }
 
+    void addJiraBuilderListener(JiraBuilderListener jiraBuilderListener) {
+        jiraBuilderListeners << jiraBuilderListener
+    }
+
+    void setQuietPeriod(int quietPeriod) {
+        this.quietPeriod = quietPeriod
+    }
+
     @Override
     void commentCreated(JiraWebhookContext jiraWebhookContext) {
         def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraBuilderTrigger) }
         if (jobs) {
             log.fine("Found jobs: ${jobs.collect { it.name }}")
+            boolean buildScheduled = false
+            def commentBody = jiraWebhookContext.eventBody.body as String
             for (job in jobs) {
                 JiraBuilderTrigger trigger = job.getTrigger(JiraBuilderTrigger)
                 if (trigger.commentPattern) {
-                    if (!(jiraWebhookContext.eventBody.body ==~ trigger.commentPattern)) {
+                    if (!(commentBody ==~ trigger.commentPattern)) {
                         log.fine("[${job.fullName}] commentPattern doesn't match with the comment body, not scheduling build")
                         break
                     }
@@ -50,13 +56,18 @@ class JiraBuilder implements JiraWebhookListener {
                         break
                     }
                 }
+
+                List<Action> actions = []
                 if (trigger.parameterMappings) {
                     def issue = jira.getIssueMap(jiraWebhookContext.issueKey)
-                    lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(),
-                            new ParametersAction(collectParameterValues(trigger, issue))))
-                } else {
-                    lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause()))
+                    actions << new ParametersAction(collectParameterValues(trigger, issue))
                 }
+                job.scheduleBuild2(quietPeriod, new JiraBuilderTrigger.JiraBuilderTriggerCause(), actions)
+                jiraBuilderListeners*.buildScheduled(jiraWebhookContext.issueKey, commentBody, job.fullName)
+                buildScheduled = true
+            }
+            if (!buildScheduled) {
+                jiraBuilderListeners*.buildNotScheduled(jiraWebhookContext.issueKey, commentBody)
             }
         } else {
             log.fine("Couldn't find any jobs that have JiraBuildTrigger configured")
@@ -72,21 +83,12 @@ class JiraBuilder implements JiraWebhookListener {
                 if (attributeValue) {
                     return new StringParameterValue(parameterMapping.jenkinsParameter, attributeValue as String)
                 } else {
-                    LOGGER.warning("Can't resolve attribute ${parameterMapping.issueAttributePath} from JIRA issue. Example: fields.description, key, fields.project.key")
+                    log.warning("Can't resolve attribute ${parameterMapping.issueAttributePath} from JIRA issue. Example: fields.description, key, fields.project.key")
                     return null
                 }
             } else {
                 throw new UnsupportedOperationException("Unsupported parameter mapping ${it.class}")
             }
         } - null
-    }
-
-    public AbstractBuild getLastScheduledBuild(long timeout, TimeUnit timeUnit) {
-        def build = lastScheduledBuild.poll(timeout, timeUnit)
-        if (build) {
-            return build.get()
-        } else {
-            return null
-        }
     }
 }

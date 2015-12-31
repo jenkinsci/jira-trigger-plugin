@@ -53,8 +53,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jira.addComment(issueKey, "a comment")
 
         then:
-        jenkins.buildShouldBeScheduled("simplejob")
-        jenkins.buildTriggeredWithParameter("simplejob", [
+        jenkins.buildShouldBeScheduledWithParameter("simplejob", [
                 "jenkins_description": "Dummy issue description"
         ])
     }
@@ -88,8 +87,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jira.addComment(issueKey, "a comment")
 
         then:
-        jenkins.buildShouldBeScheduled("simplejob")
-        jenkins.buildTriggeredWithParameter("simplejob", [
+        jenkins.buildShouldBeScheduledWithParameter("simplejob", [
                 "jenkins_description": "Dummy issue description",
                 "jenkins_key"        : issueKey
         ])
@@ -118,7 +116,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jira.addComment(issueKey, "bla bla bla")
 
         then:
-        jenkins.buildShouldNotBeScheduled("job")
+        jenkins.noBuildShouldBeScheduled()
     }
 
     def 'Job is triggered when the issue matches JQL filter'() {
@@ -144,7 +142,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jira.addComment(issueKey, "comment body")
 
         then:
-        jenkins.buildShouldNotBeScheduled("job")
+        jenkins.noBuildShouldBeScheduled()
     }
 
     // ** Incremental features: **
@@ -154,6 +152,6 @@ class JiraBuilderAcceptanceTest extends Specification {
     // Help message
     // Form Validation in Global Config
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
-    // Check
+    // Check SequentialExecutionQueue that is used by GitHubWebHook
     // Updated comment ?
 }
