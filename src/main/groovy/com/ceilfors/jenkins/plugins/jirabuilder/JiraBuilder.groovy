@@ -1,10 +1,10 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jirabuilder.parameter.IssueAttributePathParameterMapping
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookContext
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookListener
 import com.google.inject.Singleton
+import groovy.util.logging.Log
 import hudson.model.*
 import hudson.model.queue.QueueTaskFuture
 import jenkins.model.Jenkins
@@ -13,15 +13,13 @@ import javax.inject.Inject
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
-import java.util.logging.Logger
-
 /**
  * @author ceilfors
  */
 @Singleton
+@Log
 class JiraBuilder implements JiraWebhookListener {
 
-    private static final Logger LOGGER = Logger.getLogger(JiraBuilder.name)
     private BlockingQueue<QueueTaskFuture<? extends AbstractBuild>> lastScheduledBuild = new ArrayBlockingQueue<>(1)
 
     private Jenkins jenkins
@@ -37,28 +35,31 @@ class JiraBuilder implements JiraWebhookListener {
     void commentCreated(JiraWebhookContext jiraWebhookContext) {
         def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraBuilderTrigger) }
         if (jobs) {
-            LOGGER.info("Found jobs: ${jobs.collect { it.name }}")
+            log.fine("Found jobs: ${jobs.collect { it.name }}")
             for (job in jobs) {
                 JiraBuilderTrigger trigger = job.getTrigger(JiraBuilderTrigger)
                 if (trigger.commentPattern) {
                     if (!(jiraWebhookContext.eventBody.body ==~ trigger.commentPattern)) {
-                        LOGGER.fine("[${job.fullName}] commentPattern doesn't match with the comment body, not scheduling build")
+                        log.fine("[${job.fullName}] commentPattern doesn't match with the comment body, not scheduling build")
                         break
                     }
                 }
                 if (trigger.jqlFilter) {
                     if (!jira.validateIssueKey(jiraWebhookContext.issueKey, trigger.jqlFilter)) {
-                        LOGGER.fine("[${job.fullName}] jqlFilter doesn't match with the JQL filter, not scheduling build")
+                        log.fine("[${job.fullName}] jqlFilter doesn't match with the JQL filter, not scheduling build")
                         break
                     }
                 }
-                def issue = jira.getIssueMap(jiraWebhookContext.issueKey)
-                lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(),
-                        new ParametersAction(collectParameterValues(trigger, issue))))
-
+                if (trigger.parameterMappings) {
+                    def issue = jira.getIssueMap(jiraWebhookContext.issueKey)
+                    lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause(),
+                            new ParametersAction(collectParameterValues(trigger, issue))))
+                } else {
+                    lastScheduledBuild.put(job.scheduleBuild2(0, new JiraBuilderTrigger.JiraBuilderTriggerCause()))
+                }
             }
         } else {
-            LOGGER.fine("Couldn't find any jobs that have JiraBuildTrigger configured")
+            log.fine("Couldn't find any jobs that have JiraBuildTrigger configured")
         }
     }
 
