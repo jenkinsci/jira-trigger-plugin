@@ -81,7 +81,7 @@ class JiraBuilderTrigger extends Trigger<AbstractProject> {
 
         @Override
         String getShortDescription() {
-            return "JIRA Builder"
+            return "Build when a comment is added to JIRA"
         }
     }
 }
