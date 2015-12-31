@@ -1,16 +1,14 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
 import com.ceilfors.jenkins.plugins.jirabuilder.parameter.IssueAttributePathParameterMapping
 import com.gargoylesoftware.htmlunit.html.*
-
 /**
  * @author ceilfors
  */
-class JiraBuilderConfigurePage {
+class JiraBuilderConfigurationPage {
 
     private HtmlPage configPage
 
-    JiraBuilderConfigurePage(HtmlPage configPage) {
+    JiraBuilderConfigurationPage(HtmlPage configPage) {
         this.configPage = configPage
     }
 

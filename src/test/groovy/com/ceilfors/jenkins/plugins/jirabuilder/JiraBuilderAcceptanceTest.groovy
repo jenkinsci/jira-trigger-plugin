@@ -1,33 +1,44 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
+
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.JrjcJiraClient
+import jenkins.model.GlobalConfiguration
 import org.junit.Rule
+import org.junit.rules.ExternalResource
+import org.junit.rules.RuleChain
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.util.logging.Level
+
 /**
  * @author ceilfors
  */
 class JiraBuilderAcceptanceTest extends Specification {
 
-    def Jira jira = new JrjcJiraClient(new JiraBuilderGlobalConfiguration("http://localhost:2990/jira", "admin", "admin"))
+    JenkinsRunner jenkins = new JenkinsRunner()
 
-    @Rule JenkinsRunner jenkins = new JenkinsRunner()
-    @Rule JulLogLevelRule julLogLevelRule = new JulLogLevelRule(Level.FINEST)
+    @Rule
+    RuleChain ruleChain = RuleChain
+            .outerRule(new JulLogLevelRule(Level.FINEST))
+            .around(jenkins)
+            .around(
+            new ExternalResource() {
+                @Override
+                protected void before() throws Throwable {
+                    jenkins.setJiraBuilderGlobalConfig("http://localhost:2990/jira", "admin", "admin")
+                    JiraBuilderGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraBuilderGlobalConfiguration)
+                    jira = new JrjcJiraClient(configuration)
+                    jira.deleteAllWebhooks()
+                    jira.registerWebhook(jenkins.webhookUrl)
+                }
+            })
 
-    def setupSpec() {
-        // Initialize JIRA in Jenkins Global Configuration
-    }
-
-    def setup() {
-        jira.deleteAllWebhooks()
-    }
+    Jira jira
 
     @Unroll
     def 'Trigger simple job when a comment is created'() {
         given:
-        jira.registerWebhook(jenkins.webhookUrl)
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject(jobName)
 
@@ -38,14 +49,13 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled(jobName)
 
         where:
-        jobName      | comment
-        "simplejob"  | "a comment"
-        "other job"  | "arbitrary comment"
+        jobName     | comment
+        "simplejob" | "a comment"
+        "other job" | "arbitrary comment"
     }
 
     def 'Trigger job with built-in field when a comment is created'() {
         given:
-        jira.registerWebhook(jenkins.webhookUrl)
         def issueKey = jira.createIssue("Dummy issue description")
         jenkins.createJiraTriggeredProject("simplejob", "jenkins_description", "jenkins_key")
         jenkins.addParameterMapping("simplejob", "jenkins_description", "fields.description")
@@ -58,13 +68,12 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("simplejob")
         jenkins.buildTriggeredWithParameter("simplejob", [
                 "jenkins_description": "Dummy issue description",
-                "jenkins_key": issueKey
+                "jenkins_key"        : issueKey
         ])
     }
 
     def 'Job is triggered when a comment matches the comment pattern'() {
         given:
-        jira.registerWebhook(jenkins.webhookUrl)
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
         jenkins.setJiraBuilderCommentPattern("job", ".*jiratrigger.*")
@@ -78,7 +87,6 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     def 'Job is not triggered when a comment does not match the comment pattern'() {
         given:
-        jira.registerWebhook(jenkins.webhookUrl)
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
         jenkins.setJiraBuilderCommentPattern("job", ".*jiratrigger.*")
@@ -92,7 +100,6 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     def 'Job is triggered when the issue matches JQL filter'() {
         given:
-        jira.registerWebhook(jenkins.webhookUrl)
         def issueKey = jira.createIssue("dummy description")
         jenkins.createJiraTriggeredProject("job")
         jenkins.setJiraBuilderJqlFilter("job", 'type=task and description~"dummy description" and status="To Do"')
@@ -106,7 +113,6 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     def 'Job is not triggered when the issue does not match JQL filter'() {
         given:
-        jira.registerWebhook(jenkins.webhookUrl)
         def issueKey = jira.createIssue("dummy description")
         jenkins.createJiraTriggeredProject("job")
         jenkins.setJiraBuilderJqlFilter("job", 'type=task and status="Done"')
@@ -123,6 +129,7 @@ class JiraBuilderAcceptanceTest extends Specification {
     // Use secret to store password
     // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
     // Help message
-    // Updated comment ?
+    // Form Validation in Global Config
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
+    // Updated comment ?
 }

@@ -3,6 +3,7 @@ package com.ceilfors.jenkins.plugins.jirabuilder
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.*
+import jenkins.model.GlobalConfiguration
 import org.jvnet.hudson.test.JenkinsRule
 
 import java.util.concurrent.TimeUnit
@@ -45,7 +46,7 @@ class JenkinsRunner extends JenkinsRule {
             new StringParameterDefinition(it, "")
         }))
 
-        JiraBuilderConfigurePage configPage = configure(name)
+        JiraBuilderConfigurationPage configPage = configure(name)
         configPage.activateJiraBuilderTrigger()
         configPage.save()
 
@@ -60,7 +61,7 @@ class JenkinsRunner extends JenkinsRule {
     }
 
     def setJiraBuilderCommentPattern(String name, String commentPattern) {
-        JiraBuilderConfigurePage configPage = configure(name)
+        JiraBuilderConfigurationPage configPage = configure(name)
         configPage.setCommentPattern(commentPattern)
         configPage.save()
 
@@ -70,7 +71,7 @@ class JenkinsRunner extends JenkinsRule {
 
 
     void setJiraBuilderJqlFilter(String name, String jqlFilter) {
-        JiraBuilderConfigurePage configPage = configure(name)
+        JiraBuilderConfigurationPage configPage = configure(name)
         configPage.setJqlFilter(jqlFilter)
         configPage.save()
 
@@ -78,16 +79,21 @@ class JenkinsRunner extends JenkinsRule {
         assertThat(jiraBuilderTrigger.jqlFilter, is(jqlFilter))
     }
 
-    JiraBuilderConfigurePage configure(String jobName) {
+    JiraBuilderConfigurationPage configure(String jobName) {
         HtmlPage htmlPage = createWebClient().goTo("job/$jobName/configure")
-        return new JiraBuilderConfigurePage(htmlPage)
+        return new JiraBuilderConfigurationPage(htmlPage)
+    }
+
+    JiraBuilderGlobalConfigurationPage globalConfigure() {
+        HtmlPage htmlPage = createWebClient().goTo("configure")
+        return new JiraBuilderGlobalConfigurationPage(htmlPage)
     }
 
     void addParameterMapping(String name, String jenkinsParameter, String issueAttributePath) {
         JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
         def originalParameterMappingSize = jiraBuilderTrigger.parameterMappings.size()
 
-        JiraBuilderConfigurePage configPage = configure(name)
+        JiraBuilderConfigurationPage configPage = configure(name)
         configPage.addParameterMapping(jenkinsParameter, issueAttributePath)
         configPage.save()
 
@@ -95,5 +101,17 @@ class JenkinsRunner extends JenkinsRule {
         assertThat("Parameter mapping is not added", jiraBuilderTrigger.parameterMappings.size(), equalTo(originalParameterMappingSize + 1))
         assertThat(jiraBuilderTrigger.parameterMappings.last().jenkinsParameter, is(jenkinsParameter))
         assertThat(jiraBuilderTrigger.parameterMappings.last().issueAttributePath, is(issueAttributePath))
+    }
+
+    void setJiraBuilderGlobalConfig(String rootUrl, String username, String password) {
+        JiraBuilderGlobalConfigurationPage configPage = globalConfigure()
+        configPage.setRootUrl(rootUrl)
+        configPage.setCredentials(username, password)
+        configPage.save()
+
+        def globalConfig = GlobalConfiguration.all().get(JiraBuilderGlobalConfiguration)
+        assertThat(globalConfig.rootUrl, equalTo(rootUrl))
+        assertThat(globalConfig.username, equalTo(username))
+        assertThat(globalConfig.password, equalTo(password))
     }
 }
