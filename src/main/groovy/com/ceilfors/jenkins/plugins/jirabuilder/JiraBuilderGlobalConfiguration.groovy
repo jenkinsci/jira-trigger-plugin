@@ -1,6 +1,8 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
+import groovy.transform.PackageScope
 import hudson.Extension
+import hudson.util.Secret
 import jenkins.model.GlobalConfiguration
 import net.sf.json.JSONObject
 import org.kohsuke.stapler.StaplerRequest
@@ -12,23 +14,23 @@ class JiraBuilderGlobalConfiguration extends GlobalConfiguration {
 
     private String jiraRootUrl
     private String jiraUsername
-    private String jiraPassword
+    private Secret jiraPassword
 
     JiraBuilderGlobalConfiguration() {
         load()
     }
 
     JiraBuilderGlobalConfiguration(String jiraRootUrl, String jiraUsername, String jiraPassword) {
-        this.jiraRootUrl = jiraRootUrl
-        this.jiraUsername = jiraUsername
-        this.jiraPassword = jiraPassword
+        setJiraRootUrl(jiraRootUrl)
+        setJiraUsername(jiraUsername)
+        setJiraPassword(jiraPassword)
     }
 
     @Override
     boolean configure(StaplerRequest req, JSONObject formData) {
-        jiraRootUrl = formData.getString("jiraRootUrl")
-        jiraUsername = formData.getString("jiraUsername")
-        jiraPassword = formData.getString("jiraPassword")
+        setJiraRootUrl(formData.getString("jiraRootUrl"))
+        setJiraUsername(formData.getString("jiraUsername"))
+        setJiraPassword(formData.getString("jiraPassword"))
         save();
         return super.configure(req, formData)
     }
@@ -41,7 +43,22 @@ class JiraBuilderGlobalConfiguration extends GlobalConfiguration {
         return jiraUsername
     }
 
-    String getPassword() {
+    Secret getPassword() {
         return jiraPassword
+    }
+
+    @PackageScope
+    void setJiraRootUrl(String jiraRootUrl) {
+        this.jiraRootUrl = jiraRootUrl
+    }
+
+    @PackageScope
+    void setJiraUsername(String jiraUsername) {
+        this.jiraUsername = jiraUsername
+    }
+
+    @PackageScope
+    void setJiraPassword(String jiraPassword) {
+        this.jiraPassword = Secret.fromString(jiraPassword)
     }
 }

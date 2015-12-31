@@ -34,7 +34,7 @@ class JrjcJiraClient implements Jira {
     private DisposableHttpClient getHttpClient() {
         return new AsynchronousHttpClientFactory()
                 .createClient(serverUri,
-                new BasicHttpAuthenticationHandler(jiraBuilderGlobalConfiguration.username, jiraBuilderGlobalConfiguration.password));
+                new BasicHttpAuthenticationHandler(jiraBuilderGlobalConfiguration.username, jiraBuilderGlobalConfiguration.password.plainText));
     }
 
     private JbRestClient getJiraRestClient() {

@@ -112,6 +112,6 @@ class JenkinsRunner extends JenkinsRule {
         def globalConfig = GlobalConfiguration.all().get(JiraBuilderGlobalConfiguration)
         assertThat(globalConfig.rootUrl, equalTo(rootUrl))
         assertThat(globalConfig.username, equalTo(username))
-        assertThat(globalConfig.password, equalTo(password))
+        assertThat(globalConfig.password.plainText, equalTo(password))
     }
 }

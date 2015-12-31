@@ -16,6 +16,10 @@ import java.util.logging.Level
  */
 class JiraBuilderAcceptanceTest extends Specification {
 
+    String jiraRootUrl = "http://localhost:2990/jira"
+    String jiraUsername = "admin"
+    String jiraPassword = "admin"
+
     JenkinsRunner jenkins = new JenkinsRunner()
 
     @Rule
@@ -26,8 +30,10 @@ class JiraBuilderAcceptanceTest extends Specification {
             new ExternalResource() {
                 @Override
                 protected void before() throws Throwable {
-                    jenkins.setJiraBuilderGlobalConfig("http://localhost:2990/jira", "admin", "admin")
                     JiraBuilderGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraBuilderGlobalConfiguration)
+                    configuration.jiraRootUrl = jiraRootUrl
+                    configuration.jiraUsername = jiraUsername
+                    configuration.jiraPassword = jiraPassword
                     jira = new JrjcJiraClient(configuration)
                     jira.deleteAllWebhooks()
                     jira.registerWebhook(jenkins.webhookUrl)
@@ -35,6 +41,23 @@ class JiraBuilderAcceptanceTest extends Specification {
             })
 
     Jira jira
+
+    def 'Should be able to hit JIRA when setting up JIRA global configuration from UI'() {
+        given:
+        def issueKey = jira.createIssue("Dummy issue description")
+        jenkins.createJiraTriggeredProject("simplejob", "jenkins_description")
+        jenkins.addParameterMapping("simplejob", "jenkins_description", "fields.description")
+
+        when:
+        jenkins.setJiraBuilderGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
+        jira.addComment(issueKey, "a comment")
+
+        then:
+        jenkins.buildShouldBeScheduled("simplejob")
+        jenkins.buildTriggeredWithParameter("simplejob", [
+                "jenkins_description": "Dummy issue description"
+        ])
+    }
 
     @Unroll
     def 'Trigger simple job when a comment is created'() {
@@ -125,11 +148,12 @@ class JiraBuilderAcceptanceTest extends Specification {
     }
 
     // ** Incremental features: **
+    // Add comment back to JIRA when there is a comment pattern that matches, but no jobs have been triggered
     // Make JIRA configurable including the webhook URL from Jenkins
-    // Use secret to store password
     // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
     // Help message
     // Form Validation in Global Config
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
+    // Check
     // Updated comment ?
 }
