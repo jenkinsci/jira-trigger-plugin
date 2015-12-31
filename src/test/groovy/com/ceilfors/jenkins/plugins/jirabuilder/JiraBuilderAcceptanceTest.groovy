@@ -1,6 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
-import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
+import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.JrjcJiraClient
 import jenkins.model.GlobalConfiguration
 import org.junit.Rule
@@ -40,7 +40,7 @@ class JiraBuilderAcceptanceTest extends Specification {
                 }
             })
 
-    Jira jira
+    JiraClient jira
 
     def 'Should be able to hit JIRA when setting up JIRA global configuration from UI'() {
         given:

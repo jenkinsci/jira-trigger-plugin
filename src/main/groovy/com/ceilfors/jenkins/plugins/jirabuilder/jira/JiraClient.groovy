@@ -6,7 +6,7 @@ package com.ceilfors.jenkins.plugins.jirabuilder.jira
  *
  * @author ceilfors
  */
-interface Jira {
+interface JiraClient {
 
     String createIssue()
 

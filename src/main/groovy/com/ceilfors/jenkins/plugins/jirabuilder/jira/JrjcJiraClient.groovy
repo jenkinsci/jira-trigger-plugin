@@ -17,7 +17,7 @@ import javax.ws.rs.core.UriBuilder
  * @author ceilfors
  */
 @Singleton
-class JrjcJiraClient implements Jira {
+class JrjcJiraClient implements JiraClient {
 
     private static final WEBHOOK_NAME = "Jenkins JIRA Builder"
     JiraBuilderGlobalConfiguration jiraBuilderGlobalConfiguration

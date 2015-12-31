@@ -1,6 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
-import com.ceilfors.jenkins.plugins.jirabuilder.jira.Jira
+import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jirabuilder.parameter.IssueAttributePathParameterMapping
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookContext
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookListener
@@ -25,10 +25,10 @@ class JiraBuilder implements JiraWebhookListener {
     private BlockingQueue<QueueTaskFuture<? extends AbstractBuild>> lastScheduledBuild = new ArrayBlockingQueue<>(1)
 
     private Jenkins jenkins
-    private Jira jira
+    private JiraClient jira
 
     @Inject
-    public JiraBuilder(Jenkins jenkins, Jira jira) {
+    public JiraBuilder(Jenkins jenkins, JiraClient jira) {
         this.jenkins = jenkins
         this.jira = jira
     }
