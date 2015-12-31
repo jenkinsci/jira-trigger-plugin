@@ -5,7 +5,6 @@ import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookListener
 import com.google.inject.AbstractModule
 import com.google.inject.Scopes
 import hudson.Extension
-import jenkins.model.Jenkins
 /**
  * @author ceilfors
  */
@@ -16,7 +15,5 @@ class JiraBuilderModule extends AbstractModule {
     protected void configure() {
         bind(JiraWebhookListener).to(JiraBuilder).in(Scopes.SINGLETON)
         bind(Jira).to(JrjcJiraClient).in(Scopes.SINGLETON)
-        bind(Jenkins).toInstance(Jenkins.instance)
-//        bind(JiraBuilderGlobalConfiguration).toInstance(GlobalConfiguration.all().get(JiraBuilderGlobalConfiguration))
     }
 }

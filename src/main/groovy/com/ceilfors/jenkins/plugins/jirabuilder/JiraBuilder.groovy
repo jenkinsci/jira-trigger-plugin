@@ -24,11 +24,14 @@ class JiraBuilder implements JiraWebhookListener {
     private static final Logger LOGGER = Logger.getLogger(JiraBuilder.name)
     private BlockingQueue<QueueTaskFuture<? extends AbstractBuild>> lastScheduledBuild = new ArrayBlockingQueue<>(1)
 
-    @Inject
-    Jenkins jenkins
+    private Jenkins jenkins
+    private Jira jira
 
     @Inject
-    Jira jira
+    public JiraBuilder(Jenkins jenkins, Jira jira) {
+        this.jenkins = jenkins
+        this.jira = jira
+    }
 
     @Override
     void commentCreated(JiraWebhookContext jiraWebhookContext) {

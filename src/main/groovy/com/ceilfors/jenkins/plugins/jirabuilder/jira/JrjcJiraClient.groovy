@@ -1,29 +1,44 @@
 package com.ceilfors.jenkins.plugins.jirabuilder.jira
-import com.atlassian.httpclient.api.HttpClient
+
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory
+import com.atlassian.jira.rest.client.internal.async.DisposableHttpClient
+import com.ceilfors.jenkins.plugins.jirabuilder.JiraBuilderGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhook
+import com.google.inject.Singleton
 import groovy.json.JsonSlurper
 
+import javax.inject.Inject
 import javax.ws.rs.core.UriBuilder
+
 /**
  * @author ceilfors
  */
+@Singleton
 class JrjcJiraClient implements Jira {
 
-    private JbRestClient jiraRestClient
-    private HttpClient httpClient
-    private URI serverUri
-
     private static final WEBHOOK_NAME = "Jenkins JIRA Builder"
+    JiraBuilderGlobalConfiguration jiraBuilderGlobalConfiguration
 
-    public JrjcJiraClient() {
-        serverUri = "http://localhost:2990/jira".toURI()
-        httpClient = new AsynchronousHttpClientFactory()
-                .createClient(serverUri, new BasicHttpAuthenticationHandler("admin", "admin"));
-        jiraRestClient = new JbRestClient(serverUri, httpClient)
+    @Inject
+    public JrjcJiraClient(JiraBuilderGlobalConfiguration jiraBuilderGlobalConfiguration) {
+        this.jiraBuilderGlobalConfiguration = jiraBuilderGlobalConfiguration
+    }
+
+    private URI getServerUri() {
+        return jiraBuilderGlobalConfiguration.rootUrl.toURI()
+    }
+
+    private DisposableHttpClient getHttpClient() {
+        return new AsynchronousHttpClientFactory()
+                .createClient(serverUri,
+                new BasicHttpAuthenticationHandler(jiraBuilderGlobalConfiguration.username, jiraBuilderGlobalConfiguration.password));
+    }
+
+    private JbRestClient getJiraRestClient() {
+        return new JbRestClient(serverUri, httpClient)
     }
 
     @Override

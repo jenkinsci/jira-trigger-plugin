@@ -18,8 +18,10 @@ class JiraBuilderGlobalConfiguration extends GlobalConfiguration {
         load()
     }
 
-    public static JiraBuilderGlobalConfiguration get() {
-        return all().get(JiraBuilderGlobalConfiguration)
+    JiraBuilderGlobalConfiguration(String jiraRootUrl, String jiraUsername, String jiraPassword) {
+        this.jiraRootUrl = jiraRootUrl
+        this.jiraUsername = jiraUsername
+        this.jiraPassword = jiraPassword
     }
 
     @Override

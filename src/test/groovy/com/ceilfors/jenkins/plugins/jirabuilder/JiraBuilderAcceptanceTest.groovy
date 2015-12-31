@@ -11,7 +11,7 @@ import java.util.logging.Level
  */
 class JiraBuilderAcceptanceTest extends Specification {
 
-    def Jira jira = new JrjcJiraClient()
+    def Jira jira = new JrjcJiraClient(new JiraBuilderGlobalConfiguration("http://localhost:2990/jira", "admin", "admin"))
 
     @Rule JenkinsRunner jenkins = new JenkinsRunner()
     @Rule JulLogLevelRule julLogLevelRule = new JulLogLevelRule(Level.FINEST)
@@ -120,8 +120,9 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     // ** Incremental features: **
     // Make JIRA configurable including the webhook URL from Jenkins
+    // Use secret to store password
+    // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
     // Help message
-    // Webhook 'h' is small letter.
     // Updated comment ?
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
 }
