@@ -14,10 +14,10 @@ import java.util.logging.Logger
  */
 class JulLogLevelRule implements TestRule {
 
-    private Level level
+    private Level pluginLogLevel
 
-    public JulLogLevelRule(Level level) {
-        this.level = level
+    public JulLogLevelRule(Level pluginLogLevel) {
+        this.pluginLogLevel = pluginLogLevel
     }
 
     @Override
@@ -29,8 +29,8 @@ class JulLogLevelRule implements TestRule {
             consoleHandler = new ConsoleHandler();
             topLogger.addHandler(consoleHandler);
         }
-        consoleHandler.setLevel(level)
-        Logger.getLogger("com.ceilfors.jenkins.plugins").setLevel(level)
+        consoleHandler.setLevel(pluginLogLevel)
+        Logger.getLogger("com.ceilfors.jenkins.plugins").setLevel(pluginLogLevel)
         return base
     }
 }
