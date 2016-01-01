@@ -7,7 +7,7 @@ import org.kohsuke.stapler.DataBoundConstructor
  */
 class IssueAttributePathParameterMapping extends ParameterMapping {
 
-    private String issueAttributePath
+    private final String issueAttributePath
 
     @DataBoundConstructor
     IssueAttributePathParameterMapping(String jenkinsParameter, String issueAttributePath) {

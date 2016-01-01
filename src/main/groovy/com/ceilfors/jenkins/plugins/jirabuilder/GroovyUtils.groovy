@@ -3,6 +3,7 @@ package com.ceilfors.jenkins.plugins.jirabuilder
 /**
  * @author ceilfors
  */
+@Deprecated
 class GroovyUtils {
 
     /**
