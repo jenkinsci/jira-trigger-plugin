@@ -2,13 +2,15 @@ package com.ceilfors.jenkins.plugins.jirabuilder.parameter
 
 import com.ceilfors.jenkins.plugins.jirabuilder.JiraBuilderException
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
+import com.google.inject.Singleton
 
 import javax.inject.Inject
 
 /**
  * @author ceilfors
  */
-class IssueAttributePathParameterResolver implements ParameterResolver {
+@Singleton
+class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttributePathParameterMapping, String> {
 
     private JiraClient jiraClient
 
