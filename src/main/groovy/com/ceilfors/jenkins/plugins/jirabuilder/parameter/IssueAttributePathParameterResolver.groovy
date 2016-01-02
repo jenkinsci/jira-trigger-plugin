@@ -3,6 +3,7 @@ package com.ceilfors.jenkins.plugins.jirabuilder.parameter
 import com.ceilfors.jenkins.plugins.jirabuilder.JiraBuilderException
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
 import com.google.inject.Singleton
+import hudson.model.StringParameterValue
 
 import javax.inject.Inject
 
@@ -10,7 +11,7 @@ import javax.inject.Inject
  * @author ceilfors
  */
 @Singleton
-class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttributePathParameterMapping, String> {
+class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttributePathParameterMapping, StringParameterValue> {
 
     private JiraClient jiraClient
 
@@ -19,8 +20,9 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
         this.jiraClient = jiraClient
     }
 
-    String resolve(IssueAttributePathParameterMapping issueAttributePathParameterMapping, String issueKey) {
-        resolveProperty(jiraClient.getIssueMap(issueKey), issueAttributePathParameterMapping.issueAttributePath)
+    StringParameterValue resolve(IssueAttributePathParameterMapping issueAttributePathParameterMapping, String issueKey) {
+        String attributeValue = resolveProperty(jiraClient.getIssueMap(issueKey), issueAttributePathParameterMapping.issueAttributePath)
+        new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
     }
 
     /**
@@ -30,7 +32,7 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
      * @param property
      * @return the resolved property, null otherwise
      */
-    static def resolveProperty(Map map, String property) {
+    static String resolveProperty(Map map, String property) {
         try {
             if (!property.contains(".") && !map.containsKey(property)) {
                 // If property is not nested, Eval.x returns null instead of throwing NPE

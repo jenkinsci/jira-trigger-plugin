@@ -1,9 +1,11 @@
 package com.ceilfors.jenkins.plugins.jirabuilder.parameter
 
+import hudson.model.ParameterValue
+
 /**
  * @author ceilfors
  */
-interface ParameterResolver<T extends ParameterMapping, R> {
+interface ParameterResolver<M extends ParameterMapping, V extends ParameterValue > {
 
-    R resolve(T parameterMapping, String issueKey)
+    V resolve(M parameterMapping, String issueKey)
 }

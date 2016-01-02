@@ -3,6 +3,7 @@ package com.ceilfors.jenkins.plugins.jirabuilder.parameter
 import com.ceilfors.jenkins.plugins.jirabuilder.JiraBuilderException
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
 import groovy.json.JsonSlurper
+import hudson.model.StringParameterValue
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -22,19 +23,22 @@ class IssueAttributePathParameterResolverTest extends Specification {
         IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver(jiraClient)
 
         when:
-        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping("unused", attributePath)
-        String result = resolver.resolve(mapping, "TEST-136")
+        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping("parameter", attributePath)
+        StringParameterValue result = resolver.resolve(mapping, "TEST-136")
 
         then:
-        result == attributeValue
+        result != null
+        result.value == attributeValue
+        result.name == "parameter"
         1 * jiraClient.getIssueMap("TEST-136") >> { getIssueJson("TEST-136") }
 
         where:
-        attributePath        | attributeValue
-        "fields.description" | "description body"
-        "fields.summary"     | "summary content"
-        "fields.status.name" | "To Do"
-        "id"                 | "11120"
+        attributePath                 | attributeValue
+        "fields.description"          | "description body"
+        "fields.summary"              | "summary content"
+        "fields.status.name"          | "To Do"
+        "id"                          | "11120"
+        "fields.timeoriginalestimate" | 300
     }
 
     @Unroll
