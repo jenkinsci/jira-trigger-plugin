@@ -64,7 +64,7 @@ class JrjcJiraClient implements JiraClient {
     @Override
     void registerWebhook(String url) {
         jiraRestClient.webhookRestClient.registerWebhook(new WebhookInput(
-                url: "$url?issue_key=\${issue.key}",
+                url: "$url",
                 name: WEBHOOK_NAME,
                 events: [JiraWebhook.WEBHOOK_EVENT],
         )).claim()
@@ -80,11 +80,11 @@ class JrjcJiraClient implements JiraClient {
     }
 
     @Override
-    Map getIssueMap(String issueKey) {
+    Map getIssueMap(String issueKeyOrId) {
         final URI uri = UriBuilder.fromUri(serverUri)
                 .path("/rest/api/latest")
                 .path("issue")
-                .path(issueKey)
+                .path(issueKeyOrId)
                 .build();
         return new JsonSlurper().parseText(httpClient.newRequest(uri).setAccept("application/json").get().claim().entity) as Map
     }

@@ -1,8 +1,10 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
+
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
+import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraUtils
 import com.ceilfors.jenkins.plugins.jirabuilder.parameter.IssueAttributePathParameterMapping
-import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookContext
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookListener
+import com.ceilfors.jenkins.plugins.jirabuilder.webhook.WebhookCommentEvent
 import com.google.inject.Singleton
 import groovy.util.logging.Log
 import hudson.model.*
@@ -36,12 +38,13 @@ class JiraBuilder implements JiraWebhookListener {
     }
 
     @Override
-    void commentCreated(JiraWebhookContext jiraWebhookContext) {
+    void commentCreated(WebhookCommentEvent commentEvent) {
         def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraBuilderTrigger) }
         if (jobs) {
             log.fine("Found jobs: ${jobs.collect { it.name }}")
             boolean buildScheduled = false
-            def commentBody = jiraWebhookContext.eventBody.body as String
+            def commentBody = commentEvent.comment.body
+            def issueId = JiraUtils.getIssueIdFromComment(commentEvent.comment)
             for (job in jobs) {
                 JiraBuilderTrigger trigger = job.getTrigger(JiraBuilderTrigger)
                 if (trigger.commentPattern) {
@@ -51,7 +54,7 @@ class JiraBuilder implements JiraWebhookListener {
                     }
                 }
                 if (trigger.jqlFilter) {
-                    if (!jira.validateIssueKey(jiraWebhookContext.issueKey, trigger.jqlFilter)) {
+                    if (!jira.validateIssueKey(issueId, trigger.jqlFilter)) {
                         log.fine("[${job.fullName}] jqlFilter doesn't match with the JQL filter, not scheduling build")
                         break
                     }
@@ -59,15 +62,15 @@ class JiraBuilder implements JiraWebhookListener {
 
                 List<Action> actions = []
                 if (trigger.parameterMappings) {
-                    def issue = jira.getIssueMap(jiraWebhookContext.issueKey)
+                    def issue = jira.getIssueMap(issueId)
                     actions << new ParametersAction(collectParameterValues(trigger, issue))
                 }
                 job.scheduleBuild2(quietPeriod, new JiraBuilderTrigger.JiraBuilderTriggerCause(), actions)
-                jiraBuilderListeners*.buildScheduled(jiraWebhookContext.issueKey, commentBody, job.fullName)
+                jiraBuilderListeners*.buildScheduled(issueId, commentBody, job.fullName)
                 buildScheduled = true
             }
             if (!buildScheduled) {
-                jiraBuilderListeners*.buildNotScheduled(jiraWebhookContext.issueKey, commentBody)
+                jiraBuilderListeners*.buildNotScheduled(issueId, commentBody)
             }
         } else {
             log.fine("Couldn't find any jobs that have JiraBuildTrigger configured")

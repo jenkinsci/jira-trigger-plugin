@@ -3,11 +3,12 @@ package com.ceilfors.jenkins.plugins.jirabuilder.webhook
 import groovy.json.JsonSlurper
 import hudson.Extension
 import hudson.model.UnprotectedRootAction
-import org.kohsuke.stapler.QueryParameter
+import org.codehaus.jettison.json.JSONObject
 import org.kohsuke.stapler.StaplerRequest
 import org.kohsuke.stapler.interceptor.RequirePOST
 
 import javax.inject.Inject
+
 /**
  * @author ceilfors
  */
@@ -43,20 +44,17 @@ class JiraWebhook implements UnprotectedRootAction {
 
     @SuppressWarnings("GroovyUnusedDeclaration")
     @RequirePOST
-    public void doIndex(StaplerRequest request, @QueryParameter(required = true) String issue_key) {
-        Map webhookEvent = new JsonSlurper().parseText(getRequestBody(request)) as Map
-        processEvent(request, issue_key, webhookEvent)
+    public void doIndex(StaplerRequest request) {
+        processEvent(request, getRequestBody(request))
     }
 
-    public void processEvent(StaplerRequest request, String issueKey, Map webhookEvent) {
-        if (webhookEvent["webhookEvent"] == WEBHOOK_EVENT) {
-            JiraWebhookContext jiraWebhookContext = new JiraWebhookContext(
-                    issueKey,
-                    webhookEvent.comment as Map
-            )
-            jiraWebhookContext.userId = request.getParameter("user_id")
-            jiraWebhookContext.userKey = request.getParameter("user_key")
-            jiraWebhookListener.commentCreated(jiraWebhookContext)
+    public void processEvent(StaplerRequest request, String webhookEvent) {
+        Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
+        if (webhookEventMap["webhookEvent"] == WEBHOOK_EVENT) {
+            WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(new JSONObject(webhookEvent))
+            commentEvent.userId = request.getParameter("user_id")
+            commentEvent.userKey = request.getParameter("user_key")
+            jiraWebhookListener.commentCreated(commentEvent)
         }
     }
 

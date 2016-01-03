@@ -18,7 +18,7 @@ interface JiraClient {
 
     def deleteAllWebhooks()
 
-    Map getIssueMap(String issueKey)
+    Map getIssueMap(String issueKeyOrId)
 
     boolean validateIssueKey(String issueKey, String jqlFilter)
 }
