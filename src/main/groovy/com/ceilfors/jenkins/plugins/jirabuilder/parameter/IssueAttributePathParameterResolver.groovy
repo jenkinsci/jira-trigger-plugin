@@ -21,6 +21,7 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
     }
 
     StringParameterValue resolve(IssueAttributePathParameterMapping issueAttributePathParameterMapping, String issueKey) {
+        // KLUDGE: Hits JIRA multiple times, might want to handle multiple parameters at one time
         String attributeValue = resolveProperty(jiraClient.getIssueMap(issueKey), issueAttributePathParameterMapping.issueAttributePath)
         new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
     }
