@@ -1,7 +1,9 @@
 package com.ceilfors.jenkins.plugins.jirabuilder.parameter
 
+import com.atlassian.jira.rest.client.api.domain.Comment
 import com.ceilfors.jenkins.plugins.jirabuilder.JiraBuilderException
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
+import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraUtils
 import com.google.inject.Singleton
 import hudson.model.StringParameterValue
 
@@ -20,9 +22,10 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
         this.jiraClient = jiraClient
     }
 
-    StringParameterValue resolve(IssueAttributePathParameterMapping issueAttributePathParameterMapping, String issueKey) {
+    StringParameterValue resolve(Comment comment, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
         // KLUDGE: Hits JIRA multiple times, might want to handle multiple parameters at one time
-        String attributeValue = resolveProperty(jiraClient.getIssueMap(issueKey), issueAttributePathParameterMapping.issueAttributePath)
+        def issueMap = jiraClient.getIssueMap(JiraUtils.getIssueIdFromComment(comment))
+        String attributeValue = resolveProperty(issueMap, issueAttributePathParameterMapping.issueAttributePath)
         new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
     }
 

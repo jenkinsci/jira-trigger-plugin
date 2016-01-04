@@ -146,12 +146,16 @@ class JiraBuilderAcceptanceTest extends Specification {
     }
 
     // ** Incremental features: **
+    // Help message
+    // Add default comment pattern to prevent all jobs being triggered without configuration
+    // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
+    // Check if logs are working
+    // --- 1.0 ---
+
     // Add comment back to JIRA when there is a comment pattern that matches, but no jobs have been triggered
     // Make JIRA configurable including the webhook URL from Jenkins
     // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
-    // Help message
-    // Form Validation in Global Config
-    // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
+    // Form Validation in Global Config by hitting JIRA
     // Check SequentialExecutionQueue that is used by GitHubWebHook
     // Updated comment ?
 }

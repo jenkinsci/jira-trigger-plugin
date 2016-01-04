@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder.parameter
 
+import com.atlassian.jira.rest.client.api.domain.Comment
 import hudson.model.ParameterValue
 
 /**
@@ -7,5 +8,5 @@ import hudson.model.ParameterValue
  */
 interface ParameterResolver<M extends ParameterMapping, V extends ParameterValue > {
 
-    V resolve(M parameterMapping, String issueKey)
+    V resolve(Comment comment, M parameterMapping)
 }
