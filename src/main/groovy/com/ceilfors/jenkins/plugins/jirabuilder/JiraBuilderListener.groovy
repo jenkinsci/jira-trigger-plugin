@@ -1,9 +1,10 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
+import com.atlassian.jira.rest.client.api.domain.Comment
+import hudson.model.AbstractProject
 /**
  * @author ceilfors
  */
 interface JiraBuilderListener {
-    def buildScheduled(String issueKey, String commentBody, String jobName)
-    def buildNotScheduled(String issueKey, String commentBody)
+    def buildScheduled(Comment comment, Collection<? extends AbstractProject> projects)
+    def buildNotScheduled(Comment comment)
 }

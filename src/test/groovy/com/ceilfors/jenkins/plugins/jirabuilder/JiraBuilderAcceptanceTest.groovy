@@ -150,7 +150,11 @@ class JiraBuilderAcceptanceTest extends Specification {
     // Add default comment pattern to prevent all jobs being triggered without configuration
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
     // Check if logs are working
-    // --- 1.0 ---
+    // --- 1.0.0 ---
+
+    // Make AcceptanceTest independent of JIRA
+    // Run CI in CloudBees Jenkins
+    // --- 1.0.1 ---
 
     // Add comment back to JIRA when there is a comment pattern that matches, but no jobs have been triggered
     // Make JIRA configurable including the webhook URL from Jenkins

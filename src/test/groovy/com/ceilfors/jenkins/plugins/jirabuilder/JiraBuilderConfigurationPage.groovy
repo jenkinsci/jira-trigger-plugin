@@ -61,7 +61,7 @@ class JiraBuilderConfigurationPage {
 
     private HtmlCheckBoxInput getJiraBuilderTriggerCheckBox() {
         throwIfNotFound("jiraBuilderTriggerCheckBox") {
-            configPage.getFirstByXPath("""//input[contains(@name, "${JiraBuilderTrigger.simpleName}")]""")
+            configPage.getFirstByXPath("""//input[contains(@name, "${JiraCommentBuilderTrigger.simpleName}")]""")
         }
     }
 

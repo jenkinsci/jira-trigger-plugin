@@ -1,4 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
+
+import com.atlassian.jira.rest.client.api.domain.Comment
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.*
@@ -27,12 +29,12 @@ class JenkinsRunner extends JenkinsRule {
         jiraBuilder.addJiraBuilderListener(new JiraBuilderListener() {
 
             @Override
-            def buildScheduled(String issueKey, String commentBody, String jobName) {
+            def buildScheduled(Comment comment, Collection<? extends AbstractProject> projects) {
                 scheduledItem.offer(JenkinsRunner.this.instance.queue.getItems().last(), 5, TimeUnit.SECONDS)
             }
 
             @Override
-            def buildNotScheduled(String issueKey, String commentBody) {
+            def buildNotScheduled(Comment comment) {
                 noBuildLatch.countDown()
             }
         })
@@ -86,7 +88,7 @@ class JenkinsRunner extends JenkinsRule {
         configPage.activateJiraBuilderTrigger()
         configPage.save()
 
-        assertThat(project.triggers.values(), hasItem(instanceOf(JiraBuilderTrigger)))
+        assertThat(project.triggers.values(), hasItem(instanceOf(JiraCommentBuilderTrigger)))
         return project
     }
 
@@ -95,7 +97,7 @@ class JenkinsRunner extends JenkinsRule {
         configPage.setCommentPattern(commentPattern)
         configPage.save()
 
-        JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        JiraCommentBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraCommentBuilderTrigger)
         assertThat(jiraBuilderTrigger.commentPattern, is(commentPattern))
     }
 
@@ -105,7 +107,7 @@ class JenkinsRunner extends JenkinsRule {
         configPage.setJqlFilter(jqlFilter)
         configPage.save()
 
-        JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        JiraCommentBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraCommentBuilderTrigger)
         assertThat(jiraBuilderTrigger.jqlFilter, is(jqlFilter))
     }
 
@@ -120,14 +122,14 @@ class JenkinsRunner extends JenkinsRule {
     }
 
     void addParameterMapping(String name, String jenkinsParameter, String issueAttributePath) {
-        JiraBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        JiraCommentBuilderTrigger jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraCommentBuilderTrigger)
         def originalParameterMappingSize = jiraBuilderTrigger.parameterMappings.size()
 
         JiraBuilderConfigurationPage configPage = configure(name)
         configPage.addParameterMapping(jenkinsParameter, issueAttributePath)
         configPage.save()
 
-        jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraBuilderTrigger)
+        jiraBuilderTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraCommentBuilderTrigger)
         assertThat("Parameter mapping is not added", jiraBuilderTrigger.parameterMappings.size(), equalTo(originalParameterMappingSize + 1))
         assertThat(jiraBuilderTrigger.parameterMappings.last().jenkinsParameter, is(jenkinsParameter))
         assertThat(jiraBuilderTrigger.parameterMappings.last().issueAttributePath, is(issueAttributePath))
