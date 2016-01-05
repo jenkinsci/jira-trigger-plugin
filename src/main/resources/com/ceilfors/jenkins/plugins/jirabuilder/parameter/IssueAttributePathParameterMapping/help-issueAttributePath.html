@@ -1,0 +1,59 @@
+<div>
+    <p>
+        JIRA attribute path resolves an attribute from the JSON response returned by JIRA Get Issue REST API e.g.
+        host:port/jira/rest/api/2/issue/10509/. To understand how the path works, refer to the example below.
+    </p>
+
+    <p>
+        <span style="text-decoration: underline">Example attribute path</span>
+    </p>
+    <table>
+        <thead style="font-style: italic; font-weight: bold">
+        <tr>
+            <td>Attribute Path</td>
+            <td>Attribute Value</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>id</td>
+            <td>11120</td>
+        </tr>
+        <tr>
+            <td>fields.description</td>
+            <td>description body</td>
+        </tr>
+        <tr>
+            <td>fields.summary</td>
+            <td>summary content</td>
+        </tr>
+        <tr>
+            <td>fields.status.name</td>
+            <td>To Do</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <span style="text-decoration: underline">Example JSON response from JIRA REST API</span>
+    </p>
+        <pre>
+{
+  "expand": "renderedFields,names,schema,transitions,operations,editmeta,changelog,versionedRepresentations",
+  "id": "11120",
+  "self": "http://localhost:2990/jira/rest/api/2/issue/11120",
+  "key": "TEST-136",
+  "fields": {
+    ...
+    "description": "description body",
+    "summary": "summary content",
+    ...
+    "status": {
+      "name": "To Do",
+        ...
+    }
+  }
+}
+        </pre>
+    </p>
+</div>
