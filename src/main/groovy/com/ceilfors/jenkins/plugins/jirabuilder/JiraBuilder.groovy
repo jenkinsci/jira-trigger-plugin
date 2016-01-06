@@ -42,6 +42,7 @@ class JiraBuilder implements JiraWebhookListener {
             List<AbstractProject> scheduledProjects = []
             for (job in jobs) {
                 JiraCommentBuilderTrigger trigger = job.getTrigger(JiraCommentBuilderTrigger)
+                trigger.setQuietPeriod(quietPeriod)
                 boolean scheduled = trigger.run(commentEvent.comment)
                 if (scheduled) {
                     scheduledProjects << job
