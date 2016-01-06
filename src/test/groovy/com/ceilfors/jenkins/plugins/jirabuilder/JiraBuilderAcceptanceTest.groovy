@@ -42,22 +42,6 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     JiraClient jira
 
-    def 'Should be able to hit JIRA when setting up JIRA global configuration from UI'() {
-        given:
-        def issueKey = jira.createIssue("Dummy issue description")
-        jenkins.createJiraTriggeredProject("simplejob", "jenkins_description")
-        jenkins.addParameterMapping("simplejob", "jenkins_description", "fields.description")
-
-        when:
-        jenkins.setJiraBuilderGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
-        jira.addComment(issueKey, "a comment")
-
-        then:
-        jenkins.buildShouldBeScheduledWithParameter("simplejob", [
-                "jenkins_description": "Dummy issue description"
-        ])
-    }
-
     @Unroll
     def 'Trigger simple job when a comment is created'() {
         given:
@@ -145,7 +129,26 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
+    def 'Should be able to hit JIRA when setting up JIRA global configuration from UI'() {
+        given:
+        def issueKey = jira.createIssue("Dummy issue description")
+        jenkins.createJiraTriggeredProject("simplejob", "jenkins_description")
+        jenkins.addParameterMapping("simplejob", "jenkins_description", "fields.description")
+
+        when:
+        jenkins.setJiraBuilderGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
+        jira.addComment(issueKey, "a comment")
+
+        then:
+        jenkins.buildShouldBeScheduledWithParameter("simplejob", [
+                "jenkins_description": "Dummy issue description"
+        ])
+    }
+
+
     // ** Incremental features: **
+    // Use JIRA 6.4.12. comment_created Jira WebHook event is only supported in JIRA 7.1, need to use other events e.g. issue_updated.
+    // Register webhook from Jenkins configuration page
     // Help message
     // Add default comment pattern to prevent all jobs being triggered without configuration
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
