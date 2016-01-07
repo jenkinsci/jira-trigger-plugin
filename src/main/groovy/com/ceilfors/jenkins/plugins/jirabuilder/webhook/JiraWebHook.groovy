@@ -16,7 +16,8 @@ import javax.inject.Inject
 class JiraWebhook implements UnprotectedRootAction {
 
     public static final URLNAME = "jira-builder"
-    public static final WEBHOOK_EVENT = "comment_created"
+    public static final PRIMARY_WEBHOOK_EVENT = "comment_created" // JIRA 7.1+
+    public static final SECONDARY_WEBHOOK_EVENT = "jira:issue_updated" // Older JIRA
     private JiraWebhookListener jiraWebhookListener
 
     JiraWebhook() {
@@ -49,12 +50,23 @@ class JiraWebhook implements UnprotectedRootAction {
     }
 
     public void processEvent(StaplerRequest request, String webhookEvent) {
-        Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
-        if (webhookEventMap["webhookEvent"] == WEBHOOK_EVENT) {
+        if (isCommentEvent(webhookEvent)) {
             WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(new JSONObject(webhookEvent))
             commentEvent.userId = request.getParameter("user_id")
             commentEvent.userKey = request.getParameter("user_key")
             jiraWebhookListener.commentCreated(commentEvent)
+        }
+    }
+
+    private boolean isCommentEvent(String webhookEvent) {
+        Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
+        String eventType = webhookEventMap["webhookEvent"]
+        if (eventType == PRIMARY_WEBHOOK_EVENT) {
+            return true
+        } else if (eventType == SECONDARY_WEBHOOK_EVENT && webhookEventMap["comment"]) {
+            return true
+        } else {
+            return false
         }
     }
 

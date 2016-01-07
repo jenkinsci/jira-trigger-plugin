@@ -147,20 +147,21 @@ class JiraBuilderAcceptanceTest extends Specification {
 
 
     // ** Incremental features: **
-    // Use JIRA 6.4.12. comment_created Jira WebHook event is only supported in JIRA 7.1, need to use other events e.g. issue_updated.
-    // Register webhook from Jenkins configuration page
     // Help message
     // Add default comment pattern to prevent all jobs being triggered without configuration
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
     // Check if logs are working
+    // Fix JiraClient createIssue(), it will be never be used by this plugin
+    // Fix JiraClient registerWebhook(), it should auto re-register without deleting webhook.
+    // Fix JiraClient delete webhook should work by searching for base URL
     // --- 1.0.0 ---
 
     // Make AcceptanceTest independent of JIRA
     // Run CI in CloudBees Jenkins
     // --- 1.0.1 ---
 
+    // Register webhook from Jenkins configuration page
     // Add comment back to JIRA when there is a comment pattern that matches, but no jobs have been triggered
-    // Make JIRA configurable including the webhook URL from Jenkins
     // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
     // Form Validation in Global Config by hitting JIRA
     // Check SequentialExecutionQueue that is used by GitHubWebHook

@@ -38,4 +38,12 @@ class WebhookCommentEvent {
     Comment getComment() {
         return comment
     }
+
+    String getWebhookEventType() {
+        return webhookEventType
+    }
+
+    long getTimestamp() {
+        return timestamp
+    }
 }

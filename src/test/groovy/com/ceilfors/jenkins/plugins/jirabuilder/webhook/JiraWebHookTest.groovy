@@ -6,17 +6,26 @@ import spock.lang.Specification
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static spock.util.matcher.HamcrestSupport.expect
+
 /**
  * @author ceilfors
  */
 class JiraWebhookTest extends Specification {
 
     String createCommentCreatedEvent() {
-        this.class.getResourceAsStream("/webhook-request-sample/comment_created.json").text
+        this.class.getResourceAsStream("comment_created.json").text
     }
 
     String createIssueCreatedEvent() {
-        this.class.getResourceAsStream("/webhook-request-sample/issue_created.json").text
+        this.class.getResourceAsStream("issue_created.json").text
+    }
+
+    String createIssueUpdatedEvent() {
+        this.class.getResourceAsStream("issue_updated_without_comment.json").text
+    }
+
+    String createIssueUpdatedWithCommentEvent() {
+        this.class.getResourceAsStream("issue_updated_with_comment.json").text
     }
 
     def "Should notify listener when a comment event is received"() {
@@ -34,6 +43,7 @@ class JiraWebhookTest extends Specification {
         1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
         expect commentEvent.comment.body, is("comment body")
         expect commentEvent.comment.author.name, is("admin")
+        expect commentEvent.webhookEventType, is(JiraWebhook.PRIMARY_WEBHOOK_EVENT)
     }
 
     def "Should store request parameter in context"() {
@@ -56,7 +66,7 @@ class JiraWebhookTest extends Specification {
         expect commentEvent.userKey, equalTo("adminKey")
     }
 
-    def "Should not notify listener when the event type is not comment_created"() {
+    def "Should not notify listener when the event type is issue created"() {
         given:
         JiraWebhook jiraWebhook = new JiraWebhook()
 
@@ -65,6 +75,39 @@ class JiraWebhookTest extends Specification {
 
         when:
         jiraWebhook.processEvent(Mock(StaplerRequest), createIssueCreatedEvent())
+
+        then:
+        0 * listener.commentCreated(_)
+    }
+
+    def "Should not notify listener when issue is updated with comment"() {
+        WebhookCommentEvent commentEvent = null
+
+        given:
+        JiraWebhook jiraWebhook = new JiraWebhook()
+
+        def listener = Mock(JiraWebhookListener)
+        jiraWebhook.setJiraWebhookListener(listener)
+
+        when:
+        jiraWebhook.processEvent(Mock(StaplerRequest), createIssueUpdatedWithCommentEvent())
+
+        then:
+        1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
+        expect commentEvent.comment.body, is("comment body")
+        expect commentEvent.comment.author.name, is("admin")
+        expect commentEvent.webhookEventType, is(JiraWebhook.SECONDARY_WEBHOOK_EVENT)
+    }
+
+    def "Should not notify listener when issue is updated without comment"() {
+        given:
+        JiraWebhook jiraWebhook = new JiraWebhook()
+
+        def listener = Mock(JiraWebhookListener)
+        jiraWebhook.setJiraWebhookListener(listener)
+
+        when:
+        jiraWebhook.processEvent(Mock(StaplerRequest), createIssueUpdatedEvent())
 
         then:
         0 * listener.commentCreated(_)
