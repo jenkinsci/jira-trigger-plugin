@@ -1,6 +1,9 @@
 ### Jenkins ###
 work/
 
+### IDEA ###
+classes/
+
 # Created by https://www.gitignore.io/api/java,intellij,gradle,vagrant,maven
 
 ### Java ###
