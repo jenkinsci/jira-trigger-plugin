@@ -168,5 +168,5 @@ class JiraBuilderAcceptanceTest extends Specification {
     // Form Validation in Global Config by hitting JIRA
     // Check SequentialExecutionQueue that is used by GitHubWebHook
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
-    // Updated comment ?
+    // Translate JiraBuilderException to error messages
 }

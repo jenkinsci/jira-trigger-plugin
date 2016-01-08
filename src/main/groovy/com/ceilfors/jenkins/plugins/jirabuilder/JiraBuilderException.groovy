@@ -6,7 +6,7 @@ package com.ceilfors.jenkins.plugins.jirabuilder
 class JiraBuilderException extends RuntimeException {
 
     private ErrorCode errorCode
-    private Map attributes
+    private Map attributes = [:]
 
     JiraBuilderException(ErrorCode errorCode) {
         this.errorCode = errorCode
@@ -20,5 +20,18 @@ class JiraBuilderException extends RuntimeException {
     JiraBuilderException add(String key, String value) {
         attributes.put(key, value)
         return this
+    }
+
+    ErrorCode getErrorCode() {
+        return errorCode
+    }
+
+    Map getAttributes() {
+        return attributes
+    }
+
+    @Override
+    String getMessage() {
+        return "Class: ${errorCode.class.simpleName}, Name: ${errorCode.name()}, Code: ${errorCode.getCode()}, Attributes: ${attributes}"
     }
 }

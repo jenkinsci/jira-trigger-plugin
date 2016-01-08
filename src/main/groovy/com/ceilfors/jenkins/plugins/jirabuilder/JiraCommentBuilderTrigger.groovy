@@ -79,17 +79,18 @@ class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
     }
 
     boolean run(Comment comment) {
+        log.fine("[${job.fullName}] - Processing comment ${comment.self}")
         def commentBody = comment.body
         def issueId = JiraUtils.getIssueIdFromComment(comment)
         if (commentPattern) {
             if (!(commentBody ==~ commentPattern)) {
-                log.fine("[${job.fullName}] commentPattern doesn't match with the comment body, not scheduling build")
+                log.fine("[${job.fullName}] - Not scheduling build: commentPattern doesn't match with the comment body")
                 return false
             }
         }
         if (jqlFilter) {
             if (!descriptor.jiraClient.validateIssueId(issueId, jqlFilter)) {
-                log.fine("[${job.fullName}] jqlFilter doesn't match with the JQL filter, not scheduling build")
+                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issueId} doesn't match with the jqlFilter set")
                 return false
             }
         }
@@ -98,7 +99,7 @@ class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
         if (parameterMappings) {
             actions << new ParametersAction(collectParameterValues(comment))
         }
-        log.info("[${job.fullName}] scheduling build for JIRA Issue ID $issueId")
+        log.fine("[${job.fullName}] - Scheduilng build for ${comment.self}")
         job.scheduleBuild2(quietPeriod, new JiraBuilderTriggerCause(), actions)
     }
 

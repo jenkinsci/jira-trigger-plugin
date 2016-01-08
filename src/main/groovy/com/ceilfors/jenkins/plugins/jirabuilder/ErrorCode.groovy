@@ -6,4 +6,6 @@ package com.ceilfors.jenkins.plugins.jirabuilder
 interface ErrorCode {
 
     String getCode()
+
+    String name()
 }

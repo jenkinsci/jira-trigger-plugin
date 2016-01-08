@@ -36,14 +36,23 @@ class JiraBuilderGlobalConfiguration extends GlobalConfiguration {
     }
 
     String getRootUrl() {
+        if (!jiraRootUrl) {
+            throw new JiraBuilderException(JiraBuilderErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraRootUrl")
+        }
         return jiraRootUrl
     }
 
     String getUsername() {
+        if (!jiraUsername) {
+            throw new JiraBuilderException(JiraBuilderErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraUsername")
+        }
         return jiraUsername
     }
 
     Secret getPassword() {
+        if (!jiraPassword) {
+            throw new JiraBuilderException(JiraBuilderErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraPassword")
+        }
         return jiraPassword
     }
 

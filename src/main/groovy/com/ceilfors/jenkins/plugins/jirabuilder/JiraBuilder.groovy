@@ -46,7 +46,6 @@ class JiraBuilder implements JiraWebhookListener {
                 boolean scheduled = trigger.run(commentEvent.comment)
                 if (scheduled) {
                     scheduledProjects << job
-
                 }
             }
             if (scheduledProjects) {
