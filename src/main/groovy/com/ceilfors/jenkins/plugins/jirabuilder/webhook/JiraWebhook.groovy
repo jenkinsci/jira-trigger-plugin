@@ -1,6 +1,7 @@
 package com.ceilfors.jenkins.plugins.jirabuilder.webhook
 
 import groovy.json.JsonSlurper
+import groovy.util.logging.Log
 import hudson.Extension
 import hudson.model.UnprotectedRootAction
 import org.codehaus.jettison.json.JSONObject
@@ -12,6 +13,7 @@ import javax.inject.Inject
 /**
  * @author ceilfors
  */
+@Log
 @Extension
 class JiraWebhook implements UnprotectedRootAction {
 
@@ -50,16 +52,19 @@ class JiraWebhook implements UnprotectedRootAction {
     }
 
     public void processEvent(StaplerRequest request, String webhookEvent) {
-        if (isCommentEvent(webhookEvent)) {
+        Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
+        if (isCommentEvent(webhookEventMap)) {
+            log.fine("Received Webhook callback, processing webhook event")
             WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(new JSONObject(webhookEvent))
             commentEvent.userId = request.getParameter("user_id")
             commentEvent.userKey = request.getParameter("user_key")
             jiraWebhookListener.commentCreated(commentEvent)
+        } else {
+            log.warning("Received Webhook callback with the wrong event type, not processing: ${webhookEventMap['webhookEvent']}")
         }
     }
 
-    private boolean isCommentEvent(String webhookEvent) {
-        Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
+    private boolean isCommentEvent(Map webhookEventMap) {
         String eventType = webhookEventMap["webhookEvent"]
         if (eventType == PRIMARY_WEBHOOK_EVENT) {
             return true

@@ -78,7 +78,6 @@ class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
         return super.getDescriptor() as DescriptorImpl
     }
 
-
     boolean run(Comment comment) {
         def commentBody = comment.body
         def issueId = JiraUtils.getIssueIdFromComment(comment)
@@ -99,6 +98,7 @@ class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
         if (parameterMappings) {
             actions << new ParametersAction(collectParameterValues(comment))
         }
+        log.info("[${job.fullName}] scheduling build for JIRA Issue ID $issueId")
         job.scheduleBuild2(quietPeriod, new JiraBuilderTriggerCause(), actions)
     }
 

@@ -38,7 +38,7 @@ class JiraBuilder implements JiraWebhookListener {
     void commentCreated(WebhookCommentEvent commentEvent) {
         def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraCommentBuilderTrigger) }
         if (jobs) {
-            log.fine("Found jobs: ${jobs.collect { it.name }}")
+            log.finest("Found jobs with JiraCommentBuilderTrigger configuration: ${jobs.collect { it.name }}")
             List<AbstractProject> scheduledProjects = []
             for (job in jobs) {
                 JiraCommentBuilderTrigger trigger = job.getTrigger(JiraCommentBuilderTrigger)
@@ -55,7 +55,7 @@ class JiraBuilder implements JiraWebhookListener {
                 jiraBuilderListeners*.buildNotScheduled(commentEvent.comment)
             }
         } else {
-            log.fine("Couldn't find any jobs that have JiraBuildTrigger configured")
+            log.fine("Couldn't find any jobs that have JiraCommentBuilderTrigger configured")
         }
     }
 }
