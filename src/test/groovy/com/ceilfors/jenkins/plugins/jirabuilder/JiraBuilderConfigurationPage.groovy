@@ -24,6 +24,10 @@ class JiraBuilderConfigurationPage {
         jqlFilterText.setValueAttribute(jqlFilter)
     }
 
+    String getCommentPattern() {
+        commentPatternText.valueAttribute
+    }
+
     void addParameterMapping(String jenkinsParameter, String attributePath) {
         HtmlButton addButton = configPage.getFirstByXPath('//button[contains(@suffix, "parameterMappings")]')
         addButton.click()

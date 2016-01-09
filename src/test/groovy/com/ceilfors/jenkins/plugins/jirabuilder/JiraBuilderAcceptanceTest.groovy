@@ -11,6 +11,8 @@ import spock.lang.Unroll
 
 import java.util.logging.Level
 
+import static com.ceilfors.jenkins.plugins.jirabuilder.JiraCommentBuilderTrigger.DEFAULT_COMMENT
+
 /**
  * @author ceilfors
  */
@@ -46,18 +48,13 @@ class JiraBuilderAcceptanceTest extends Specification {
     def 'Trigger simple job when a comment is created'() {
         given:
         def issueKey = jira.createIssue()
-        jenkins.createJiraTriggeredProject(jobName)
+        jenkins.createJiraTriggeredProject("job")
 
         when:
-        jira.addComment(issueKey, comment)
+        jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
-        jenkins.buildShouldBeScheduled(jobName)
-
-        where:
-        jobName     | comment
-        "simplejob" | "a comment"
-        "other job" | "arbitrary comment"
+        jenkins.buildShouldBeScheduled("job")
     }
 
     def 'Trigger job with built-in field when a comment is created'() {
@@ -68,7 +65,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.addParameterMapping("simplejob", "jenkins_key", "key")
 
         when:
-        jira.addComment(issueKey, "a comment")
+        jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.buildShouldBeScheduledWithParameter("simplejob", [
@@ -97,7 +94,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.setJiraBuilderCommentPattern("job", ".*jiratrigger.*")
 
         when:
-        jira.addComment(issueKey, "bla bla bla")
+        jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.noBuildShouldBeScheduled()
@@ -110,7 +107,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.setJiraBuilderJqlFilter("job", 'type=task and description~"dummy description" and status="To Do"')
 
         when:
-        jira.addComment(issueKey, "comment body")
+        jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.buildShouldBeScheduled("job")
@@ -123,31 +120,35 @@ class JiraBuilderAcceptanceTest extends Specification {
         jenkins.setJiraBuilderJqlFilter("job", 'type=task and status="Done"')
 
         when:
-        jira.addComment(issueKey, "comment body")
+        jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.noBuildShouldBeScheduled()
     }
 
-    def 'Should be able to hit JIRA when setting up JIRA global configuration from UI'() {
+    def 'Jobs is triggered when JIRA configuration is set from the UI'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
         jenkins.createJiraTriggeredProject("simplejob", "jenkins_description")
-        jenkins.addParameterMapping("simplejob", "jenkins_description", "fields.description")
+        jenkins.setJiraBuilderJqlFilter("simplejob", 'type=task and description~"dummy description" and status="To Do"')
 
         when:
         jenkins.setJiraBuilderGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
-        jira.addComment(issueKey, "a comment")
+        jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
-        jenkins.buildShouldBeScheduledWithParameter("simplejob", [
-                "jenkins_description": "Dummy issue description"
-        ])
+        jenkins.buildShouldBeScheduled("simplejob")
     }
 
+    def 'Comment pattern by default must not be empty'() {
+        when:
+        jenkins.createJiraTriggeredProject("job")
+
+        then:
+        jenkins.triggerCommentPatternShouldNotBeEmpty("job")
+    }
 
     // ** Incremental features: **
-    // Add default comment pattern to prevent all jobs being triggered without configuration
     // Fix JiraClient createIssue(), it will be never be used by this plugin
     // Fix JiraClient registerWebhook(), it should auto re-register without deleting webhook.
     // Fix JiraClient delete webhook should work by searching for base URL
@@ -157,7 +158,7 @@ class JiraBuilderAcceptanceTest extends Specification {
     // --- 0.2.0 ---
 
     // Document log names in wiki
-    // Make AcceptanceTest independent of JIRA
+    // Make AcceptanceTest independent of JIRA / Split source sets
     // Run CI in CloudBees Jenkins
     // --- 1.0.0 ---
 

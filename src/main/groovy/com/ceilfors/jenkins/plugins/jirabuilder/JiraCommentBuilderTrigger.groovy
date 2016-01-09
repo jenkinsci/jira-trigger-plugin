@@ -30,7 +30,8 @@ import java.util.logging.Level
 @Log
 class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
 
-    private String commentPattern = ""
+    public static final String DEFAULT_COMMENT = "build this please"
+    private String commentPattern = DescriptorImpl.DEFAULT_COMMENT_PATTERN
     private String jqlFilter = ""
     private List<ParameterMapping> parameterMappings = []
     private int quietPeriod
@@ -120,6 +121,9 @@ class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
 
     @Extension
     static class DescriptorImpl extends TriggerDescriptor {
+
+        @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly
+        public static final String DEFAULT_COMMENT_PATTERN = "${DEFAULT_COMMENT}"
 
         @Inject
         private Jenkins jenkins

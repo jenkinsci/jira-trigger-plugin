@@ -146,4 +146,9 @@ class JenkinsRunner extends JenkinsRule {
         assertThat(globalConfig.username, equalTo(username))
         assertThat(globalConfig.password.plainText, equalTo(password))
     }
+
+    void triggerCommentPatternShouldNotBeEmpty(String jobName) {
+        JiraBuilderConfigurationPage configPage = configure(jobName)
+        assertThat(configPage.commentPattern, not(isEmptyOrNullString()))
+    }
 }
