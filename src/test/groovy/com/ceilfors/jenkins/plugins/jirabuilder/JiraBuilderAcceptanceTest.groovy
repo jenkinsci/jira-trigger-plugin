@@ -147,8 +147,6 @@ class JiraBuilderAcceptanceTest extends Specification {
 
 
     // ** Incremental features: **
-    // Fix & add more logs + level, think about how to test logging
-    // Help message
     // Add default comment pattern to prevent all jobs being triggered without configuration
     // Fix JiraClient createIssue(), it will be never be used by this plugin
     // Fix JiraClient registerWebhook(), it should auto re-register without deleting webhook.
@@ -158,9 +156,10 @@ class JiraBuilderAcceptanceTest extends Specification {
     // Register webhook from Jenkins configuration page
     // --- 0.2.0 ---
 
+    // Document log names in wiki
     // Make AcceptanceTest independent of JIRA
     // Run CI in CloudBees Jenkins
-    // --- 1.0.1 ---
+    // --- 1.0.0 ---
 
     // JiraTriggerCause should contain issue key and link
     // Add comment back to JIRA when there is a comment pattern that matches, but no jobs have been triggered
