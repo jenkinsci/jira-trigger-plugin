@@ -72,3 +72,12 @@ jenkinsPlugin {
         }
     }
 }
+
+// Split Acceptance Test as it requires JIRA. See README.md on how to run the acceptance test.
+test {
+    exclude 'com/ceilfors/**/*AcceptanceTest*'
+}
+task acceptanceTest(type: Test) {
+    include 'com/ceilfors/**/*AcceptanceTest*'
+    reports.html.destination = file("$buildDir/reports/acceptanceTest")
+}
