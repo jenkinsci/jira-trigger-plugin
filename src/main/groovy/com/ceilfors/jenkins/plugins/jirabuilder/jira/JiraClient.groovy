@@ -8,16 +8,6 @@ package com.ceilfors.jenkins.plugins.jirabuilder.jira
  */
 interface JiraClient {
 
-    String createIssue()
-
-    String createIssue(String description)
-
-    void addComment(String issueKey, String comment)
-
-    void registerWebhook(String url)
-
-    def deleteAllWebhooks()
-
     Map getIssueMap(String issueKeyOrId)
 
     boolean validateIssueId(String issueId, String jqlFilter)

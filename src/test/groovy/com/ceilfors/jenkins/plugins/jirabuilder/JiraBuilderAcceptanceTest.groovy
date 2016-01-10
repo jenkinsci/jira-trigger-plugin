@@ -1,7 +1,5 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
 
-import com.ceilfors.jenkins.plugins.jirabuilder.jira.JiraClient
-import com.ceilfors.jenkins.plugins.jirabuilder.jira.JrjcJiraClient
 import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.ExternalResource
@@ -12,7 +10,6 @@ import spock.lang.Unroll
 import java.util.logging.Level
 
 import static com.ceilfors.jenkins.plugins.jirabuilder.JiraCommentBuilderTrigger.DEFAULT_COMMENT
-
 /**
  * @author ceilfors
  */
@@ -36,13 +33,13 @@ class JiraBuilderAcceptanceTest extends Specification {
                     configuration.jiraRootUrl = jiraRootUrl
                     configuration.jiraUsername = jiraUsername
                     configuration.jiraPassword = jiraPassword
-                    jira = new JrjcJiraClient(configuration)
+                    jira = new JiraRunner(configuration)
                     jira.deleteAllWebhooks()
                     jira.registerWebhook(jenkins.webhookUrl)
                 }
             })
 
-    JiraClient jira
+    JiraRunner jira
 
     @Unroll
     def 'Trigger simple job when a comment is created'() {
@@ -149,11 +146,10 @@ class JiraBuilderAcceptanceTest extends Specification {
     }
 
     // ** Incremental features: **
-    // Fix JiraClient createIssue(), it will be never be used by this plugin
-    // Fix JiraClient registerWebhook(), it should auto re-register without deleting webhook.
-    // Fix JiraClient delete webhook should work by searching for base URL
+    // Host plugin to Jenkins
     // --- 0.1.0 ---
 
+    // Classes javadoc
     // Register webhook from Jenkins configuration page
     // --- 0.2.0 ---
 
