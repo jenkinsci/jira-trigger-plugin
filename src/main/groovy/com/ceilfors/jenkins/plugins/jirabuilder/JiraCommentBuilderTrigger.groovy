@@ -8,13 +8,7 @@ import com.ceilfors.jenkins.plugins.jirabuilder.parameter.ParameterMapping
 import com.ceilfors.jenkins.plugins.jirabuilder.parameter.ParameterResolver
 import groovy.util.logging.Log
 import hudson.Extension
-import hudson.model.AbstractProject
-import hudson.model.Action
-import hudson.model.BuildableItem
-import hudson.model.Cause
-import hudson.model.Item
-import hudson.model.ParameterValue
-import hudson.model.ParametersAction
+import hudson.model.*
 import hudson.triggers.Trigger
 import hudson.triggers.TriggerDescriptor
 import jenkins.model.Jenkins
@@ -28,7 +22,7 @@ import java.util.logging.Level
  * @author ceilfors
  */
 @Log
-class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
+class JiraCommentBuilderTrigger extends Trigger<BuildableItem> {
 
     public static final String DEFAULT_COMMENT = "build this please"
     private String commentPattern = DescriptorImpl.DEFAULT_COMMENT_PATTERN
@@ -82,16 +76,16 @@ class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
     boolean run(Comment comment) {
         log.fine("[${job.fullName}] - Processing comment ${comment.self}")
         def commentBody = comment.body
-        def issueId = JiraUtils.getIssueIdFromComment(comment)
         if (commentPattern) {
             if (!(commentBody ==~ commentPattern)) {
-                log.fine("[${job.fullName}] - Not scheduling build: commentPattern doesn't match with the comment body")
+                log.fine("[${job.fullName}] - Not scheduling build: commentPattern [$commentPattern] doesn't match with the comment body [$commentBody]")
                 return false
             }
         }
         if (jqlFilter) {
+            def issueId = JiraUtils.getIssueIdFromComment(comment)
             if (!descriptor.jiraClient.validateIssueId(issueId, jqlFilter)) {
-                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issueId} doesn't match with the jqlFilter set")
+                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issueId} doesn't match with the jqlFilter [$jqlFilter]")
                 return false
             }
         }
@@ -101,7 +95,7 @@ class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
             actions << new ParametersAction(collectParameterValues(comment))
         }
         log.fine("[${job.fullName}] - Scheduilng build for ${comment.self}")
-        job.scheduleBuild2(quietPeriod, new JiraBuilderTriggerCause(), actions)
+        return job.scheduleBuild(quietPeriod, new JiraBuilderTriggerCause(), *actions)
     }
 
     private List<ParameterValue> collectParameterValues(Comment comment) {
@@ -123,7 +117,7 @@ class JiraCommentBuilderTrigger extends Trigger<AbstractProject> {
     static class DescriptorImpl extends TriggerDescriptor {
 
         @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly
-        public static final String DEFAULT_COMMENT_PATTERN = "${DEFAULT_COMMENT}"
+        public static final String DEFAULT_COMMENT_PATTERN = "(?i)${DEFAULT_COMMENT}"
 
         @Inject
         private Jenkins jenkins
