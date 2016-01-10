@@ -46,12 +46,6 @@ jenkinsPlugin {
     gitHubUrl = 'https://github.com/ceilfors/jira-builder-plugin'
     pluginFirstClassLoader = true
 
-    // optional list of package prefixes that your plugin doesn't want to see from core 
-    // maskClasses = 'groovy.grape org.apache.commons.codec'
-
-    // optional version number from which this plugin release is configuration-compatible
-    // compatibleSinceVersion = '1.1.0'
-
     repoUrl = 'http://maven.jenkins-ci.org:8081/content/repositories/releases'
     snapshotRepoUrl = 'http://maven.jenkins-ci.org:8081/content/repositories/snapshots'
 
