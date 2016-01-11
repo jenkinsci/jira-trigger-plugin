@@ -1,6 +1,8 @@
 # JIRA Builder plugin
 Triggers a build when a comment is added to JIRA.
 
+![Jira Builder Configuration](docs/jira-builder-configuration.png?raw=true "Jira Builder Configuration")
+
 ## Setting up JIRA Webhook
 
 1. Go to JIRA > Cog > System > Advanced > WebHooks
