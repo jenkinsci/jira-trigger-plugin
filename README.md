@@ -25,7 +25,7 @@ Quick start:
 3. Accept Oracle license term for Java
 4. atlas-run-standalone --product jira --version 7.0.0
 5. Setup JIRA project with name TEST
-6. ./gradlew acceptanceTest
+6. ./gradlew test acceptanceTest
 7. Restart JIRA every 3 hours (It is using [timebomb license](https://developer.atlassian.com/market/add-on-licensing-for-developers/timebomb-licenses-for-testing) by default). 
 
 Result of the acceptance test will be available at $buildDir/reports/acceptanceTest/index.html.
