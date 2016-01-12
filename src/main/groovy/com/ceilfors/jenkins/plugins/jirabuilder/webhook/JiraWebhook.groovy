@@ -55,13 +55,14 @@ class JiraWebhook implements UnprotectedRootAction {
         Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
         String eventType = webhookEventMap['webhookEvent']
         if (isCommentEvent(webhookEventMap)) {
-            log.fine("Received Webhook callback, processing webhook event: ${eventType}")
+            log.fine("Received valid Webhook callback. Event type: ${eventType}")
             WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(new JSONObject(webhookEvent))
             commentEvent.userId = request.getParameter("user_id")
             commentEvent.userKey = request.getParameter("user_key")
             jiraWebhookListener.commentCreated(commentEvent)
         } else {
-            log.warning("Received Webhook callback with invalid event type, not processing: ${eventType}")
+            log.warning("Received Webhook callback with an invalid event type or a body without comment. " +
+                    "Event type: ${eventType}. Event body contains: ${webhookEventMap.keySet()}.")
         }
     }
 
