@@ -53,9 +53,9 @@ class JiraCommentBuilderTriggerTest extends Specification {
         0 * project.scheduleBuild(_, _)
 
         where:
-        commentBody         | commentPattern
-        "please abuild me"  | "please build me"
-        " please build me"  | "please build me"
-        "please build me\n" | "please build me"
+        commentBody              | commentPattern
+        "please do not build me" | "please build me"
+        " please build me"       | "please build me"
+        "please build me\n"      | "please build me"
     }
 }

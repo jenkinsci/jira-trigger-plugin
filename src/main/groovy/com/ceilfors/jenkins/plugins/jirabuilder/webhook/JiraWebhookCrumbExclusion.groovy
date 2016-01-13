@@ -7,6 +7,7 @@ import javax.servlet.FilterChain
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+
 /**
  * @author ceilfors
  */
@@ -24,6 +25,6 @@ class JiraWebhookCrumbExclusion extends CrumbExclusion {
     }
 
     String getExclusionPath() {
-        return "/" + JiraWebhook.URLNAME
+        return "/" + JiraWebhook.URL_NAME
     }
 }

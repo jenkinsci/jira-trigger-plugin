@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="jelly:define" elementFormDefault="qualified">
+    <xsd:annotation>
+        <xsd:documentation>
+            <p>Tag library which allows the creation of new tags using Jelly script itself.</p>
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:element name="invoke">
+        <xsd:annotation>
+            <xsd:documentation>The &lt;invoke&gt;tag will invoke a given Script instance.It can be used with the &lt;script&gt;tag which defines scriptsas variables that can later be invoked by this &lt;invoke&gt;tag.
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="script">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the Script to be invoked by this tag, which typically has been previouslydefined by the use of the &lt;script&gt;tag.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="extend">
+        <xsd:annotation>
+            <xsd:documentation>&lt;extend&gt;is used to extend a dynamic tag defined in an inheriteddynamic tag library
+                <p/>
+                <authortag>&lt;a href="mailto:tima@intalio.com"&gt;Tim Anderson&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+                <seetag>SuperTag</seetag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="name">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the tag to create</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="bean">
+        <xsd:annotation>
+            <xsd:documentation>Binds a Java bean to the given named Jelly tag so that the attributes ofthe tag set the bean properties..
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="name">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the tag to create</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="className">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the Java class name to use for the tag</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="classLoader">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the ClassLoader to use to load the class.If no value is set then the current threads context classloader is used.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="varAttribute">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the attribute used to define the bean variable that this dynamictag will output its results as. This defaults to 'var' though this propertycan be used to change this if it conflicts with a bean property called 'var'.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="classLoader">
+        <xsd:annotation>
+            <xsd:documentation>Creates a new
+                <code>URLClassLoader</code>to dynamicallyload tags froms.
+                <authortag>&lt;a href="mailto:stephenh@chase3000.com"&gt;Stephen Haberman&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="var">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <paramtag>var the variable to store the class loader in</paramtag>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="url">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <paramtag>url the url to load the classes from</paramtag>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="name">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the tag to create</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="className">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the Java class name to use for the tag</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="classLoader">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the ClassLoader to use to load the class.If no value is set then the current threads context classloader is used.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="varAttribute">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the attribute used to define the bean variable that this dynamictag will output its results as. This defaults to 'var' though this propertycan be used to change this if it conflicts with a bean property called 'var'.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="script">
+        <xsd:annotation>
+            <xsd:documentation>&lt;script&gt;tag is used to assign a Script objectto a variable. The script can then be called whenever the user wishesmaybe from inside an expression or more typically via the &lt;invoke&gt;tag.
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="var">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the variable name of the tag to create</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="invokeBody">
+        <xsd:annotation>
+            <xsd:documentation>&lt;invokeBody&gt;tag is used inside a &lt;tag&gt;tag(i.e. the definition of a dynamic tag) to invoke the tags body whenthe tag is invoked.
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="super">
+        <xsd:annotation>
+            <xsd:documentation>&lt;super&gt;tag is used to invoke a parent tag implementation, whena tag extends an existing tag
+                <authortag>&lt;a href="mailto:tima@intalio.com"&gt;Tim Anderson&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+                <seetag>ExtendTag</seetag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="attribute">
+        <xsd:annotation>
+            <xsd:documentation>This tag is bound onto a Java Bean class. When the tag is invoked a bean will be createdusing the tags attributes.The bean may also have an invoke method called invoke(), run(), execute() or some such methodwhich will be invoked after the bean has been configured.
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <authortag>&lt;a href="mailto:jason@zenplex.com"&gt;Jason van Zyl&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="name">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the attribute</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="required">
+                <xsd:annotation>
+                    <xsd:documentation>Sets whether this attribute is mandatory or not</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="defaultValue">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the default value of this attribute</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="tag">
+        <xsd:annotation>
+            <xsd:documentation>&lt;tag&gt;is used to define a new tagusing a Jelly script to implement the behaviour of the tag.Parameters can be passed into the new tag using normal XML attributenotations. Inside the body of the tag definition, the attributes canbe accessed as normal Jelly variables.
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="name">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the tag to create</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="dynaBean">
+        <xsd:annotation>
+            <xsd:documentation>Binds a Java bean to the given named Jelly tag so that the attributes ofthe tag set the bean properties..
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="name">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the tag to create</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="varAttribute">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the attribute used to define the bean variable that this dynamictag will output its results as. This defaults to 'var' though this propertycan be used to change this if it conflicts with a bean property called 'var'.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="dynaClass">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the org.apache.commons.beanutils.DynaClasswhich will be bound to this dynamic tag.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="jellyBean">
+        <xsd:annotation>
+            <xsd:documentation>Binds a Java bean to the given named Jelly tag so that the attributes ofthe tag set the bean properties. After the body of this tag is invokedthen the beans invoke() method will be called, if the bean has one.
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="method">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the method to invoke on the bean.This defaults to "run" so that Runnable objects can beinvoked, but this property can be set to whatever is required,such as "execute" or "invoke"</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="name">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the tag to create</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="className">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the Java class name to use for the tag</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="classLoader">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the ClassLoader to use to load the class.If no value is set then the current threads context classloader is used.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="varAttribute">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the name of the attribute used to define the bean variable that this dynamictag will output its results as. This defaults to 'var' though this propertycan be used to change this if it conflicts with a bean property called 'var'.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="taglib">
+        <xsd:annotation>
+            <xsd:documentation>The &lt;taglib&gt;tag is used to define a new tag libraryusing a Jelly script. The tag library is identified by its URI.The tags for a taglib are declared using the org.apache.commons.jelly.tags.define.TagTag.You can 'inherit' tags from a previously defined taglib, as well,allowing runtime extension of tag libraries
+                <authortag>&lt;a href="mailto:jstrachan@apache.org"&gt;James Strachan&lt;/a&gt;</authortag>
+                <versiontag>$Revision: 480467 $</versiontag>
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="uri">
+                <xsd:annotation>
+                    <xsd:documentation>Sets the namespace URI to register this new dynamic tag library with</xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="inherit">
+                <xsd:annotation>
+                    <xsd:documentation>Sets whether this dynamic tag should inherit from the current existing tag libraryof the same URI. This feature is enabled by default so that tags can easily besome tags can be overridden in an existing library, such as when making Mock Tags.You can disable this option if you want to disable any tags in the base library,turning them into just normal static XML.
+                        <paramtag>inherit The inherit to set</paramtag>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="trim">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tagLib">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="escapeText">
+                <xsd:annotation>
+                    <xsd:documentation/>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

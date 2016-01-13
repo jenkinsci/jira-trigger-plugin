@@ -19,6 +19,7 @@ class IssueAttributePathParameterMapping extends ParameterMapping {
         return issueAttributePath
     }
 
+    @SuppressWarnings("UnnecessaryQualifiedReference") // Can't remove qualifier, IntelliJ bug?
     @Extension
     static class IssueAttributePathParameterMappingDescriptor extends ParameterMapping.ParameterMappingDescriptor {
 

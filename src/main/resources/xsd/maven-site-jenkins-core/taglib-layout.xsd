@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="/lib/layout">
+    <xsd:annotation>
+        <xsd:documentation>Tag library that defines the basic layout of Hudson pages.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:element name="header">
+        <xsd:annotation>
+            <xsd:documentation>
+                Header portion of the HTML page, that gets rendered into the &lt;head&gt; tag.
+                Multiple &lt;l:header&gt; elements can be specified, and can even come after
+                &lt;l:main-panel&gt;.
+
+                This tag can be placed inside &lt;l:layout&gt;.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="layout">
+        <xsd:annotation>
+            <xsd:documentation>
+                Outer-most tag for a normal (non-AJAX) HTML rendering.
+                This is used with nested &lt;header&gt;, &lt;side-panel&gt;, and &lt;main-panel&gt;
+                to form Jenkins's basic HTML layout.
+
+
+
+
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+            <xsd:attribute name="title" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Title of the HTML page. Rendered into &lt;title&gt; tag.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="norefresh">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        If non-null, auto refresh is disabled on this page.
+                        This is necessary for pages that include forms.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="css">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        specify path that starts from "/" for loading additional CSS stylesheet.
+                        path is interprted as relative to the context root. e.g.,
+
+                        {noformat}&lt;l:layout css="/plugin/mysuperplugin/css/myneatstyle.css"&gt;{noformat}
+
+                        This was originally added to allow plugins to load their stylesheets, but
+                        *the use of thie attribute is discouraged now.*
+                        plugins should now do so by inserting &lt;style&gt; elements and/or &lt;script&gt; elements
+                        in &lt;l:header/&gt; tag.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="permission">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        If given, this page is only made available to users that has the specified permission.
+                        (The permission will be checked against the "it" object.)
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="tabBar">
+        <xsd:annotation>
+            <xsd:documentation/>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="main-panel">
+        <xsd:annotation>
+            <xsd:documentation>
+                Generates the body as the main content part of a Jenkins page.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="yui">
+        <xsd:annotation>
+            <xsd:documentation>
+                Load Yahoo UI module.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:attribute name="module" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        YUI module name to load.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="side-panel">
+        <xsd:annotation>
+            <xsd:documentation/>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="breadcrumb">
+        <xsd:annotation>
+            <xsd:documentation>
+                Used inside &lt;l:layout&gt; to render additional breadcrumb items.
+
+
+
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:attribute name="href">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        URL that the breadcrumb item links to. Can be omitted.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="id">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        If specified, this ID will be assigned to the LI element.
+                        This is useful for programmatically adding the context menu
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="title" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Display name of the breadcrumb.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="copyButton">
+        <xsd:annotation>
+            <xsd:documentation>
+                Creates a small button that lets the user copies a text into clipboard
+
+
+
+
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:attribute name="tooltip">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Tooltip of the button. Currently this doesn't work as reliably as we'd like.
+                        More ZeroClipboard hacking is likely necessary.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="text" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Text to be copied into the clipboard.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="message" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Confirmation message to be shown once the text is copied.
+                        This is required as in some browsers, button doesn't properly provide feedback to user actions
+                        due to the nature of the hack needed to make copy work.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="container">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Specify the CSS selector (like ".foo") that points to the ancestor block element that has "positive:relative".
+                        According to ZeroClipboard documentation, having such container would improve the accuracy of invisible flash
+                        overlay.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="hasPermission">
+        <xsd:annotation>
+            <xsd:documentation>
+                Renders the body only if the current user has the specified permission
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+            <xsd:attribute name="permission" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        permission object to check. If this is null, the body will be also rendered.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="breadcrumbBar">
+        <xsd:annotation>
+            <xsd:documentation>
+                Generates the bar that shows breadcrumbs, along with its associated dynamic behaviours.
+                This tag is used by l:layout and not expected to be used by anyone else,
+                but it's written as separate tag for better readability of code.
+
+                To render additional breadcrumb items (for example to provide in-page navigations),
+                use the &lt;l:breadcrumb&gt; tag.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="rightspace">
+        <xsd:annotation>
+            <xsd:documentation>
+                Creates a space for the right-hand side of the page.
+                This sticks to the right of the page even when the content overflows.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="renderOnDemand">
+        <xsd:annotation>
+            <xsd:documentation>
+
+
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:attribute name="tag">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Place holder HTML tag. By default it's DIV, but depending on where this is used,
+                        you might need other tags (e.g., inside a table.)
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="clazz">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Additional CSS class names, so that you can discover this tag more easily from your JavaScript.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="capture">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        ','-separated list of variables to capture and make available when later evaluating the body.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="tab">
+        <xsd:annotation>
+            <xsd:documentation/>
+        </xsd:annotation>
+        <xsd:complexType mixed="true"/>
+    </xsd:element>
+    <xsd:element name="expandButton">
+        <xsd:annotation>
+            <xsd:documentation/>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="pane">
+        <xsd:annotation>
+            <xsd:documentation>
+                Used in the &lt;l:side-panel&gt; to draw a box with a title.
+
+                The box is drawn as a table, and the body of this tag
+                is expected to draw a series of &lt;TR&gt;s to fill in the contents
+                of the box.
+
+
+
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+            <xsd:attribute name="title" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Title of the box. Can include HTML.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="width" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Specify the number of columns in the table
+                        (so that the title can stretch to the entire table width.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="id">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        @id of the table, if specified.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="tasks">
+        <xsd:annotation>
+            <xsd:documentation/>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ajax">
+        <xsd:annotation>
+            <xsd:documentation/>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="isAdmin">
+        <xsd:annotation>
+            <xsd:documentation/>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="isAdminOrTest">
+        <xsd:annotation>
+            <xsd:documentation/>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="progressiveRendering">
+        <xsd:annotation>
+            <xsd:documentation>
+
+
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:attribute name="handler" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Instance of jenkins.util.ProgressiveRendering.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="callback" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        JavaScript expression that evaluates to the function taking one JSON-valued parameter which renders results as they come.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="tooltip">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Optional tooltip for progress bar.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="task">
+        <xsd:annotation>
+            <xsd:documentation>
+                This tag inside &lt;l:tasks&gt; tag renders the left navigation bar of Hudson.
+                Each &lt;task&gt; tag gets an icon and link.
+
+
+
+
+
+
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+            <xsd:attribute name="href" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Link target. Relative to the current page.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="icon" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        URL to the icon, which should be 24x24 in size.
+                        It's relative to the context path of Hudson.
+
+                        The common values include:
+
+                        # "images/24x24/..." then points to the stock icon resources
+                        # "plugin/foobar/abc/def.png" that points to "src/main/webapp/abc/def.png" in your plugin resources
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="title" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Human readable text that follows the icon.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="enabled">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        If specified, then this controls whether the task is enabled or not.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="contextMenu">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        If "false", remove this item from the context menu.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="permission">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        If specified, the link will be only displayed when the current user
+                        has the specified permission against the "it" object.
+
+                        This is useful for showing links to restricted pages, as showing
+                        them to unprivileged users don't make sense.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

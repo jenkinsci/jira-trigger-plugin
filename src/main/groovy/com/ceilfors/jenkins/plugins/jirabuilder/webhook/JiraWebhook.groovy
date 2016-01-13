@@ -11,13 +11,15 @@ import org.kohsuke.stapler.interceptor.RequirePOST
 import javax.inject.Inject
 
 /**
+ * The HTTP endpoint that receives JIRA Webhook.
+ *
  * @author ceilfors
  */
 @Log
 @Extension
 class JiraWebhook implements UnprotectedRootAction {
 
-    public static final URLNAME = "jira-builder"
+    public static final URL_NAME = "jira-builder"
     public static final PRIMARY_WEBHOOK_EVENT = "comment_created" // JIRA 7.1+
     public static final SECONDARY_WEBHOOK_EVENT = "jira:issue_updated" // Older JIRA
     private JiraWebhookListener jiraWebhookListener
@@ -42,7 +44,7 @@ class JiraWebhook implements UnprotectedRootAction {
 
     @Override
     String getUrlName() {
-        return URLNAME
+        return URL_NAME
     }
 
     @SuppressWarnings("GroovyUnusedDeclaration")
@@ -70,11 +72,7 @@ class JiraWebhook implements UnprotectedRootAction {
         String eventType = webhookEventMap["webhookEvent"]
         if (eventType == PRIMARY_WEBHOOK_EVENT) {
             return true
-        } else if (eventType == SECONDARY_WEBHOOK_EVENT && webhookEventMap["comment"]) {
-            return true
-        } else {
-            return false
-        }
+        } else return eventType == SECONDARY_WEBHOOK_EVENT && webhookEventMap["comment"]
     }
 
     private String getRequestBody(StaplerRequest req) {

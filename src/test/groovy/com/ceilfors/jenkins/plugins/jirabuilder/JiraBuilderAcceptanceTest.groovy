@@ -57,15 +57,15 @@ class JiraBuilderAcceptanceTest extends Specification {
     def 'Trigger job with built-in field when a comment is created'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
-        jenkins.createJiraTriggeredProject("simplejob", "jenkins_description", "jenkins_key")
-        jenkins.addParameterMapping("simplejob", "jenkins_description", "fields.description")
-        jenkins.addParameterMapping("simplejob", "jenkins_key", "key")
+        jenkins.createJiraTriggeredProject("simpleJob", "jenkins_description", "jenkins_key")
+        jenkins.addParameterMapping("simpleJob", "jenkins_description", "fields.description")
+        jenkins.addParameterMapping("simpleJob", "jenkins_key", "key")
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
-        jenkins.buildShouldBeScheduledWithParameter("simplejob", [
+        jenkins.buildShouldBeScheduledWithParameter("simpleJob", [
                 "jenkins_description": "Dummy issue description",
                 "jenkins_key"        : issueKey
         ])
@@ -75,10 +75,10 @@ class JiraBuilderAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
-        jenkins.setJiraBuilderCommentPattern("job", ".*jiratrigger.*")
+        jenkins.setJiraBuilderCommentPattern("job", ".*jira trigger.*")
 
         when:
-        jira.addComment(issueKey, "bla jiratrigger bla")
+        jira.addComment(issueKey, "bla jira trigger bla")
 
         then:
         jenkins.buildShouldBeScheduled("job")
@@ -88,7 +88,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
-        jenkins.setJiraBuilderCommentPattern("job", ".*jiratrigger.*")
+        jenkins.setJiraBuilderCommentPattern("job", ".*jira trigger.*")
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
@@ -126,15 +126,15 @@ class JiraBuilderAcceptanceTest extends Specification {
     def 'Jobs is triggered when JIRA configuration is set from the UI'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
-        jenkins.createJiraTriggeredProject("simplejob", "jenkins_description")
-        jenkins.setJiraBuilderJqlFilter("simplejob", 'type=task and description~"dummy description" and status="To Do"')
+        jenkins.createJiraTriggeredProject("simpleJob", "jenkins_description")
+        jenkins.setJiraBuilderJqlFilter("simpleJob", 'type=task and description~"dummy description" and status="To Do"')
 
         when:
         jenkins.setJiraBuilderGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
         jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
-        jenkins.buildShouldBeScheduled("simplejob")
+        jenkins.buildShouldBeScheduled("simpleJob")
     }
 
     def 'Comment pattern by default must not be empty'() {

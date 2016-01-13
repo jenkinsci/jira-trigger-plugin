@@ -28,6 +28,7 @@ class JiraWebhookTest extends Specification {
         this.class.getResourceAsStream("issue_updated_with_comment.json").text
     }
 
+    @SuppressWarnings("GrReassignedInClosureLocalVar")
     def "Should notify listener when a comment event is received"() {
         WebhookCommentEvent commentEvent = null
 
@@ -46,6 +47,7 @@ class JiraWebhookTest extends Specification {
         expect commentEvent.webhookEventType, is(JiraWebhook.PRIMARY_WEBHOOK_EVENT)
     }
 
+    @SuppressWarnings("GrReassignedInClosureLocalVar")
     def "Should store request parameter in context"() {
         WebhookCommentEvent commentEvent = null
 
@@ -80,6 +82,7 @@ class JiraWebhookTest extends Specification {
         0 * listener.commentCreated(_)
     }
 
+    @SuppressWarnings("GrReassignedInClosureLocalVar")
     def "Should not notify listener when issue is updated with comment"() {
         WebhookCommentEvent commentEvent = null
 

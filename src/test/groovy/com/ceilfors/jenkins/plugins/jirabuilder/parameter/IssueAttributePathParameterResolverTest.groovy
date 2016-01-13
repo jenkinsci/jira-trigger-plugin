@@ -61,6 +61,7 @@ class IssueAttributePathParameterResolverTest extends Specification {
         thrown JiraBuilderException
 
         where:
+        //noinspection SpellCheckingInspection
         attributePath << [
                 "fieldsa.description",
                 "typo"

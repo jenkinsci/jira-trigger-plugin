@@ -49,7 +49,7 @@ class JiraRunner extends JrjcJiraClient {
     def deleteAllWebhooks() {
         Iterable<Webhook> webhooks = jiraRestClient.webhookRestClient.getWebhooks().claim()
         // TODO: Should find by base URL
-        // TODO: Expose only 1 method: reregisterWebhook() when moving functionality to Jenkins
+        // TODO: Expose only 1 method: re-registerWebhook() when moving functionality to Jenkins
         def webhook = webhooks.find { it.name == WEBHOOK_NAME } as Webhook
         if (webhook) {
             jiraRestClient.webhookRestClient.unregisterWebhook(webhook.selfUri).claim()

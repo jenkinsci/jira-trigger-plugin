@@ -1,0 +1,1 @@
+https://github.com/kohsuke/maven-jellydoc-plugin/tree/master/maven-jellydoc-plugin/schemas
