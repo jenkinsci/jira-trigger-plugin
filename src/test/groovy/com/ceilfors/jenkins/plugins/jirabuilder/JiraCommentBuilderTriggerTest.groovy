@@ -8,6 +8,7 @@ import spock.lang.Unroll
 /**
  * @author ceilfors
  */
+@SuppressWarnings("GroovyAssignabilityCheck")
 class JiraCommentBuilderTriggerTest extends Specification {
 
     def project

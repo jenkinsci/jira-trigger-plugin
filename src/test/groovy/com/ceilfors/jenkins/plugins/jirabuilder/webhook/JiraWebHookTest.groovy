@@ -10,6 +10,7 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * @author ceilfors
  */
+@SuppressWarnings("GroovyAssignabilityCheck")
 class JiraWebhookTest extends Specification {
 
     String createCommentCreatedEvent() {
