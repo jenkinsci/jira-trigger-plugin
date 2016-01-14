@@ -33,9 +33,9 @@ class JiraBuilderAcceptanceTest extends Specification {
                     configuration.jiraRootUrl = jiraRootUrl
                     configuration.jiraUsername = jiraUsername
                     configuration.jiraPassword = jiraPassword
-                    jira = new JiraRunner(configuration)
+                    jira = new RealJiraRunner(configuration)
                     jira.deleteAllWebhooks()
-                    jira.registerWebhook(jenkins.webhookUrl)
+                    jira.registerWebhook(jenkins.webhookUrl.replace("localhost", "10.0.2.2"))
                 }
             })
 
@@ -154,10 +154,11 @@ class JiraBuilderAcceptanceTest extends Specification {
     // --- 0.2.0 ---
 
     // Document log names in wiki
-    // Make AcceptanceTest independent of JIRA / Split source sets
+    // Make AcceptanceTest independent of JIRA
     // Run CI in CloudBees Jenkins
     // --- 1.0.0 ---
 
+    // How to enable JenkinsRule as ClassRule to make the build faster
     // JiraTriggerCause should contain issue key and link
     // Add comment back to JIRA when there is a comment pattern that matches, but no jobs have been triggered
     // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error

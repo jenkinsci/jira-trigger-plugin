@@ -75,7 +75,6 @@ class JenkinsRunner extends JenkinsRule {
 
     String getWebhookUrl() {
         return "${getURL().toString()}${jiraWebhook.urlName}/"
-                .replace("localhost", "10.0.2.2") // vagrant
     }
 
     FreeStyleProject createJiraTriggeredProject(String name, String... parameters) {
