@@ -10,17 +10,17 @@ import org.kohsuke.stapler.StaplerRequest
  * @author ceilfors
  */
 @Extension
-class JiraBuilderGlobalConfiguration extends GlobalConfiguration {
+class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
 
     private String jiraRootUrl
     private String jiraUsername
     private Secret jiraPassword
 
-    JiraBuilderGlobalConfiguration() {
+    JiraTriggerGlobalConfiguration() {
         load()
     }
 
-    JiraBuilderGlobalConfiguration(String jiraRootUrl, String jiraUsername, String jiraPassword) {
+    JiraTriggerGlobalConfiguration(String jiraRootUrl, String jiraUsername, String jiraPassword) {
         setJiraRootUrl(jiraRootUrl)
         setJiraUsername(jiraUsername)
         setJiraPassword(jiraPassword)
@@ -37,21 +37,21 @@ class JiraBuilderGlobalConfiguration extends GlobalConfiguration {
 
     String getRootUrl() {
         if (!jiraRootUrl) {
-            throw new JiraBuilderException(JiraBuilderErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraRootUrl")
+            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraRootUrl")
         }
         return jiraRootUrl
     }
 
     String getUsername() {
         if (!jiraUsername) {
-            throw new JiraBuilderException(JiraBuilderErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraUsername")
+            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraUsername")
         }
         return jiraUsername
     }
 
     Secret getPassword() {
         if (!jiraPassword) {
-            throw new JiraBuilderException(JiraBuilderErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraPassword")
+            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraPassword")
         }
         return jiraPassword
     }

@@ -7,11 +7,11 @@ import spock.lang.Specification
 
 import java.util.logging.Level
 
-import static com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentBuilderTrigger.DEFAULT_COMMENT
+import static JiraCommentTrigger.DEFAULT_COMMENT
 /**
  * @author ceilfors
  */
-class JiraBuilderAcceptanceTest extends Specification {
+class JiraTriggerAcceptanceTest extends Specification {
 
     String jiraRootUrl = "http://localhost:2990/jira"
     String jiraUsername = "admin"
@@ -27,7 +27,7 @@ class JiraBuilderAcceptanceTest extends Specification {
             new ExternalResource() {
                 @Override
                 protected void before() throws Throwable {
-                    JiraBuilderGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraBuilderGlobalConfiguration)
+                    JiraTriggerGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
                     configuration.jiraRootUrl = jiraRootUrl
                     configuration.jiraUsername = jiraUsername
                     configuration.jiraPassword = jiraPassword
@@ -73,7 +73,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
-        jenkins.setJiraBuilderCommentPattern("job", ".*jira trigger.*")
+        jenkins.setJiraTriggerCommentPattern("job", ".*jira trigger.*")
 
         when:
         jira.addComment(issueKey, "bla jira trigger bla")
@@ -86,7 +86,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
-        jenkins.setJiraBuilderCommentPattern("job", ".*jira trigger.*")
+        jenkins.setJiraTriggerCommentPattern("job", ".*jira trigger.*")
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
@@ -99,7 +99,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("dummy description")
         jenkins.createJiraTriggeredProject("job")
-        jenkins.setJiraBuilderJqlFilter("job", 'type=task and description~"dummy description" and status="To Do"')
+        jenkins.setJiraTriggerJqlFilter("job", 'type=task and description~"dummy description" and status="To Do"')
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
@@ -112,7 +112,7 @@ class JiraBuilderAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("dummy description")
         jenkins.createJiraTriggeredProject("job")
-        jenkins.setJiraBuilderJqlFilter("job", 'type=task and status="Done"')
+        jenkins.setJiraTriggerJqlFilter("job", 'type=task and status="Done"')
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
@@ -125,10 +125,10 @@ class JiraBuilderAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
         jenkins.createJiraTriggeredProject("simpleJob", "jenkins_description")
-        jenkins.setJiraBuilderJqlFilter("simpleJob", 'type=task and description~"dummy description" and status="To Do"')
+        jenkins.setJiraTriggerJqlFilter("simpleJob", 'type=task and description~"dummy description" and status="To Do"')
 
         when:
-        jenkins.setJiraBuilderGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
+        jenkins.setJiraTriggerGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
         jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
@@ -168,5 +168,5 @@ class JiraBuilderAcceptanceTest extends Specification {
     // Form Validation in Global Config by hitting JIRA
     // Check SequentialExecutionQueue that is used by GitHubWebHook
     // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
-    // Translate JiraBuilderException to error messages
+    // Translate JiraTriggerException to error messages
 }

@@ -24,8 +24,8 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     private Jenkins jenkins
 
-    RealJiraRunner(Jenkins jenkins, JiraBuilderGlobalConfiguration jiraBuilderGlobalConfiguration) {
-        super(jiraBuilderGlobalConfiguration)
+    RealJiraRunner(Jenkins jenkins, JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
+        super(jiraTriggerGlobalConfiguration)
         this.jenkins = jenkins
     }
 

@@ -1,7 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import com.atlassian.jira.rest.client.api.domain.Comment
-import com.ceilfors.jenkins.plugins.jiratrigger.JiraBuilderException
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import groovy.json.JsonSlurper
 import hudson.model.StringParameterValue
@@ -58,7 +58,7 @@ class IssueAttributePathParameterResolverTest extends Specification {
         resolver.resolve(comment, mapping)
 
         then:
-        thrown JiraBuilderException
+        thrown JiraTriggerException
 
         where:
         //noinspection SpellCheckingInspection

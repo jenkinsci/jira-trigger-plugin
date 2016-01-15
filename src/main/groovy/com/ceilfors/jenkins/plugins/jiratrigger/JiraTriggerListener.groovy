@@ -4,7 +4,7 @@ import hudson.model.AbstractProject
 /**
  * @author ceilfors
  */
-interface JiraBuilderListener {
+interface JiraTriggerListener {
     void buildScheduled(Comment comment, Collection<? extends AbstractProject> projects)
     void buildNotScheduled(Comment comment)
 }

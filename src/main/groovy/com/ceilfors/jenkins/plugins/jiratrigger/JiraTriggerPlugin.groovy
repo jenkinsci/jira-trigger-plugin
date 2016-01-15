@@ -6,7 +6,7 @@ import hudson.util.PluginServletFilter
 /**
  * @author ceilfors
  */
-class JiraBuilderPlugin extends Plugin {
+class JiraTriggerPlugin extends Plugin {
 
     @Override
     void start() throws Exception {

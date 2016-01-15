@@ -4,16 +4,16 @@ import com.gargoylesoftware.htmlunit.html.*
 /**
  * @author ceilfors
  */
-class JiraBuilderConfigurationPage {
+class JiraTriggerConfigurationPage {
 
     private HtmlPage configPage
 
-    JiraBuilderConfigurationPage(HtmlPage configPage) {
+    JiraTriggerConfigurationPage(HtmlPage configPage) {
         this.configPage = configPage
     }
 
-    void activateJiraBuilderTrigger() {
-        jiraBuilderTriggerCheckBox.setChecked(true)
+    void activateJiraCommentTrigger() {
+        jiraCommentTriggerCheckBox.setChecked(true)
     }
 
     void setCommentPattern(String commentPattern) {
@@ -63,9 +63,9 @@ class JiraBuilderConfigurationPage {
         configPage.getByXPath("""//div[contains(@descriptorId, "${IssueAttributePathParameterMapping.simpleName}")]""").last()
     }
 
-    private HtmlCheckBoxInput getJiraBuilderTriggerCheckBox() {
-        throwIfNotFound("jiraBuilderTriggerCheckBox") {
-            configPage.getFirstByXPath("""//input[contains(@name, "${JiraCommentBuilderTrigger.simpleName}")]""")
+    private HtmlCheckBoxInput getJiraCommentTriggerCheckBox() {
+        throwIfNotFound("jiraCommentTriggerCheckBox") {
+            configPage.getFirstByXPath("""//input[contains(@name, "${JiraCommentTrigger.simpleName}")]""")
         }
     }
 
@@ -76,7 +76,7 @@ class JiraBuilderConfigurationPage {
     }
 
     private HtmlTextInput getJqlFilterText() {
-        throwIfNotFound("commentPatternText") {
+        throwIfNotFound("jqlFilter") {
             configPage.getFirstByXPath('//input[contains(@name, "jqlFilter")]')
         }
     }

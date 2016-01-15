@@ -3,13 +3,13 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 /**
  * @author ceilfors
  */
-enum JiraBuilderErrorCode implements ErrorCode {
+enum JiraTriggerErrorCode implements ErrorCode {
 
     JIRA_NOT_CONFIGURED("1")
 
     private String code
 
-    JiraBuilderErrorCode(String code) {
+    JiraTriggerErrorCode(String code) {
         this.code = code
     }
 

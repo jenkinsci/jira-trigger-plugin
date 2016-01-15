@@ -22,7 +22,7 @@ import java.util.logging.Level
  * @author ceilfors
  */
 @Log
-class JiraCommentBuilderTrigger extends Trigger<BuildableItem> {
+class JiraCommentTrigger extends Trigger<BuildableItem> {
 
     public static final String DEFAULT_COMMENT = "build this please"
     private String commentPattern = DescriptorImpl.DEFAULT_COMMENT_PATTERN
@@ -31,7 +31,7 @@ class JiraCommentBuilderTrigger extends Trigger<BuildableItem> {
     private int quietPeriod
 
     @DataBoundConstructor
-    JiraCommentBuilderTrigger() {
+    JiraCommentTrigger() {
     }
 
     String getCommentPattern() {
@@ -95,7 +95,7 @@ class JiraCommentBuilderTrigger extends Trigger<BuildableItem> {
             actions << new ParametersAction(collectParameterValues(comment))
         }
         log.fine("[${job.fullName}] - Scheduilng build for ${comment.self}")
-        return job.scheduleBuild(quietPeriod, new JiraBuilderTriggerCause(), *actions)
+        return job.scheduleBuild(quietPeriod, new JiraCommentTriggerCause(), *actions)
     }
 
     private List<ParameterValue> collectParameterValues(Comment comment) {
@@ -103,7 +103,7 @@ class JiraCommentBuilderTrigger extends Trigger<BuildableItem> {
             if (it instanceof IssueAttributePathParameterMapping) {
                 try {
                     return descriptor.parameterResolver.resolve(comment, it)
-                } catch (JiraBuilderException e) {
+                } catch (JiraTriggerException e) {
                     log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. Example: fields.description, key, fields.project.key", e)
                     return null
                 }
@@ -142,7 +142,7 @@ class JiraCommentBuilderTrigger extends Trigger<BuildableItem> {
         }
     }
 
-    static class JiraBuilderTriggerCause extends Cause {
+    static class JiraCommentTriggerCause extends Cause {
 
         @Override
         String getShortDescription() {

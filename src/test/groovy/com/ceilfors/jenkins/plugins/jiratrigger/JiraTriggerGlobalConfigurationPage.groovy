@@ -9,11 +9,11 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput
 /**
  * @author ceilfors
  */
-class JiraBuilderGlobalConfigurationPage {
+class JiraTriggerGlobalConfigurationPage {
 
     private HtmlPage configPage
 
-    JiraBuilderGlobalConfigurationPage(HtmlPage configPage) {
+    JiraTriggerGlobalConfigurationPage(HtmlPage configPage) {
         this.configPage = configPage
     }
 

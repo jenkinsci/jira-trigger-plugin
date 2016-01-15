@@ -13,26 +13,26 @@ import javax.inject.Inject
  */
 @Singleton
 @Log
-class JiraBuilder implements JiraWebhookListener {
+class JiraTriggerExecutor implements JiraWebhookListener {
 
     private Jenkins jenkins
     private JiraClient jira
-    private Set<JiraBuilderListener> jiraBuilderListeners = []
+    private Set<JiraTriggerListener> jiraTriggerListeners = []
     private int quietPeriod = 0
 
     @Inject
-    public JiraBuilder(Jenkins jenkins, JiraClient jira) {
+    public JiraTriggerExecutor(Jenkins jenkins, JiraClient jira) {
         this.jenkins = jenkins
         this.jira = jira
     }
 
     @Inject
-    private void setJiraBuilderListeners(Set<JiraBuilderListener> jiraBuilderListeners) {
-        this.jiraBuilderListeners.addAll(jiraBuilderListeners)
+    private void setJiraTriggerListeners(Set<JiraTriggerListener> jiraTriggerListeners) {
+        this.jiraTriggerListeners.addAll(jiraTriggerListeners)
     }
 
-    void addJiraBuilderListener(JiraBuilderListener jiraBuilderListener) {
-        jiraBuilderListeners << jiraBuilderListener
+    void addJiraTriggerListener(JiraTriggerListener jiraTriggerListener) {
+        jiraTriggerListeners << jiraTriggerListener
     }
 
     void setQuietPeriod(int quietPeriod) {
@@ -41,12 +41,12 @@ class JiraBuilder implements JiraWebhookListener {
 
     @Override
     void commentCreated(WebhookCommentEvent commentEvent) {
-        def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraCommentBuilderTrigger) }
+        def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraCommentTrigger) }
         if (jobs) {
-            log.finest("Found jobs with JiraCommentBuilderTrigger configuration: ${jobs.collect { it.name }}")
+            log.finest("Found jobs with JiraCommentTrigger configuration: ${jobs.collect { it.name }}")
             List<AbstractProject> scheduledProjects = []
             for (job in jobs) {
-                JiraCommentBuilderTrigger trigger = job.getTrigger(JiraCommentBuilderTrigger)
+                JiraCommentTrigger trigger = job.getTrigger(JiraCommentTrigger)
                 trigger.setQuietPeriod(quietPeriod)
                 boolean scheduled = trigger.run(commentEvent.comment)
                 if (scheduled) {
@@ -54,12 +54,12 @@ class JiraBuilder implements JiraWebhookListener {
                 }
             }
             if (scheduledProjects) {
-                jiraBuilderListeners*.buildScheduled(commentEvent.comment, scheduledProjects)
+                jiraTriggerListeners*.buildScheduled(commentEvent.comment, scheduledProjects)
             } else {
-                jiraBuilderListeners*.buildNotScheduled(commentEvent.comment)
+                jiraTriggerListeners*.buildNotScheduled(commentEvent.comment)
             }
         } else {
-            log.fine("Couldn't find any jobs that have JiraCommentBuilderTrigger configured")
+            log.fine("Couldn't find any jobs that have JiraCommentTrigger configured")
         }
     }
 }

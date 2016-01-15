@@ -20,15 +20,15 @@ class ExceptionLoggingFilter implements Filter {
         try {
             chain.doFilter(request, response)
         } catch (Throwable e) {
-            def jiraBuilderException = ExceptionUtils.getThrowableList(e).find { it instanceof JiraBuilderException }
-            if (jiraBuilderException) {
-                logOrRethrow(jiraBuilderException as JiraBuilderException)
+            def jiraTriggerException = ExceptionUtils.getThrowableList(e).find { it instanceof JiraTriggerException }
+            if (jiraTriggerException) {
+                logOrRethrow(jiraTriggerException as JiraTriggerException)
             }
         }
     }
 
-    private static void logOrRethrow(JiraBuilderException e) {
-        if (e.errorCode == JiraBuilderErrorCode.JIRA_NOT_CONFIGURED) {
+    private static void logOrRethrow(JiraTriggerException e) {
+        if (e.errorCode == JiraTriggerErrorCode.JIRA_NOT_CONFIGURED) {
             log.severe("JIRA is not configured in Jenkins Global Settings. Please set the ${e.attributes['config']}.")
         } else {
             throw e

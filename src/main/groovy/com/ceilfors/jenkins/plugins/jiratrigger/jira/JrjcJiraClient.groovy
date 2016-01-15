@@ -4,7 +4,7 @@ import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory
 import com.atlassian.jira.rest.client.internal.async.DisposableHttpClient
-import com.ceilfors.jenkins.plugins.jiratrigger.JiraBuilderGlobalConfiguration
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.google.inject.Singleton
 import groovy.json.JsonSlurper
 import groovy.util.logging.Log
@@ -18,21 +18,21 @@ import javax.ws.rs.core.UriBuilder
 @Log
 class JrjcJiraClient implements JiraClient {
 
-    JiraBuilderGlobalConfiguration jiraBuilderGlobalConfiguration
+    JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration
 
     @Inject
-    public JrjcJiraClient(JiraBuilderGlobalConfiguration jiraBuilderGlobalConfiguration) {
-        this.jiraBuilderGlobalConfiguration = jiraBuilderGlobalConfiguration
+    public JrjcJiraClient(JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
+        this.jiraTriggerGlobalConfiguration = jiraTriggerGlobalConfiguration
     }
 
     protected URI getServerUri() {
-        return jiraBuilderGlobalConfiguration.rootUrl.toURI()
+        return jiraTriggerGlobalConfiguration.rootUrl.toURI()
     }
 
     protected DisposableHttpClient getHttpClient() {
         return new AsynchronousHttpClientFactory()
                 .createClient(serverUri,
-                new BasicHttpAuthenticationHandler(jiraBuilderGlobalConfiguration.username, jiraBuilderGlobalConfiguration.password.plainText));
+                new BasicHttpAuthenticationHandler(jiraTriggerGlobalConfiguration.username, jiraTriggerGlobalConfiguration.password.plainText));
     }
 
     protected JbRestClient getJiraRestClient() {

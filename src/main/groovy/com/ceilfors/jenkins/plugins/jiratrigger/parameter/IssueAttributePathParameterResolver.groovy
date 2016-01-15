@@ -1,7 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import com.atlassian.jira.rest.client.api.domain.Comment
-import com.ceilfors.jenkins.plugins.jiratrigger.JiraBuilderException
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraUtils
 import com.google.inject.Singleton
@@ -40,11 +40,11 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
         try {
             if (!property.contains(".") && !map.containsKey(property)) {
                 // If property is not nested, Eval.x returns null instead of throwing NPE
-                throw new JiraBuilderException(ParameterErrorCode.FAILED_TO_RESOLVE)
+                throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE)
             }
             Eval.x(map, 'x.' + property)
         } catch (NullPointerException e) {
-            throw new JiraBuilderException(ParameterErrorCode.FAILED_TO_RESOLVE, e)
+            throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE, e)
         }
     }
 }

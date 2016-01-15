@@ -9,7 +9,7 @@ import spock.lang.Unroll
  * @author ceilfors
  */
 @SuppressWarnings("GroovyAssignabilityCheck")
-class JiraCommentBuilderTriggerTest extends Specification {
+class JiraCommentTriggerTest extends Specification {
 
     def project
 
@@ -23,7 +23,7 @@ class JiraCommentBuilderTriggerTest extends Specification {
     def "Triggers build when comment body matches the comment pattern"(String commentBody, String commentPattern) {
         given:
         def comment = new Comment(null, commentBody, null, null, null, null, null, null)
-        JiraCommentBuilderTrigger trigger = new JiraCommentBuilderTrigger(commentPattern: commentPattern)
+        JiraCommentTrigger trigger = new JiraCommentTrigger(commentPattern: commentPattern)
 
         when:
         trigger.start(project, false)
@@ -44,7 +44,7 @@ class JiraCommentBuilderTriggerTest extends Specification {
     def "Does not trigger build when comment body matches the comment pattern"(String commentBody, String commentPattern) {
         given:
         def comment = new Comment(null, commentBody, null, null, null, null, null, null)
-        JiraCommentBuilderTrigger trigger = new JiraCommentBuilderTrigger(commentPattern: commentPattern)
+        JiraCommentTrigger trigger = new JiraCommentTrigger(commentPattern: commentPattern)
 
         when:
         trigger.start(project, false)
