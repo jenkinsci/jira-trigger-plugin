@@ -6,6 +6,7 @@ import com.ceilfors.jenkins.plugins.jirabuilder.parameter.ParameterResolver
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhookListener
 import com.google.inject.AbstractModule
 import com.google.inject.Scopes
+import com.google.inject.multibindings.Multibinder
 import hudson.Extension
 /**
  * @author ceilfors
@@ -18,5 +19,8 @@ class JiraBuilderModule extends AbstractModule {
         bind(JiraWebhookListener).to(JiraBuilder).in(Scopes.SINGLETON)
         bind(JiraClient).to(JrjcJiraClient).in(Scopes.SINGLETON)
         bind(ParameterResolver).to(IssueAttributePathParameterResolver).in(Scopes.SINGLETON)
+
+        Multibinder<JiraBuilderListener> jiraBuilderListenerBinder = Multibinder.newSetBinder(binder(), JiraBuilderListener);
+        jiraBuilderListenerBinder.addBinding().to(CommentingJiraBuilderListener);
     }
 }

@@ -29,12 +29,12 @@ class JenkinsRunner extends JenkinsRule {
         jiraBuilder.addJiraBuilderListener(new JiraBuilderListener() {
 
             @Override
-            def buildScheduled(Comment comment, Collection<? extends AbstractProject> projects) {
+            void buildScheduled(Comment comment, Collection<? extends AbstractProject> projects) {
                 scheduledItem.offer(JenkinsRunner.this.instance.queue.getItems().last(), 5, TimeUnit.SECONDS)
             }
 
             @Override
-            def buildNotScheduled(Comment comment) {
+            void buildNotScheduled(Comment comment) {
                 noBuildLatch.countDown()
             }
         })

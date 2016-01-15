@@ -17,13 +17,18 @@ class JiraBuilder implements JiraWebhookListener {
 
     private Jenkins jenkins
     private JiraClient jira
-    private List<JiraBuilderListener> jiraBuilderListeners = []
+    private Set<JiraBuilderListener> jiraBuilderListeners = []
     private int quietPeriod = 0
 
     @Inject
     public JiraBuilder(Jenkins jenkins, JiraClient jira) {
         this.jenkins = jenkins
         this.jira = jira
+    }
+
+    @Inject
+    private void setJiraBuilderListeners(Set<JiraBuilderListener> jiraBuilderListeners) {
+        this.jiraBuilderListeners.addAll(jiraBuilderListeners)
     }
 
     void addJiraBuilderListener(JiraBuilderListener jiraBuilderListener) {

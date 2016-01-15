@@ -5,6 +5,6 @@ import hudson.model.AbstractProject
  * @author ceilfors
  */
 interface JiraBuilderListener {
-    def buildScheduled(Comment comment, Collection<? extends AbstractProject> projects)
-    def buildNotScheduled(Comment comment)
+    void buildScheduled(Comment comment, Collection<? extends AbstractProject> projects)
+    void buildNotScheduled(Comment comment)
 }

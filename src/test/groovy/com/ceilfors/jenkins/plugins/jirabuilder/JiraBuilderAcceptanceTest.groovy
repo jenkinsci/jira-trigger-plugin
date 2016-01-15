@@ -1,11 +1,9 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
 import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import java.util.logging.Level
 
@@ -33,7 +31,7 @@ class JiraBuilderAcceptanceTest extends Specification {
                     configuration.jiraRootUrl = jiraRootUrl
                     configuration.jiraUsername = jiraUsername
                     configuration.jiraPassword = jiraPassword
-                    jira = new RealJiraRunner(configuration)
+                    jira = new RealJiraRunner(jenkins.instance, configuration)
                     jira.deleteAllWebhooks()
                     jira.registerWebhook(jenkins.webhookUrl.replace("localhost", "10.0.2.2"))
                 }
@@ -41,7 +39,6 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     JiraRunner jira
 
-    @Unroll
     def 'Trigger simple job when a comment is created'() {
         given:
         def issueKey = jira.createIssue()
@@ -52,6 +49,7 @@ class JiraBuilderAcceptanceTest extends Specification {
 
         then:
         jenkins.buildShouldBeScheduled("job")
+        jira.shouldBeNotifiedWithComment(issueKey, "job")
     }
 
     def 'Trigger job with built-in field when a comment is created'() {
@@ -146,13 +144,19 @@ class JiraBuilderAcceptanceTest extends Specification {
     }
 
     // ** Incremental features: **
-    // Host plugin to Jenkins
+    // Add comment - to notify that a build is scheduled
+    // Add comment - Visibility must be the requester and jira-administrators
+    // Add comment - Visibility must be configured in global configuration
+    // Add comment - when there is a comment pattern that matches, but no jobs have been triggered
+    // Trigger job when issue is updated - all
+    // Trigger job when issue is updated - filter by field
+    // Trigger job when issue is updated - filter by from and to value
     // --- 0.1.0 ---
 
     // Classes javadoc
-    // Register webhook from Jenkins configuration page
     // --- 0.2.0 ---
 
+    // Register webhook from Jenkins configuration page
     // Document log names in wiki
     // Make AcceptanceTest independent of JIRA
     // Run CI in CloudBees Jenkins
@@ -160,7 +164,6 @@ class JiraBuilderAcceptanceTest extends Specification {
 
     // How to enable JenkinsRule as ClassRule to make the build faster
     // JiraTriggerCause should contain issue key and link
-    // Add comment back to JIRA when there is a comment pattern that matches, but no jobs have been triggered
     // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
     // Form Validation in Global Config by hitting JIRA
     // Check SequentialExecutionQueue that is used by GitHubWebHook

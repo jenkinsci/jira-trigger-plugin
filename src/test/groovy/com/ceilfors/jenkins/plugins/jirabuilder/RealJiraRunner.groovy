@@ -1,5 +1,4 @@
 package com.ceilfors.jenkins.plugins.jirabuilder
-
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder
 import com.atlassian.jira.rest.client.api.RestClientException
 import com.atlassian.jira.rest.client.api.domain.CimProject
@@ -10,7 +9,11 @@ import com.ceilfors.jenkins.plugins.jirabuilder.jira.Webhook
 import com.ceilfors.jenkins.plugins.jirabuilder.jira.WebhookInput
 import com.ceilfors.jenkins.plugins.jirabuilder.webhook.JiraWebhook
 import groovy.util.logging.Log
+import hudson.model.Job
+import jenkins.model.Jenkins
 
+import static org.hamcrest.Matchers.containsString
+import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
  */
@@ -19,8 +22,11 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     private static final WEBHOOK_NAME = "Jenkins JIRA Builder"
 
-    RealJiraRunner(JiraBuilderGlobalConfiguration jiraBuilderGlobalConfiguration) {
+    private Jenkins jenkins
+
+    RealJiraRunner(Jenkins jenkins, JiraBuilderGlobalConfiguration jiraBuilderGlobalConfiguration) {
         super(jiraBuilderGlobalConfiguration)
+        this.jenkins = jenkins
     }
 
     void registerWebhook(String url) {
@@ -69,9 +75,14 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
         jiraRestClient.issueClient.createIssue(issueInputBuilder.build()).claim().key
     }
 
-    void addComment(String issueKey, String comment) {
+    @Override
+    void shouldBeNotifiedWithComment(String issueKey, String jobName) {
+        // TODO: Should not sleep
+        Thread.sleep(1000)
         def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
-        jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
+        Comment lastComment = issue.getComments().last()
+        Job job = jenkins.getItemByFullName(jobName, Job)
+        assertThat("$issueKey was not notified!", lastComment.body, containsString(job.absoluteUrl))
     }
 
     private Long getIssueTypeId(String project, String issueTypeName) {

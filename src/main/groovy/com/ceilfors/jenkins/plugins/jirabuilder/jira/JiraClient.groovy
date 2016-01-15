@@ -8,6 +8,8 @@ package com.ceilfors.jenkins.plugins.jirabuilder.jira
  */
 interface JiraClient {
 
+    void addComment(String issueKey, String comment)
+
     Map getIssueMap(String issueKeyOrId)
 
     boolean validateIssueId(String issueId, String jqlFilter)

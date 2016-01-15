@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jirabuilder.jira
 
+import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory
 import com.atlassian.jira.rest.client.internal.async.DisposableHttpClient
@@ -52,5 +53,11 @@ class JrjcJiraClient implements JiraClient {
     boolean validateIssueId(String issueId, String jqlFilter) {
         def searchResult = jiraRestClient.searchClient.searchJql("id=$issueId and ($jqlFilter)").claim()
         searchResult.total != 0
+    }
+
+    @Override
+    void addComment(String issueKey, String comment) {
+        def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
+        jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
     }
 }
