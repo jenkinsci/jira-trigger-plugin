@@ -1,15 +1,15 @@
-# JIRA Builder plugin
+# JIRA Trigger plugin
 Triggers a build when a comment is added to JIRA.
 
-![Jira Builder Configuration](docs/jira-builder-configuration.png?raw=true "Jira Builder Configuration")
+![Jira Trigger Configuration](docs/jira-trigger-configuration.png?raw=true "Jira Trigger Configuration")
 
 ## Setting up JIRA Webhook
 
 1. Go to JIRA > Cog > System > Advanced > WebHooks
 2. Create a new Webhook
-3. Set URL to: ${Jenkins URL}/jira-builder/ e.g. http://localhost:8080/jenkins/jira-builder/
+3. Set URL to: ${Jenkins URL}/jira-trigger/ e.g. http://localhost:8080/jenkins/jira-trigger/
 4. Set Events to: _comment created_ or _issue updated_
-5. Enable Jenkins logging at FINE level for troubleshooting: com.ceilfors.jenkins.plugins.jirabuilder.webhook
+5. Enable Jenkins logging at FINE level for troubleshooting: com.ceilfors.jenkins.plugins.jiratrigger.webhook
 6. You should see "Received Webhook callback ..." log messages when Jenkins is receiving webhook events
 
 ## Running Acceptance Test

@@ -26,7 +26,7 @@ repositories {
 
 group = 'org.jenkins-ci.plugins'
 version = '0.1.0-SNAPSHOT'
-description = 'JIRA Builder'
+description = 'JIRA Trigger'
 
 dependencies {
     compile('com.atlassian.jira:jira-rest-java-client-core:3.0.0') {
@@ -41,10 +41,10 @@ dependencies {
 
 jenkinsPlugin {
     coreVersion = '1.565.3'
-    shortName = 'jira-builder'
-    displayName = 'JIRA Builder Plugin'
-    url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Builder+Plugin'
-    gitHubUrl = 'https://github.com/ceilfors/jira-builder-plugin'
+    shortName = 'jira-trigger'
+    displayName = 'JIRA Trigger Plugin'
+    url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin'
+    gitHubUrl = 'https://github.com/ceilfors/jira-trigger-plugin'
     pluginFirstClassLoader = true
 
     repoUrl = 'http://maven.jenkins-ci.org:8081/content/repositories/releases'
