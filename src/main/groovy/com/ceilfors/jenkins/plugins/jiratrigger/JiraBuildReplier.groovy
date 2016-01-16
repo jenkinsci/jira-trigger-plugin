@@ -10,7 +10,7 @@ import javax.inject.Inject
 /**
  * @author ceilfors
  */
-class CommentingJiraTriggerListener implements JiraTriggerListener {
+class JiraBuildReplier implements JiraTriggerListener {
 
     @Inject
     JiraClient jiraClient
