@@ -24,9 +24,9 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     private Jenkins jenkins
 
-    RealJiraRunner(Jenkins jenkins, JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
+    RealJiraRunner(JenkinsRunner jenkinsRunner, JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
         super(jiraTriggerGlobalConfiguration)
-        this.jenkins = jenkins
+        this.jenkins = jenkinsRunner.jenkins
     }
 
     void registerWebhook(String url) {
@@ -77,8 +77,6 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     @Override
     void shouldBeNotifiedWithComment(String issueKey, String jobName) {
-        // TODO: Should not sleep
-        Thread.sleep(1000)
         def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
         Comment lastComment = issue.getComments().last()
         Job job = jenkins.getItemByFullName(jobName, Job)

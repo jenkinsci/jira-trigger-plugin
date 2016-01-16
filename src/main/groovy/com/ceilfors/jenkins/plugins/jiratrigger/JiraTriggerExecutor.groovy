@@ -17,7 +17,7 @@ class JiraTriggerExecutor implements JiraWebhookListener {
 
     private Jenkins jenkins
     private JiraClient jira
-    private Set<JiraTriggerListener> jiraTriggerListeners = []
+    private List<JiraTriggerListener> jiraTriggerListeners = []
     private int quietPeriod = 0
 
     @Inject

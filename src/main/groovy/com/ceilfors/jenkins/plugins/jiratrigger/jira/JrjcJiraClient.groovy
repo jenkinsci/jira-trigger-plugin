@@ -11,12 +11,17 @@ import groovy.util.logging.Log
 
 import javax.inject.Inject
 import javax.ws.rs.core.UriBuilder
+import java.util.concurrent.TimeUnit
+
 /**
  * @author ceilfors
  */
 @Singleton
 @Log
 class JrjcJiraClient implements JiraClient {
+
+    long timeout = 10
+    TimeUnit timeoutUnit = TimeUnit.SECONDS
 
     JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration
 
@@ -45,19 +50,19 @@ class JrjcJiraClient implements JiraClient {
                 .path("/rest/api/latest")
                 .path("issue")
                 .path(issueKeyOrId)
-                .build();
-        return new JsonSlurper().parseText(httpClient.newRequest(uri).setAccept("application/json").get().claim().entity) as Map
+                .build()
+        return new JsonSlurper().parseText(httpClient.newRequest(uri).setAccept("application/json").get().get(timeout, timeoutUnit).entity) as Map
     }
 
     @Override
     boolean validateIssueId(String issueId, String jqlFilter) {
-        def searchResult = jiraRestClient.searchClient.searchJql("id=$issueId and ($jqlFilter)").claim()
+        def searchResult = jiraRestClient.searchClient.searchJql("id=$issueId and ($jqlFilter)").get(timeout, timeoutUnit)
         searchResult.total != 0
     }
 
     @Override
     void addComment(String issueKey, String comment) {
-        def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
-        jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
+        def issue = jiraRestClient.issueClient.getIssue(issueKey).get(timeout, timeoutUnit)
+        jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).get(timeout, timeoutUnit)
     }
 }

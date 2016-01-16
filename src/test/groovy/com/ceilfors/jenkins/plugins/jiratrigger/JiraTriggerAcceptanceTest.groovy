@@ -31,7 +31,7 @@ class JiraTriggerAcceptanceTest extends Specification {
                     configuration.jiraRootUrl = jiraRootUrl
                     configuration.jiraUsername = jiraUsername
                     configuration.jiraPassword = jiraPassword
-                    jira = new RealJiraRunner(jenkins.instance, configuration)
+                    jira = new RealJiraRunner(jenkins, configuration)
                     jira.deleteAllWebhooks()
                     jira.registerWebhook(jenkins.webhookUrl.replace("localhost", "10.0.2.2"))
                 }
@@ -162,6 +162,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Run CI in CloudBees Jenkins
     // --- 1.0.0 ---
 
+    // void method in JrjcJiraClient should be async. Be careful on concurrency issues in this test case.
     // How to enable JenkinsRule as ClassRule to make the build faster
     // JiraTriggerCause should contain issue key and link
     // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error

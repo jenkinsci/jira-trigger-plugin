@@ -21,6 +21,6 @@ class JiraTriggerModule extends AbstractModule {
         bind(ParameterResolver).to(IssueAttributePathParameterResolver).in(Scopes.SINGLETON)
 
         Multibinder<JiraTriggerListener> jiraTriggerListenerBinder = Multibinder.newSetBinder(binder(), JiraTriggerListener)
-        jiraTriggerListenerBinder.addBinding().to(JiraBuildReplier)
+        jiraTriggerListenerBinder.addBinding().to(JiraCommentReplier)
     }
 }
