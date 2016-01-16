@@ -45,7 +45,6 @@ jenkinsPlugin {
     displayName = 'JIRA Trigger Plugin'
     url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin'
     gitHubUrl = 'https://github.com/ceilfors/jira-trigger-plugin'
-    pluginFirstClassLoader = true
 
     repoUrl = 'http://maven.jenkins-ci.org:8081/content/repositories/releases'
     snapshotRepoUrl = 'http://maven.jenkins-ci.org:8081/content/repositories/snapshots'
