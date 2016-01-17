@@ -61,8 +61,8 @@ class JrjcJiraClient implements JiraClient {
     }
 
     @Override
-    void addComment(String issueKey, String comment) {
+    void addCommentReply(String issueKey, String comment) {
         def issue = jiraRestClient.issueClient.getIssue(issueKey).get(timeout, timeoutUnit)
-        jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).get(timeout, timeoutUnit)
+        jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.createWithRoleLevel(comment, "jira-administrator")).get(timeout, timeoutUnit)
     }
 }

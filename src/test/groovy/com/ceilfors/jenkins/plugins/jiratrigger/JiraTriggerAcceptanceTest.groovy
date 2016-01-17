@@ -45,7 +45,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.createJiraTriggeredProject("job")
 
         when:
-        jira.addComment(issueKey, DEFAULT_COMMENT)
+        jira.addCommentReply(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.buildShouldBeScheduled("job")
@@ -60,7 +60,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.addParameterMapping("simpleJob", "jenkins_key", "key")
 
         when:
-        jira.addComment(issueKey, DEFAULT_COMMENT)
+        jira.addCommentReply(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.buildShouldBeScheduledWithParameter("simpleJob", [
@@ -76,7 +76,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.setJiraTriggerCommentPattern("job", ".*jira trigger.*")
 
         when:
-        jira.addComment(issueKey, "bla jira trigger bla")
+        jira.addCommentReply(issueKey, "bla jira trigger bla")
 
         then:
         jenkins.buildShouldBeScheduled("job")
@@ -89,7 +89,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.setJiraTriggerCommentPattern("job", ".*jira trigger.*")
 
         when:
-        jira.addComment(issueKey, DEFAULT_COMMENT)
+        jira.addCommentReply(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.noBuildShouldBeScheduled()
@@ -102,7 +102,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.setJiraTriggerJqlFilter("job", 'type=task and description~"dummy description" and status="To Do"')
 
         when:
-        jira.addComment(issueKey, DEFAULT_COMMENT)
+        jira.addCommentReply(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.buildShouldBeScheduled("job")
@@ -115,7 +115,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.setJiraTriggerJqlFilter("job", 'type=task and status="Done"')
 
         when:
-        jira.addComment(issueKey, DEFAULT_COMMENT)
+        jira.addCommentReply(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.noBuildShouldBeScheduled()
@@ -129,7 +129,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
         when:
         jenkins.setJiraTriggerGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
-        jira.addComment(issueKey, DEFAULT_COMMENT)
+        jira.addCommentReply(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.buildShouldBeScheduled("simpleJob")
@@ -144,14 +144,14 @@ class JiraTriggerAcceptanceTest extends Specification {
     }
 
     // ** Incremental features: **
-    // Add comment - to notify that a build is scheduled
-    // Add comment - Visibility must be the requester and jira-administrators
-    // Add comment - Visibility must be configured in global configuration
     // Add comment - when there is a comment pattern that matches, but no jobs have been triggered
+    // Add comment - Visibility must be configured in global configuration i.e. on/off, role/group
+    // Add comment - Visibility to jira-administrators
+
+    // --- 0.1.0 ---
     // Trigger job when issue is updated - all
     // Trigger job when issue is updated - filter by field
     // Trigger job when issue is updated - filter by from and to value
-    // --- 0.1.0 ---
 
     // Classes javadoc
     // --- 0.2.0 ---
@@ -162,6 +162,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Run CI in CloudBees Jenkins
     // --- 1.0.0 ---
 
+    // Jira returned result should be cached. Use Guava.
     // void method in JrjcJiraClient should be async. Be careful on concurrency issues in this test case.
     // How to enable JenkinsRule as ClassRule to make the build faster
     // JiraTriggerCause should contain issue key and link

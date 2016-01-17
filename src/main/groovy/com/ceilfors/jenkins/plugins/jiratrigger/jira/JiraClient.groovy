@@ -8,7 +8,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger.jira
  */
 interface JiraClient {
 
-    void addComment(String issueKey, String comment)
+    void addCommentReply(String issueKey, String comment)
 
     Map getIssueMap(String issueKeyOrId)
 
