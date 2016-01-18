@@ -158,6 +158,8 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     // ** Incremental features: **
     // Trigger job when issue is updated - all
+    // Remove comment_created webhook type as preparation
+    // Usage of BlockingQueue is duplicated at JenkinsRunner and JiraRunner
     // Trigger job when issue is updated - filter by field
     // Trigger job when issue is updated - filter by from and to value
     // -- 0.2.0 --
@@ -165,6 +167,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Add comment - when there is a comment pattern that matches, but no jobs have been triggered
     // Add comment - Visibility to jira-administrators
     // Add comment - Visibility must be configured in global configuration i.e. role/group
+    // Don't process comment from the user configured in Jenkins due to potential infinite loop?
     // -- 0.3.0 --
 
     // Register webhook from Jenkins configuration page
