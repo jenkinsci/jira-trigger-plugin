@@ -65,7 +65,7 @@ class JenkinsRunner extends JenkinsRule {
         assertThat(parametersAction.parameters, containsInAnyOrder(*parameterMap.collect { key, value -> new StringParameterValue(key, value) }))
     }
 
-    private JiraTriggerExecutor getJiraTriggerExecutor() {
+    public JiraTriggerExecutor getJiraTriggerExecutor() {
         instance.getInjector().getInstance(JiraTriggerExecutor)
     }
 
@@ -141,13 +141,22 @@ class JenkinsRunner extends JenkinsRule {
         configPage.save()
 
         def globalConfig = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
-        assertThat(globalConfig.rootUrl, equalTo(rootUrl))
-        assertThat(globalConfig.username, equalTo(username))
-        assertThat(globalConfig.password.plainText, equalTo(password))
+        assertThat(globalConfig.jiraRootUrl, equalTo(rootUrl))
+        assertThat(globalConfig.jiraUsername, equalTo(username))
+        assertThat(globalConfig.jiraPassword.plainText, equalTo(password))
     }
 
     void triggerCommentPatternShouldNotBeEmpty(String jobName) {
         JiraTriggerConfigurationPage configPage = configure(jobName)
         assertThat(configPage.commentPattern, not(isEmptyOrNullString()))
+    }
+
+    def setJiraCommentReply(boolean active) {
+        JiraTriggerGlobalConfigurationPage configPage = globalConfigure()
+        configPage.setJiraCommentReply(active)
+        configPage.save()
+
+        def globalConfig = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
+        assertThat(globalConfig.jiraCommentReply, equalTo(active))
     }
 }

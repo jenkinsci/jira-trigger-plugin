@@ -31,13 +31,14 @@ class JrjcJiraClient implements JiraClient {
     }
 
     protected URI getServerUri() {
-        return jiraTriggerGlobalConfiguration.rootUrl.toURI()
+        jiraTriggerGlobalConfiguration.validateConfiguration()
+        return jiraTriggerGlobalConfiguration.jiraRootUrl.toURI()
     }
 
     protected DisposableHttpClient getHttpClient() {
         return new AsynchronousHttpClientFactory()
                 .createClient(serverUri,
-                new BasicHttpAuthenticationHandler(jiraTriggerGlobalConfiguration.username, jiraTriggerGlobalConfiguration.password.plainText));
+                new BasicHttpAuthenticationHandler(jiraTriggerGlobalConfiguration.jiraUsername, jiraTriggerGlobalConfiguration.jiraPassword.plainText));
     }
 
     protected JbRestClient getJiraRestClient() {
@@ -61,8 +62,8 @@ class JrjcJiraClient implements JiraClient {
     }
 
     @Override
-    void addCommentReply(String issueKey, String comment) {
+    void addComment(String issueKey, String comment) {
         def issue = jiraRestClient.issueClient.getIssue(issueKey).get(timeout, timeoutUnit)
-        jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.createWithRoleLevel(comment, "jira-administrator")).get(timeout, timeoutUnit)
+        jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).get(timeout, timeoutUnit)
     }
 }

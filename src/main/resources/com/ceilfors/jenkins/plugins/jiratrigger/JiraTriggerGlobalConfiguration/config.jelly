@@ -10,5 +10,8 @@
         <f:entry title="JIRA Password" field="jiraPassword">
             <f:password />
         </f:entry>
+        <f:entry title="Reply to JIRA for build updates?" field="jiraCommentReply">
+            <f:checkbox default="false"/>
+        </f:entry>
     </f:section>
 </j:jelly>

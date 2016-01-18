@@ -15,6 +15,7 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
     private String jiraRootUrl
     private String jiraUsername
     private Secret jiraPassword
+    private boolean jiraCommentReply = false
 
     JiraTriggerGlobalConfiguration() {
         load()
@@ -31,29 +32,25 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
         setJiraRootUrl(formData.getString("jiraRootUrl"))
         setJiraUsername(formData.getString("jiraUsername"))
         setJiraPassword(formData.getString("jiraPassword"))
+        jiraCommentReply = formData.getBoolean("jiraCommentReply")
         save();
         return super.configure(req, formData)
     }
 
-    String getRootUrl() {
-        if (!jiraRootUrl) {
-            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraRootUrl")
-        }
+    String getJiraRootUrl() {
         return jiraRootUrl
     }
 
-    String getUsername() {
-        if (!jiraUsername) {
-            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraUsername")
-        }
+    String getJiraUsername() {
         return jiraUsername
     }
 
-    Secret getPassword() {
-        if (!jiraPassword) {
-            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraPassword")
-        }
+    Secret getJiraPassword() {
         return jiraPassword
+    }
+
+    boolean getJiraCommentReply() {
+        return jiraCommentReply
     }
 
     @PackageScope
@@ -69,5 +66,22 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
     @PackageScope
     void setJiraPassword(String jiraPassword) {
         this.jiraPassword = Secret.fromString(jiraPassword)
+    }
+
+    @PackageScope
+    void setJiraCommentReply(boolean jiraCommentReply) {
+        this.jiraCommentReply = jiraCommentReply
+    }
+
+    void validateConfiguration() {
+        if (!jiraRootUrl) {
+            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraRootUrl")
+        }
+        if (!jiraPassword) {
+            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraPassword")
+        }
+        if (!jiraUsername) {
+            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraUsername")
+        }
     }
 }

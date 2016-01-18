@@ -1,11 +1,5 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
-
-import com.gargoylesoftware.htmlunit.html.HtmlButton
-import com.gargoylesoftware.htmlunit.html.HtmlForm
-import com.gargoylesoftware.htmlunit.html.HtmlPage
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput
-
+import com.gargoylesoftware.htmlunit.html.*
 /**
  * @author ceilfors
  */
@@ -31,6 +25,10 @@ class JiraTriggerGlobalConfigurationPage {
         jiraUsername.setValueAttribute(username)
     }
 
+    def setJiraCommentReply(boolean active) {
+        getJiraCommentReplyCheckBox().setChecked(active)
+    }
+
     private HtmlPasswordInput getJiraPassword() {
         throwIfNotFound("jiraPassword") {
             configPage.getFirstByXPath('//input[contains(@name, "jiraPassword")]')
@@ -46,6 +44,12 @@ class JiraTriggerGlobalConfigurationPage {
     private HtmlTextInput getJiraRootUrl() {
         throwIfNotFound("jiraRootUrl") {
             configPage.getFirstByXPath('//input[contains(@name, "jiraRootUrl")]')
+        }
+    }
+
+    private HtmlCheckBoxInput getJiraCommentReplyCheckBox() {
+        throwIfNotFound("jiraCommentReply") {
+            configPage.getFirstByXPath('//input[contains(@name, "jiraCommentReply")]')
         }
     }
 

@@ -9,10 +9,20 @@ import com.ceilfors.jenkins.plugins.jiratrigger.jira.Webhook
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.WebhookInput
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import groovy.util.logging.Log
+import hudson.model.AbstractProject
 import hudson.model.Job
+import hudson.model.Queue
 import jenkins.model.Jenkins
 
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.BlockingQueue
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
 import static org.hamcrest.Matchers.containsString
+import static org.hamcrest.Matchers.is
+import static org.hamcrest.Matchers.not
+import static org.hamcrest.Matchers.nullValue
 import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
@@ -24,9 +34,25 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     private Jenkins jenkins
 
+    BlockingQueue<Queue.Item> scheduledItem = new ArrayBlockingQueue<>(1)
+    CountDownLatch noBuildLatch = new CountDownLatch(1)
+
     RealJiraRunner(JenkinsRunner jenkinsRunner, JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
         super(jiraTriggerGlobalConfiguration)
         this.jenkins = jenkinsRunner.jenkins
+
+        jenkinsRunner.jiraTriggerExecutor.addJiraTriggerListener(new JiraTriggerListener() {
+
+            @Override
+            void buildScheduled(Comment comment, Collection<? extends AbstractProject> projects) {
+                scheduledItem.offer(jenkins.queue.getItems().last(), 5, TimeUnit.SECONDS)
+            }
+
+            @Override
+            void buildNotScheduled(Comment comment) {
+                noBuildLatch.countDown()
+            }
+        })
     }
 
     void registerWebhook(String url) {
@@ -77,10 +103,13 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     @Override
     void shouldBeNotifiedWithComment(String issueKey, String jobName) {
+        Queue.Item scheduledItem = this.scheduledItem.poll(5, TimeUnit.SECONDS)
+        assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))
+
         def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
         Comment lastComment = issue.getComments().last()
         Job job = jenkins.getItemByFullName(jobName, Job)
-        assertThat("$issueKey was not notified!", lastComment.body, containsString(job.absoluteUrl))
+        assertThat("$issueKey was not notified by Jenkins!", lastComment.body, containsString(job.absoluteUrl))
     }
 
     private Long getIssueTypeId(String project, String issueTypeName) {
