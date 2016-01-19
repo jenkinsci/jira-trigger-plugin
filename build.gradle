@@ -25,7 +25,6 @@ repositories {
 }
 
 group = 'org.jenkins-ci.plugins'
-version = '0.1.0-SNAPSHOT'
 description = 'JIRA Trigger'
 
 dependencies {
