@@ -102,6 +102,11 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
     }
 
     @Override
+    void updateDescription(String issueKey, String description) {
+
+    }
+
+    @Override
     void shouldBeNotifiedWithComment(String issueKey, String jobName) {
         Queue.Item scheduledItem = this.scheduledItem.poll(5, TimeUnit.SECONDS)
         assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))

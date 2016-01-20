@@ -40,13 +40,25 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     JiraRunner jira
 
-    def 'Trigger simple job when a comment is created'() {
+    def 'Should trigger a job when a comment is added'() {
         given:
         def issueKey = jira.createIssue()
         jenkins.createJiraTriggeredProject("job")
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
+
+        then:
+        jenkins.buildShouldBeScheduled("job")
+    }
+
+    def 'Should trigger a job when an issue is updated'() {
+        given:
+        def issueKey = jira.createIssue("Original description")
+        jenkins.createJiraTriggeredProject("job")
+
+        when:
+        jira.updateDescription(issueKey, "New description")
 
         then:
         jenkins.buildShouldBeScheduled("job")
@@ -155,6 +167,8 @@ class JiraTriggerAcceptanceTest extends Specification {
         then:
         jenkins.triggerCommentPatternShouldNotBeEmpty("job")
     }
+
+    // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
     // Trigger job when issue is updated - all
