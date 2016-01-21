@@ -16,6 +16,10 @@ class JiraTriggerConfigurationPage {
         jiraCommentTriggerCheckBox.setChecked(true)
     }
 
+    def activateJiraChangelogTrigger() {
+        jiraChangelogTriggerCheckBox.setChecked(true)
+    }
+
     void setCommentPattern(String commentPattern) {
         commentPatternText.setValueAttribute(commentPattern)
     }
@@ -66,6 +70,12 @@ class JiraTriggerConfigurationPage {
     private HtmlCheckBoxInput getJiraCommentTriggerCheckBox() {
         throwIfNotFound("jiraCommentTriggerCheckBox") {
             configPage.getFirstByXPath("""//input[contains(@name, "${JiraCommentTrigger.simpleName}")]""")
+        }
+    }
+
+    private HtmlCheckBoxInput getJiraChangelogTriggerCheckBox() {
+        throwIfNotFound("jiraChangelogTriggerCheckBox") {
+            configPage.getFirstByXPath("""//input[contains(@name, "${JiraChangelogTrigger.simpleName}")]""")
         }
     }
 

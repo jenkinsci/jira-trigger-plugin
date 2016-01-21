@@ -1,6 +1,5 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder
-import com.atlassian.jira.rest.client.api.RestClientException
 import com.atlassian.jira.rest.client.api.domain.CimProject
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
@@ -19,10 +18,7 @@ import java.util.concurrent.BlockingQueue
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-import static org.hamcrest.Matchers.containsString
-import static org.hamcrest.Matchers.is
-import static org.hamcrest.Matchers.not
-import static org.hamcrest.Matchers.nullValue
+import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
@@ -56,26 +52,11 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
     }
 
     void registerWebhook(String url) {
-        try {
-            jiraRestClient.webhookRestClient.registerWebhook(new WebhookInput(
-                    url: "$url",
-                    name: WEBHOOK_NAME,
-                    events: [JiraWebhook.PRIMARY_WEBHOOK_EVENT],
-            )).claim()
-        } catch (RestClientException e) {
-            if (e.statusCode.present && e.statusCode.get() == 400) {
-                // Might be caused by comment_created event not supported yet. Response body is not available in the
-                // exception and it requires complex overriding in AsynchronousWebhookRestClient to read the response.
-                log.warning("${JiraWebhook.PRIMARY_WEBHOOK_EVENT} JIRA Webhook event is not available, using ${JiraWebhook.SECONDARY_WEBHOOK_EVENT}")
-                jiraRestClient.webhookRestClient.registerWebhook(new WebhookInput(
-                        url: "$url",
-                        name: WEBHOOK_NAME,
-                        events: [JiraWebhook.SECONDARY_WEBHOOK_EVENT],
-                )).claim()
-            } else {
-                throw e
-            }
-        }
+        jiraRestClient.webhookRestClient.registerWebhook(new WebhookInput(
+                url: "$url",
+                name: WEBHOOK_NAME,
+                events: [JiraWebhook.WEBHOOK_EVENT],
+        )).claim()
     }
 
     void deleteAllWebhooks() {
@@ -103,7 +84,7 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     @Override
     void updateDescription(String issueKey, String description) {
-
+        jiraRestClient.issueClient.updateIssue(issueKey, new IssueInputBuilder().setDescription(description).build()).get(timeout, timeoutUnit)
     }
 
     @Override

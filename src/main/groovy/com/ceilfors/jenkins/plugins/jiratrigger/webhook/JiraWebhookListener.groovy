@@ -6,4 +6,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.webhook
 interface JiraWebhookListener {
 
     void commentCreated(WebhookCommentEvent commentEvent)
+
+    void changelogCreated(WebhookChangelogEvent changelogEvent)
 }

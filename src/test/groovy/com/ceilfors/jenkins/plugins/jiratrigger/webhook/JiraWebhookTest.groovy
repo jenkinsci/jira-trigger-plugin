@@ -1,12 +1,12 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.webhook
-
+import com.atlassian.jira.rest.client.api.domain.ChangelogItem
+import com.atlassian.jira.rest.client.api.domain.FieldType
 import org.kohsuke.stapler.StaplerRequest
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static spock.util.matcher.HamcrestSupport.expect
-
 /**
  * @author ceilfors
  */
@@ -29,6 +29,10 @@ class JiraWebhookTest extends Specification {
         this.class.getResourceAsStream("issue_updated_with_comment.json").text
     }
 
+    String createIssueStatusUpdatedEvent() {
+        this.class.getResourceAsStream("issue_updated_status_updated.json").text
+    }
+
     @SuppressWarnings("GrReassignedInClosureLocalVar")
     def "Should notify listener when a comment event is received"() {
         WebhookCommentEvent commentEvent = null
@@ -45,7 +49,27 @@ class JiraWebhookTest extends Specification {
         1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
         expect commentEvent.comment.body, is("comment body")
         expect commentEvent.comment.author.name, is("admin")
-        expect commentEvent.webhookEventType, is(JiraWebhook.PRIMARY_WEBHOOK_EVENT)
+        expect commentEvent.webhookEventType, is(JiraWebhook.WEBHOOK_EVENT)
+    }
+
+    def "Should fire changelog created event when status field is updated"() {
+        WebhookChangelogEvent changelogEvent = null
+
+        given:
+        JiraWebhook jiraWebhook = new JiraWebhook()
+
+        def listener = Mock(JiraWebhookListener)
+        jiraWebhook.setJiraWebhookListener(listener)
+
+        when:
+        jiraWebhook.processEvent(Mock(StaplerRequest), createIssueStatusUpdatedEvent())
+
+        then:
+        1 * listener.changelogCreated(_) >> { args -> changelogEvent = args[0] }
+        expect changelogEvent.changelog.items.toList(), equalTo([
+                new ChangelogItem(FieldType.JIRA, "resolution", "1", "Fixed", "10000", "Done"),
+                new ChangelogItem(FieldType.JIRA, "status", "10000", "To Do", "10001", "Done")
+        ])
     }
 
     @SuppressWarnings("GrReassignedInClosureLocalVar")
@@ -100,10 +124,10 @@ class JiraWebhookTest extends Specification {
         1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
         expect commentEvent.comment.body, is("comment body")
         expect commentEvent.comment.author.name, is("admin")
-        expect commentEvent.webhookEventType, is(JiraWebhook.SECONDARY_WEBHOOK_EVENT)
+        expect commentEvent.webhookEventType, is(JiraWebhook.WEBHOOK_EVENT)
     }
 
-    def "Should not notify listener when issue is updated without comment"() {
+    def "Should not fire comment created event when a comment is added to an issue"() {
         given:
         JiraWebhook jiraWebhook = new JiraWebhook()
 

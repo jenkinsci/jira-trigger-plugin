@@ -1,6 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhookListener
+import com.ceilfors.jenkins.plugins.jiratrigger.webhook.WebhookChangelogEvent
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.WebhookCommentEvent
 import com.google.inject.Singleton
 import groovy.util.logging.Log
@@ -8,6 +9,7 @@ import hudson.model.AbstractProject
 import jenkins.model.Jenkins
 
 import javax.inject.Inject
+
 /**
  * @author ceilfors
  */
@@ -61,5 +63,10 @@ class JiraTriggerExecutor implements JiraWebhookListener {
         } else {
             log.fine("Couldn't find any jobs that have JiraCommentTrigger configured")
         }
+    }
+
+    @Override
+    void changelogCreated(WebhookChangelogEvent changelogEvent) {
+
     }
 }

@@ -43,7 +43,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Should trigger a job when a comment is added'() {
         given:
         def issueKey = jira.createIssue()
-        jenkins.createJiraTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject("job")
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
@@ -55,7 +55,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Should trigger a job when an issue is updated'() {
         given:
         def issueKey = jira.createIssue("Original description")
-        jenkins.createJiraTriggeredProject("job")
+        jenkins.createJiraChangelogTriggeredProject("job")
 
         when:
         jira.updateDescription(issueKey, "New description")
@@ -67,7 +67,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def "Should reply back to JIRA when a build is scheduled"() {
         given:
         def issueKey = jira.createIssue()
-        jenkins.createJiraTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject("job")
 
         when:
         jenkins.setJiraCommentReply(true)
@@ -80,7 +80,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Trigger job with built-in field when a comment is created'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
-        jenkins.createJiraTriggeredProject("simpleJob", "jenkins_description", "jenkins_key")
+        jenkins.createJiraCommentTriggeredProject("simpleJob", "jenkins_description", "jenkins_key")
         jenkins.addParameterMapping("simpleJob", "jenkins_description", "fields.description")
         jenkins.addParameterMapping("simpleJob", "jenkins_key", "key")
 
@@ -97,7 +97,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Job is triggered when a comment matches the comment pattern'() {
         given:
         def issueKey = jira.createIssue()
-        jenkins.createJiraTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject("job")
         jenkins.setJiraTriggerCommentPattern("job", ".*jira trigger.*")
 
         when:
@@ -110,7 +110,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Job is not triggered when a comment does not match the comment pattern'() {
         given:
         def issueKey = jira.createIssue()
-        jenkins.createJiraTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject("job")
         jenkins.setJiraTriggerCommentPattern("job", ".*jira trigger.*")
 
         when:
@@ -123,7 +123,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Job is triggered when the issue matches JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
-        jenkins.createJiraTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject("job")
         jenkins.setJiraTriggerJqlFilter("job", 'type=task and description~"dummy description" and status="To Do"')
 
         when:
@@ -136,7 +136,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Job is not triggered when the issue does not match JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
-        jenkins.createJiraTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject("job")
         jenkins.setJiraTriggerJqlFilter("job", 'type=task and status="Done"')
 
         when:
@@ -149,7 +149,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Jobs is triggered when JIRA configuration is set from the UI'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
-        jenkins.createJiraTriggeredProject("simpleJob", "jenkins_description")
+        jenkins.createJiraCommentTriggeredProject("simpleJob", "jenkins_description")
         jenkins.setJiraTriggerJqlFilter("simpleJob", 'type=task and description~"dummy description" and status="To Do"')
 
         when:
@@ -162,12 +162,14 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     def 'Comment pattern by default must not be empty'() {
         when:
-        jenkins.createJiraTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject("job")
 
         then:
         jenkins.triggerCommentPatternShouldNotBeEmpty("job")
     }
 
+    // what happen when an issue contains changelog and event?
+    // What happen if a job have two of the trigger configured?
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **

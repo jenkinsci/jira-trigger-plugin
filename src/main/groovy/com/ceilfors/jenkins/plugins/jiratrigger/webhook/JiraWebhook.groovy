@@ -20,8 +20,7 @@ import javax.inject.Inject
 class JiraWebhook implements UnprotectedRootAction {
 
     public static final URL_NAME = "jira-trigger"
-    public static final PRIMARY_WEBHOOK_EVENT = "comment_created" // JIRA 7.1+
-    public static final SECONDARY_WEBHOOK_EVENT = "jira:issue_updated" // Older JIRA
+    public static final WEBHOOK_EVENT = "jira:issue_updated"
     private JiraWebhookListener jiraWebhookListener
 
     JiraWebhook() {
@@ -56,8 +55,14 @@ class JiraWebhook implements UnprotectedRootAction {
     public void processEvent(StaplerRequest request, String webhookEvent) {
         Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
         String eventType = webhookEventMap['webhookEvent']
-        if (isCommentEvent(webhookEventMap)) {
-            log.fine("Received valid Webhook callback. Event type: ${eventType}")
+        if (isChangelogEvent(webhookEventMap)) {
+            log.fine("Received Webhook callback from changelog. Event type: ${eventType}")
+            WebhookChangelogEvent changelogEvent = new WebhookChangelogEventJsonParser().parse(new JSONObject(webhookEvent))
+            changelogEvent.userId = request.getParameter("user_id")
+            changelogEvent.userKey = request.getParameter("user_key")
+            jiraWebhookListener.changelogCreated(changelogEvent)
+        } else if (isCommentEvent(webhookEventMap)) {
+            log.fine("Received Webhook callback from comment. Event type: ${eventType}")
             WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(new JSONObject(webhookEvent))
             commentEvent.userId = request.getParameter("user_id")
             commentEvent.userKey = request.getParameter("user_key")
@@ -68,11 +73,14 @@ class JiraWebhook implements UnprotectedRootAction {
         }
     }
 
+    private boolean isChangelogEvent(Map webhookEventMap) {
+        String eventType = webhookEventMap["webhookEvent"]
+        return eventType == WEBHOOK_EVENT && webhookEventMap["changelog"]
+    }
+
     private boolean isCommentEvent(Map webhookEventMap) {
         String eventType = webhookEventMap["webhookEvent"]
-        if (eventType == PRIMARY_WEBHOOK_EVENT) {
-            return true
-        } else return eventType == SECONDARY_WEBHOOK_EVENT && webhookEventMap["comment"]
+        return eventType == WEBHOOK_EVENT && webhookEventMap["comment"]
     }
 
     private String getRequestBody(StaplerRequest req) {

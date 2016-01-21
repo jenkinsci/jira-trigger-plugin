@@ -77,7 +77,18 @@ class JenkinsRunner extends JenkinsRule {
         return "${getURL().toString()}${jiraWebhook.urlName}/"
     }
 
-    FreeStyleProject createJiraTriggeredProject(String name, String... parameters) {
+    FreeStyleProject createJiraChangelogTriggeredProject(String name) {
+        FreeStyleProject project = createFreeStyleProject(name)
+
+        JiraTriggerConfigurationPage configPage = configure(name)
+        configPage.activateJiraChangelogTrigger()
+        configPage.save()
+
+        assertThat(project.triggers.values(), hasItem(instanceOf(JiraChangelogTrigger)))
+        return project
+    }
+
+    FreeStyleProject createJiraCommentTriggeredProject(String name, String... parameters) {
         FreeStyleProject project = createFreeStyleProject(name)
         project.addProperty(new ParametersDefinitionProperty(parameters.collect {
             new StringParameterDefinition(it, "")
