@@ -169,7 +169,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     }
 
     // what happen when an issue contains changelog and event?
-    // What happen if a job have two of the trigger configured?
+    // What happen if a job have two of the trigger configured? Maybe only allow one type of trigger? Checkout dropdownDescriptorSelector.
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
@@ -180,6 +180,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Trigger job when issue is updated - filter by from and to value
     // -- 0.2.0 --
 
+    // Add comment - when changelog is added
     // Add comment - when there is a comment pattern that matches, but no jobs have been triggered
     // Add comment - Visibility to jira-administrators
     // Add comment - Visibility must be configured in global configuration i.e. role/group

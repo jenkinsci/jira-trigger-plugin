@@ -68,7 +68,7 @@ class JiraWebhook implements UnprotectedRootAction {
             commentEvent.userKey = request.getParameter("user_key")
             jiraWebhookListener.commentCreated(commentEvent)
         } else {
-            log.warning("Received Webhook callback with an invalid event type or a body without comment. " +
+            log.warning("Received Webhook callback with an invalid event type or a body without comment/changelog. " +
                     "Event type: ${eventType}. Event body contains: ${webhookEventMap.keySet()}.")
         }
     }

@@ -13,10 +13,6 @@ import static spock.util.matcher.HamcrestSupport.expect
 @SuppressWarnings("GroovyAssignabilityCheck")
 class JiraWebhookTest extends Specification {
 
-    String createCommentCreatedEvent() {
-        this.class.getResourceAsStream("comment_created.json").text
-    }
-
     String createIssueCreatedEvent() {
         this.class.getResourceAsStream("issue_created.json").text
     }
@@ -34,24 +30,6 @@ class JiraWebhookTest extends Specification {
     }
 
     @SuppressWarnings("GrReassignedInClosureLocalVar")
-    def "Should notify listener when a comment event is received"() {
-        WebhookCommentEvent commentEvent = null
-
-        given:
-        def listener = Mock(JiraWebhookListener)
-        JiraWebhook jiraWebhook = new JiraWebhook()
-        jiraWebhook.setJiraWebhookListener(listener)
-
-        when:
-        jiraWebhook.processEvent(Mock(StaplerRequest), createCommentCreatedEvent())
-
-        then:
-        1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
-        expect commentEvent.comment.body, is("comment body")
-        expect commentEvent.comment.author.name, is("admin")
-        expect commentEvent.webhookEventType, is(JiraWebhook.WEBHOOK_EVENT)
-    }
-
     def "Should fire changelog created event when status field is updated"() {
         WebhookChangelogEvent changelogEvent = null
 
@@ -85,7 +63,7 @@ class JiraWebhookTest extends Specification {
         jiraWebhook.setJiraWebhookListener(listener)
 
         when:
-        jiraWebhook.processEvent(staplerRequest, createCommentCreatedEvent())
+        jiraWebhook.processEvent(staplerRequest, createIssueUpdatedWithCommentEvent())
 
         then:
         1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
