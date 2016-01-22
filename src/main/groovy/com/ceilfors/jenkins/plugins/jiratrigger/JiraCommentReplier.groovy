@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraUtils
@@ -27,6 +28,15 @@ class JiraCommentReplier implements JiraTriggerListener {
     }
 
     @Override
+    void buildScheduled(ChangelogGroup changelog, Collection<? extends AbstractProject> projects) {
+    }
+
+    @Override
     void buildNotScheduled(Comment comment) {
+    }
+
+    @Override
+    void buildNotScheduled(ChangelogGroup changelogGroup) {
+
     }
 }

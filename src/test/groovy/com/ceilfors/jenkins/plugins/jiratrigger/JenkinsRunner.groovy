@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
@@ -34,7 +35,17 @@ class JenkinsRunner extends JenkinsRule {
             }
 
             @Override
+            void buildScheduled(ChangelogGroup changelog, Collection<? extends AbstractProject> projects) {
+                scheduledItem.offer(JenkinsRunner.this.instance.queue.getItems().last(), 5, TimeUnit.SECONDS)
+            }
+
+            @Override
             void buildNotScheduled(Comment comment) {
+                noBuildLatch.countDown()
+            }
+
+            @Override
+            void buildNotScheduled(ChangelogGroup changelogGroup) {
                 noBuildLatch.countDown()
             }
         })

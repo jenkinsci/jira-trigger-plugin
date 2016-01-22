@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder
+import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.CimProject
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
@@ -45,7 +46,17 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
             }
 
             @Override
+            void buildScheduled(ChangelogGroup changelog, Collection<? extends AbstractProject> projects) {
+                scheduledItem.offer(jenkins.queue.getItems().last(), 5, TimeUnit.SECONDS)
+            }
+
+            @Override
             void buildNotScheduled(Comment comment) {
+                noBuildLatch.countDown()
+            }
+
+            @Override
+            void buildNotScheduled(ChangelogGroup changelogGroup) {
                 noBuildLatch.countDown()
             }
         })

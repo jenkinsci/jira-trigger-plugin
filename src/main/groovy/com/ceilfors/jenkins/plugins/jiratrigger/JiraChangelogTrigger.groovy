@@ -1,18 +1,31 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
-
+import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
+import groovy.util.logging.Log
 import hudson.Extension
 import hudson.model.BuildableItem
 import hudson.model.Cause
 import hudson.model.Item
+import hudson.triggers.Trigger
 import hudson.triggers.TriggerDescriptor
 import org.kohsuke.stapler.DataBoundConstructor
 /**
  * @author ceilfors
  */
-class JiraChangelogTrigger {
+@Log
+class JiraChangelogTrigger extends Trigger<BuildableItem> {
+
+    private int quietPeriod
 
     @DataBoundConstructor
     JiraChangelogTrigger() {
+    }
+
+    void setQuietPeriod(int quietPeriod) {
+        this.quietPeriod = quietPeriod
+    }
+
+    boolean run(ChangelogGroup changelogGroup) {
+        return job.scheduleBuild(quietPeriod, new JiraChangelogTriggerCause())
     }
 
     @Extension

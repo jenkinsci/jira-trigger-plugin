@@ -67,6 +67,25 @@ class JiraTriggerExecutor implements JiraWebhookListener {
 
     @Override
     void changelogCreated(WebhookChangelogEvent changelogEvent) {
-
+        def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraChangelogTrigger) }
+        if (jobs) {
+            log.finest("Found jobs with JiraChangelogTrigger configuration: ${jobs.collect { it.name }}")
+            List<AbstractProject> scheduledProjects = []
+            for (job in jobs) {
+                JiraChangelogTrigger trigger = job.getTrigger(JiraChangelogTrigger)
+                trigger.setQuietPeriod(quietPeriod)
+                boolean scheduled = trigger.run(changelogEvent.changelog)
+                if (scheduled) {
+                    scheduledProjects << job
+                }
+            }
+            if (scheduledProjects) {
+                jiraTriggerListeners*.buildScheduled(changelogEvent.changelog, scheduledProjects)
+            } else {
+                jiraTriggerListeners*.buildNotScheduled(changelogEvent.changelog)
+            }
+        } else {
+            log.fine("Couldn't find any jobs that have JiraChangelogTrigger configured")
+        }
     }
 }
