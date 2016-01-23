@@ -173,9 +173,6 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
-    // Trigger job when issue is updated - all
-    // Remove comment_created webhook type as preparation
-    // Usage of BlockingQueue is duplicated at JenkinsRunner and JiraRunner
     // Trigger job when issue is updated - filter by field
     // Trigger job when issue is updated - filter by from and to value
     // -- 0.2.0 --

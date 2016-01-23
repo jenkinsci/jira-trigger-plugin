@@ -1,17 +1,9 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
-
-import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
-import com.atlassian.jira.rest.client.api.domain.Comment
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.*
 import jenkins.model.GlobalConfiguration
 import org.jvnet.hudson.test.JenkinsRule
-
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
@@ -20,56 +12,31 @@ import static org.junit.Assert.assertThat
  */
 class JenkinsRunner extends JenkinsRule {
 
-    BlockingQueue<Queue.Item> scheduledItem = new ArrayBlockingQueue<>(1)
-    CountDownLatch noBuildLatch = new CountDownLatch(1)
+    private JenkinsBlockingQueue jenkinsQueue
 
     @Override
     void before() throws Throwable {
         super.before()
         jiraTriggerExecutor.setQuietPeriod(100)
-        jiraTriggerExecutor.addJiraTriggerListener(new JiraTriggerListener() {
-
-            @Override
-            void buildScheduled(Comment comment, Collection<? extends AbstractProject> projects) {
-                scheduledItem.offer(JenkinsRunner.this.instance.queue.getItems().last(), 5, TimeUnit.SECONDS)
-            }
-
-            @Override
-            void buildScheduled(ChangelogGroup changelog, Collection<? extends AbstractProject> projects) {
-                scheduledItem.offer(JenkinsRunner.this.instance.queue.getItems().last(), 5, TimeUnit.SECONDS)
-            }
-
-            @Override
-            void buildNotScheduled(Comment comment) {
-                noBuildLatch.countDown()
-            }
-
-            @Override
-            void buildNotScheduled(ChangelogGroup changelogGroup) {
-                noBuildLatch.countDown()
-            }
-        })
+        jenkinsQueue = new JenkinsBlockingQueue(instance)
     }
 
 
     void buildShouldBeScheduled(String jobName) {
-        Queue.Item scheduledItem = this.scheduledItem.poll(5, TimeUnit.SECONDS)
+        Queue.Item scheduledItem = jenkinsQueue.getScheduledItem()
         assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))
         assertThat("Last build scheduled doesn't match the job name asserted", (scheduledItem.task as Project).fullName, is(jobName))
     }
 
     void noBuildShouldBeScheduled() {
-        if (!noBuildLatch.await(5, TimeUnit.SECONDS)) {
-            Queue.Item scheduledItem = this.scheduledItem.poll()
-            if (!scheduledItem) {
-                throw new IllegalStateException("JiraTriggerListener are not fired?")
-            }
+        if (jenkinsQueue.isItemScheduled()) {
+            Queue.Item scheduledItem = jenkinsQueue.scheduledItem
             assertThat("Build is scheduled: ${(scheduledItem.task as Project).fullName}", scheduledItem, is(nullValue()))
         }
     }
 
     void buildShouldBeScheduledWithParameter(String jobName, Map<String, String> parameterMap) {
-        Queue.Item scheduledItem = this.scheduledItem.poll(5, TimeUnit.SECONDS)
+        Queue.Item scheduledItem = jenkinsQueue.scheduledItem
         assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))
         assertThat("Last build scheduled doesn't match the job name asserted", (scheduledItem.task as Project).fullName, is(jobName))
         def parametersAction = scheduledItem.getAction(ParametersAction)

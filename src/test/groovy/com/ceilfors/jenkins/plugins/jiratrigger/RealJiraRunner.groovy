@@ -1,6 +1,5 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder
-import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.CimProject
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
@@ -9,15 +8,9 @@ import com.ceilfors.jenkins.plugins.jiratrigger.jira.Webhook
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.WebhookInput
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import groovy.util.logging.Log
-import hudson.model.AbstractProject
 import hudson.model.Job
 import hudson.model.Queue
 import jenkins.model.Jenkins
-
-import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
@@ -28,38 +21,13 @@ import static org.junit.Assert.assertThat
 class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     private static final WEBHOOK_NAME = "Jenkins JIRA Trigger"
-
     private Jenkins jenkins
-
-    BlockingQueue<Queue.Item> scheduledItem = new ArrayBlockingQueue<>(1)
-    CountDownLatch noBuildLatch = new CountDownLatch(1)
+    JenkinsBlockingQueue jenkinsQueue
 
     RealJiraRunner(JenkinsRunner jenkinsRunner, JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
         super(jiraTriggerGlobalConfiguration)
         this.jenkins = jenkinsRunner.jenkins
-
-        jenkinsRunner.jiraTriggerExecutor.addJiraTriggerListener(new JiraTriggerListener() {
-
-            @Override
-            void buildScheduled(Comment comment, Collection<? extends AbstractProject> projects) {
-                scheduledItem.offer(jenkins.queue.getItems().last(), 5, TimeUnit.SECONDS)
-            }
-
-            @Override
-            void buildScheduled(ChangelogGroup changelog, Collection<? extends AbstractProject> projects) {
-                scheduledItem.offer(jenkins.queue.getItems().last(), 5, TimeUnit.SECONDS)
-            }
-
-            @Override
-            void buildNotScheduled(Comment comment) {
-                noBuildLatch.countDown()
-            }
-
-            @Override
-            void buildNotScheduled(ChangelogGroup changelogGroup) {
-                noBuildLatch.countDown()
-            }
-        })
+        jenkinsQueue = new JenkinsBlockingQueue(jenkins)
     }
 
     void registerWebhook(String url) {
@@ -100,7 +68,7 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     @Override
     void shouldBeNotifiedWithComment(String issueKey, String jobName) {
-        Queue.Item scheduledItem = this.scheduledItem.poll(5, TimeUnit.SECONDS)
+        Queue.Item scheduledItem = jenkinsQueue.scheduledItem
         assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))
 
         def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
