@@ -66,7 +66,7 @@ jenkinsPlugin {
 test {
     exclude 'com/ceilfors/**/*AcceptanceTest*'
 }
-task acceptanceTest(type: Test) {
+task acceptanceTest(type: Test, dependsOn: 'generate-test-hpl') {
     include 'com/ceilfors/**/*AcceptanceTest*'
-    reports.html.destination = file("$buildDir/reports/acceptanceTest")
+    reports.html.destination = file("$buildDir/reports/acceptanceTests")
 }

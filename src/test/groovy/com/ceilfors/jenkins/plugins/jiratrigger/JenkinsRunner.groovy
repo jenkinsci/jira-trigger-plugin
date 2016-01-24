@@ -21,7 +21,6 @@ class JenkinsRunner extends JenkinsRule {
         jenkinsQueue = new JenkinsBlockingQueue(instance)
     }
 
-
     void buildShouldBeScheduled(String jobName) {
         Queue.Item scheduledItem = jenkinsQueue.getScheduledItem()
         assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))
@@ -55,72 +54,36 @@ class JenkinsRunner extends JenkinsRule {
         return "${getURL().toString()}${jiraWebhook.urlName}/"
     }
 
-    FreeStyleProject createJiraChangelogTriggeredProject(String name) {
+    JenkinsChangelogRunner createJiraChangelogTriggeredProject(String name) {
         FreeStyleProject project = createFreeStyleProject(name)
 
-        JiraTriggerConfigurationPage configPage = configure(name)
-        configPage.activateJiraChangelogTrigger()
+        JenkinsChangelogRunner jenkinsChangelogRunner = new JenkinsChangelogRunner(this, name)
+        JiraTriggerConfigurationPage configPage = jenkinsChangelogRunner.configure()
+        configPage.activate()
         configPage.save()
 
         assertThat(project.triggers.values(), hasItem(instanceOf(JiraChangelogTrigger)))
-        return project
+        return jenkinsChangelogRunner
     }
 
-    FreeStyleProject createJiraCommentTriggeredProject(String name, String... parameters) {
+    JenkinsCommentRunner createJiraCommentTriggeredProject(String name, String... parameters) {
         FreeStyleProject project = createFreeStyleProject(name)
         project.addProperty(new ParametersDefinitionProperty(parameters.collect {
             new StringParameterDefinition(it, "")
         }))
 
-        JiraTriggerConfigurationPage configPage = configure(name)
-        configPage.activateJiraCommentTrigger()
+        JenkinsCommentRunner jenkinsCommentRunner = new JenkinsCommentRunner(this, name)
+        JiraTriggerConfigurationPage configPage = jenkinsCommentRunner.configure()
+        configPage.activate()
         configPage.save()
 
         assertThat(project.triggers.values(), hasItem(instanceOf(JiraCommentTrigger)))
-        return project
-    }
-
-    def setJiraTriggerCommentPattern(String name, String commentPattern) {
-        JiraTriggerConfigurationPage configPage = configure(name)
-        configPage.setCommentPattern(commentPattern)
-        configPage.save()
-
-        JiraCommentTrigger jiraCommentTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraCommentTrigger)
-        assertThat(jiraCommentTrigger.commentPattern, is(commentPattern))
-    }
-
-
-    void setJiraTriggerJqlFilter(String name, String jqlFilter) {
-        JiraTriggerConfigurationPage configPage = configure(name)
-        configPage.setJqlFilter(jqlFilter)
-        configPage.save()
-
-        JiraCommentTrigger jiraCommentTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraCommentTrigger)
-        assertThat(jiraCommentTrigger.jqlFilter, is(jqlFilter))
-    }
-
-    JiraTriggerConfigurationPage configure(String jobName) {
-        HtmlPage htmlPage = createWebClient().goTo("job/$jobName/configure")
-        return new JiraTriggerConfigurationPage(htmlPage)
+        return jenkinsCommentRunner
     }
 
     JiraTriggerGlobalConfigurationPage globalConfigure() {
         HtmlPage htmlPage = createWebClient().goTo("configure")
         return new JiraTriggerGlobalConfigurationPage(htmlPage)
-    }
-
-    void addParameterMapping(String name, String jenkinsParameter, String issueAttributePath) {
-        JiraCommentTrigger jiraCommentTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraCommentTrigger)
-        def originalParameterMappingSize = jiraCommentTrigger.parameterMappings.size()
-
-        JiraTriggerConfigurationPage configPage = configure(name)
-        configPage.addParameterMapping(jenkinsParameter, issueAttributePath)
-        configPage.save()
-
-        jiraCommentTrigger = instance.getItemByFullName(name, AbstractProject).getTrigger(JiraCommentTrigger)
-        assertThat("Parameter mapping is not added", jiraCommentTrigger.parameterMappings.size(), equalTo(originalParameterMappingSize + 1))
-        assertThat(jiraCommentTrigger.parameterMappings.last().jenkinsParameter, is(jenkinsParameter))
-        assertThat(jiraCommentTrigger.parameterMappings.last().issueAttributePath, is(issueAttributePath))
     }
 
     void setJiraTriggerGlobalConfig(String rootUrl, String username, String password) {
@@ -133,11 +96,6 @@ class JenkinsRunner extends JenkinsRule {
         assertThat(globalConfig.jiraRootUrl, equalTo(rootUrl))
         assertThat(globalConfig.jiraUsername, equalTo(username))
         assertThat(globalConfig.jiraPassword.plainText, equalTo(password))
-    }
-
-    void triggerCommentPatternShouldNotBeEmpty(String jobName) {
-        JiraTriggerConfigurationPage configPage = configure(jobName)
-        assertThat(configPage.commentPattern, not(isEmptyOrNullString()))
     }
 
     def setJiraCommentReply(boolean active) {
