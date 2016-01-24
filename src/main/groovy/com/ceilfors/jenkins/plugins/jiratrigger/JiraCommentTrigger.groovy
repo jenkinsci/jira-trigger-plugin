@@ -94,7 +94,7 @@ class JiraCommentTrigger extends Trigger<BuildableItem> {
         if (parameterMappings) {
             actions << new ParametersAction(collectParameterValues(comment))
         }
-        log.fine("[${job.fullName}] - Scheduilng build for ${comment.self}")
+        log.fine("[${job.fullName}] - Scheduling build for ${comment.self}")
         return job.scheduleBuild(quietPeriod, new JiraCommentTriggerCause(), *actions)
     }
 
