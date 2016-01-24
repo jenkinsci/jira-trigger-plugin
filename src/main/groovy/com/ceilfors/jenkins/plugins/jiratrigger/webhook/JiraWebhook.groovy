@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.webhook
 
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.util.logging.Log
 import hudson.Extension
@@ -53,6 +54,8 @@ class JiraWebhook implements UnprotectedRootAction {
     }
 
     public void processEvent(StaplerRequest request, String webhookEvent) {
+        log.finest("Webhook event body:")
+        log.finest(JsonOutput.prettyPrint(webhookEvent))
         Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
         String eventType = webhookEventMap['webhookEvent']
         if (isChangelogEvent(webhookEventMap)) {

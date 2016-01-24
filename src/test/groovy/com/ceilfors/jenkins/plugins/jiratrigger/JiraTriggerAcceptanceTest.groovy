@@ -1,4 +1,5 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
+
 import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.ExternalResource
@@ -120,6 +121,32 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
+    def 'Triggers a job when an issue is updated and the issue matches the JQL filter'() {
+        given:
+        def issueKey = jira.createIssue("dummy description")
+        def project = jenkins.createJiraChangelogTriggeredProject("job")
+        project.setJqlFilter('type=task and description~"New description" and status="To Do"')
+
+        when:
+        jira.updateDescription(issueKey, "New description")
+
+        then:
+        jenkins.buildShouldBeScheduled("job")
+    }
+
+    def 'Does not trigger a job when an issue is updated and the issue does not match the JQL filter'() {
+        given:
+        def issueKey = jira.createIssue("dummy description")
+        def project = jenkins.createJiraChangelogTriggeredProject("job")
+        project.setJqlFilter('type=task and description~"New description" and status="Done"')
+
+        when:
+        jira.updateDescription(issueKey, "New description")
+
+        then:
+        jenkins.noBuildShouldBeScheduled()
+    }
+
     def 'Job is triggered when a comment is added and the issue matches the JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
@@ -178,12 +205,15 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Trigger job when issue is updated - filter by from and to value
     // -- 0.2.0 --
 
+    // Add default environment variable like GIT_BRANCH, e.g. JIRA_ISSUE_KEY.
+    // -- 0.3.0 --
+
     // Add comment - when changelog is added
     // Add comment - when there is a comment pattern that matches, but no jobs have been triggered
     // Add comment - Visibility to jira-administrators
     // Add comment - Visibility must be configured in global configuration i.e. role/group
     // Don't process comment from the user configured in Jenkins due to potential infinite loop?
-    // -- 0.3.0 --
+    // -- 0.4.0 --
 
     // Register webhook from Jenkins configuration page
     // Document log names in wiki

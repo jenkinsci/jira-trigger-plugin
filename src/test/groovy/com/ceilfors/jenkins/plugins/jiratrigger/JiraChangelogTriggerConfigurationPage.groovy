@@ -3,7 +3,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput
 import hudson.triggers.Trigger
-
 /**
  * @author ceilfors
  */

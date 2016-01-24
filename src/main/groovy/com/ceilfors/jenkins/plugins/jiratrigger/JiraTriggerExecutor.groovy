@@ -74,7 +74,7 @@ class JiraTriggerExecutor implements JiraWebhookListener {
             for (job in jobs) {
                 JiraChangelogTrigger trigger = job.getTrigger(JiraChangelogTrigger)
                 trigger.setQuietPeriod(quietPeriod)
-                boolean scheduled = trigger.run(changelogEvent.changelog)
+                boolean scheduled = trigger.run(changelogEvent.issue, changelogEvent.changelog)
                 if (scheduled) {
                     scheduledProjects << job
                 }

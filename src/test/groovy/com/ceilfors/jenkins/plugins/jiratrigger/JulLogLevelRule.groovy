@@ -30,6 +30,9 @@ class JulLogLevelRule implements TestRule {
             topLogger.addHandler(consoleHandler);
         }
         consoleHandler.setLevel(pluginLogLevel)
+        Logger.getLogger("com.gargoylesoftware.htmlunit.DefaultCssErrorHandler").setLevel(Level.OFF)
+        Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter").setLevel(Level.OFF)
+        Logger.getLogger("com.gargoylesoftware.htmlunit.html.InputElementFactory").setLevel(Level.WARNING)
         Logger.getLogger("com.ceilfors.jenkins.plugins").setLevel(pluginLogLevel)
         return base
     }

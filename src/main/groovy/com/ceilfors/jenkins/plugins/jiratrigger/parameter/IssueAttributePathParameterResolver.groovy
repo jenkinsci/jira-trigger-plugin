@@ -24,7 +24,7 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
 
     StringParameterValue resolve(Comment comment, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
         // KLUDGE: Hits JIRA multiple times, might want to handle multiple parameters at one time
-        def issueMap = jiraClient.getIssueMap(JiraUtils.getIssueIdFromComment(comment))
+        def issueMap = jiraClient.getIssueMap(JiraUtils.getIssueIdFromComment(comment).toString())
         String attributeValue = resolveProperty(issueMap, issueAttributePathParameterMapping.issueAttributePath)
         new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
     }

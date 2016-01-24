@@ -23,7 +23,7 @@ class JiraCommentReplier implements JiraTriggerListener {
     void buildScheduled(Comment comment, Collection<? extends AbstractProject> projects) {
         if (jiraTriggerGlobalConfiguration.jiraCommentReply) {
             def issueId = JiraUtils.getIssueIdFromComment(comment)
-            jiraClient.addComment(issueId, "Build is scheduled for: " + projects.collect { it.absoluteUrl })
+            jiraClient.addComment(issueId.toString(), "Build is scheduled for: " + projects.collect { it.absoluteUrl })
         }
     }
 

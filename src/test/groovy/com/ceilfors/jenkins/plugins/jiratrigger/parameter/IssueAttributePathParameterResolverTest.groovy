@@ -41,7 +41,7 @@ class IssueAttributePathParameterResolverTest extends Specification {
         "fields.description"          | "description body"
         "fields.summary"              | "summary content"
         "fields.status.name"          | "To Do"
-        "id"                          | "11120"
+        "id"                          | 11120
         "fields.timeoriginalestimate" | 300
     }
 
