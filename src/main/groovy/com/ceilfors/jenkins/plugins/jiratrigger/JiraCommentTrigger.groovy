@@ -1,8 +1,8 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
 import com.atlassian.jira.rest.client.api.domain.Comment
+import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
-import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraUtils
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterResolver
@@ -17,7 +17,6 @@ import org.kohsuke.stapler.DataBoundSetter
 
 import javax.inject.Inject
 import java.util.logging.Level
-
 /**
  * @author ceilfors
  */
@@ -73,7 +72,7 @@ class JiraCommentTrigger extends Trigger<BuildableItem> {
         return super.getDescriptor() as DescriptorImpl
     }
 
-    boolean run(Comment comment) {
+    boolean run(Issue issue, Comment comment) {
         log.fine("[${job.fullName}] - Processing comment ${comment.self}")
         def commentBody = comment.body
         if (commentPattern) {
@@ -83,26 +82,25 @@ class JiraCommentTrigger extends Trigger<BuildableItem> {
             }
         }
         if (jqlFilter) {
-            def issueId = JiraUtils.getIssueIdFromComment(comment)
-            if (!descriptor.jiraClient.validateIssueId(issueId, jqlFilter)) {
-                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issueId} doesn't match with the jqlFilter [$jqlFilter]")
+            if (!descriptor.jiraClient.validateIssueKey(issue.key, jqlFilter)) {
+                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} doesn't match with the jqlFilter [$jqlFilter]")
                 return false
             }
         }
 
         List<Action> actions = []
         if (parameterMappings) {
-            actions << new ParametersAction(collectParameterValues(comment))
+            actions << new ParametersAction(collectParameterValues(issue, comment))
         }
         log.fine("[${job.fullName}] - Scheduling build for ${comment.self}")
         return job.scheduleBuild(quietPeriod, new JiraCommentTriggerCause(), *actions)
     }
 
-    private List<ParameterValue> collectParameterValues(Comment comment) {
+    private List<ParameterValue> collectParameterValues(Issue issue, Comment comment) {
         return parameterMappings.collect {
             if (it instanceof IssueAttributePathParameterMapping) {
                 try {
-                    return descriptor.parameterResolver.resolve(comment, it)
+                    return descriptor.parameterResolver.resolve(issue, comment, it)
                 } catch (JiraTriggerException e) {
                     log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. Example: fields.description, key, fields.project.key", e)
                     return null

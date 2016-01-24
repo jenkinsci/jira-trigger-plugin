@@ -56,8 +56,8 @@ class JrjcJiraClient implements JiraClient {
     }
 
     @Override
-    boolean validateIssueId(Long issueId, String jqlFilter) {
-        def searchResult = jiraRestClient.searchClient.searchJql("id=$issueId and ($jqlFilter)").get(timeout, timeoutUnit)
+    boolean validateIssueKey(String issueKey, String jqlFilter) {
+        def searchResult = jiraRestClient.searchClient.searchJql("key=$issueKey and ($jqlFilter)").get(timeout, timeoutUnit)
         searchResult.total != 0
     }
 

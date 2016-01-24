@@ -1,6 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
-import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
-import com.atlassian.jira.rest.client.api.domain.Comment
+
+import com.atlassian.jira.rest.client.api.domain.Issue
 import hudson.model.AbstractProject
 import hudson.model.Queue
 import jenkins.model.Jenkins
@@ -25,26 +25,15 @@ class JenkinsBlockingQueue {
     public JenkinsBlockingQueue(Jenkins jenkins) {
         def jiraTriggerExecutor = jenkins.getInjector().getInstance(JiraTriggerExecutor)
         jiraTriggerExecutor.addJiraTriggerListener(new JiraTriggerListener() {
+
             @Override
-            void buildScheduled(Comment comment, Collection<? extends AbstractProject> projects) {
+            void buildScheduled(Issue issue, Collection<? extends AbstractProject> projects) {
                 scheduledItemBlockingQueue.offer(jenkins.queue.getItems().last(), timeout, TimeUnit.SECONDS)
                 countDownLatch.countDown()
             }
 
             @Override
-            void buildScheduled(ChangelogGroup changelog, Collection<? extends AbstractProject> projects) {
-                scheduledItemBlockingQueue.offer(jenkins.queue.getItems().last(), timeout, TimeUnit.SECONDS)
-                countDownLatch.countDown()
-            }
-
-            @Override
-            void buildNotScheduled(Comment comment) {
-                scheduledItemBlockingQueue.offer(new NullItem(), timeout, TimeUnit.SECONDS)
-                countDownLatch.countDown()
-            }
-
-            @Override
-            void buildNotScheduled(ChangelogGroup changelogGroup) {
+            void buildNotScheduled(Issue issue) {
                 scheduledItemBlockingQueue.offer(new NullItem(), timeout, TimeUnit.SECONDS)
                 countDownLatch.countDown()
             }

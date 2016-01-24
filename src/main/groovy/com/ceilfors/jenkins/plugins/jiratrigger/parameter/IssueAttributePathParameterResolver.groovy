@@ -1,14 +1,13 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import com.atlassian.jira.rest.client.api.domain.Comment
+import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
-import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraUtils
 import com.google.inject.Singleton
 import hudson.model.StringParameterValue
 
 import javax.inject.Inject
-
 /**
  * @author ceilfors
  */
@@ -22,9 +21,9 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
         this.jiraClient = jiraClient
     }
 
-    StringParameterValue resolve(Comment comment, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
+    StringParameterValue resolve(Issue issue, Comment comment, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
         // KLUDGE: Hits JIRA multiple times, might want to handle multiple parameters at one time
-        def issueMap = jiraClient.getIssueMap(JiraUtils.getIssueIdFromComment(comment).toString())
+        def issueMap = jiraClient.getIssueMap(issue.key)
         String attributeValue = resolveProperty(issueMap, issueAttributePathParameterMapping.issueAttributePath)
         new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
     }

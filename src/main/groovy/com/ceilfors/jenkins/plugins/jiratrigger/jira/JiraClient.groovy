@@ -12,5 +12,5 @@ interface JiraClient {
 
     Map getIssueMap(String issueKeyOrId)
 
-    boolean validateIssueId(Long issueId, String jqlFilter)
+    boolean validateIssueKey(String issueKey, String jqlFilter)
 }

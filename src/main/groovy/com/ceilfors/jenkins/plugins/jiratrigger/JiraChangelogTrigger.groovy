@@ -48,7 +48,7 @@ class JiraChangelogTrigger extends Trigger<BuildableItem> {
 
     boolean run(Issue issue, ChangelogGroup changelogGroup) {
         if (jqlFilter) {
-            if (!descriptor.jiraClient.validateIssueId(issue.id, jqlFilter)) {
+            if (!descriptor.jiraClient.validateIssueKey(issue.key, jqlFilter)) {
                 log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} doesn't match with the jqlFilter [$jqlFilter]")
                 return false
             }

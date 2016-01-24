@@ -50,15 +50,15 @@ class JiraTriggerExecutor implements JiraWebhookListener {
             for (job in jobs) {
                 JiraCommentTrigger trigger = job.getTrigger(JiraCommentTrigger)
                 trigger.setQuietPeriod(quietPeriod)
-                boolean scheduled = trigger.run(commentEvent.comment)
+                boolean scheduled = trigger.run(commentEvent.issue, commentEvent.comment)
                 if (scheduled) {
                     scheduledProjects << job
                 }
             }
             if (scheduledProjects) {
-                jiraTriggerListeners*.buildScheduled(commentEvent.comment, scheduledProjects)
+                jiraTriggerListeners*.buildScheduled(commentEvent.issue, scheduledProjects)
             } else {
-                jiraTriggerListeners*.buildNotScheduled(commentEvent.comment)
+                jiraTriggerListeners*.buildNotScheduled(commentEvent.issue)
             }
         } else {
             log.fine("Couldn't find any jobs that have JiraCommentTrigger configured")
@@ -80,9 +80,9 @@ class JiraTriggerExecutor implements JiraWebhookListener {
                 }
             }
             if (scheduledProjects) {
-                jiraTriggerListeners*.buildScheduled(changelogEvent.changelog, scheduledProjects)
+                jiraTriggerListeners*.buildScheduled(changelogEvent.issue, scheduledProjects)
             } else {
-                jiraTriggerListeners*.buildNotScheduled(changelogEvent.changelog)
+                jiraTriggerListeners*.buildNotScheduled(changelogEvent.issue)
             }
         } else {
             log.fine("Couldn't find any jobs that have JiraChangelogTrigger configured")

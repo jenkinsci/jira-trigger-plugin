@@ -5,6 +5,8 @@ import hudson.model.BuildableItem
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.ceilfors.jenkins.plugins.jiratrigger.TestUtils.createIssue
+
 /**
  * @author ceilfors
  */
@@ -27,7 +29,7 @@ class JiraCommentTriggerTest extends Specification {
 
         when:
         trigger.start(project, false)
-        trigger.run(comment)
+        trigger.run(createIssue("TEST-123"), comment)
 
         then:
         1 * project.scheduleBuild(_, _)
@@ -48,7 +50,7 @@ class JiraCommentTriggerTest extends Specification {
 
         when:
         trigger.start(project, false)
-        trigger.run(comment)
+        trigger.run(createIssue("TEST-123"), comment)
 
         then:
         0 * project.scheduleBuild(_, _)
