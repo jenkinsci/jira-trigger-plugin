@@ -38,4 +38,8 @@ class JenkinsChangelogRunner {
     private JiraChangelogTrigger getTrigger() {
         instance.getItemByFullName(jobName, AbstractProject).getTrigger(JiraChangelogTrigger)
     }
+
+    void addChangelogMatcher(String fieldId, String toValue) {
+
+    }
 }

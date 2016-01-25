@@ -4,6 +4,7 @@ import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.util.logging.Level
@@ -172,6 +173,35 @@ class JiraTriggerAcceptanceTest extends Specification {
         then:
         jenkins.noBuildShouldBeScheduled()
     }
+
+    @Ignore
+    def 'Triggers a job when issue status is updated to Done'() {
+        given:
+        def issueKey = jira.createIssue("original description")
+        def project = jenkins.createJiraChangelogTriggeredProject("job")
+        project.addChangelogMatcher("status", "Done")
+
+        when:
+        jira.updateStatus(issueKey, "Done")
+
+        then:
+        jenkins.buildShouldBeScheduled("job")
+    }
+
+    @Ignore
+    def 'Does not trigger a job when issue status is updated to In Progress whilst Done is expected'() {
+        given:
+        def issueKey = jira.createIssue("original description")
+        def project = jenkins.createJiraChangelogTriggeredProject("job")
+        project.addChangelogMatcher("status", "Done")
+
+        when:
+        jira.updateStatus(issueKey, "In Progress")
+
+        then:
+        jenkins.noBuildShouldBeScheduled()
+    }
+
 
     def 'Jobs is triggered when JIRA configuration is set from the UI'() {
         given:

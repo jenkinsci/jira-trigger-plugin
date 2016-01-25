@@ -1,8 +1,10 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
+
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder
-import com.atlassian.jira.rest.client.api.domain.CimProject
-import com.atlassian.jira.rest.client.api.domain.Comment
+import com.atlassian.jira.rest.client.api.IssueRestClient
+import com.atlassian.jira.rest.client.api.domain.*
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
+import com.atlassian.jira.rest.client.api.domain.input.TransitionInput
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JrjcJiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.Webhook
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.WebhookInput
@@ -14,6 +16,7 @@ import jenkins.model.Jenkins
 
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
+
 /**
  * @author ceilfors
  */
@@ -64,6 +67,25 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
     @Override
     void updateDescription(String issueKey, String description) {
         jiraRestClient.issueClient.updateIssue(issueKey, new IssueInputBuilder().setDescription(description).build()).get(timeout, timeoutUnit)
+    }
+
+    @Override
+    void updateStatus(String issueKey, String status) {
+        def issue = jiraRestClient.issueClient.getIssue(issueKey, [IssueRestClient.Expandos.TRANSITIONS]).get(timeout, timeoutUnit)
+        jiraRestClient.issueClient.transition(issue, new TransitionInput(getTransition(issue, status).id)).get(timeout, timeoutUnit)
+    }
+
+    private Transition getTransition(Issue issue, String status) {
+        Iterable<Transition> transitions = jiraRestClient.issueClient.getTransitions(issue).get(timeout, timeoutUnit)
+        String transitionName
+        if (status == 'Done') {
+            transitionName = 'Done'
+        } else if (status == 'In Progress') {
+            transitionName = 'Start Progress'
+        } else {
+            throw new UnsupportedOperationException("Configure this method to support more transition name. Available transitions: ${transitions*.name}")
+        }
+        return transitions.find { it.name == transitionName } as Transition
     }
 
     @Override
