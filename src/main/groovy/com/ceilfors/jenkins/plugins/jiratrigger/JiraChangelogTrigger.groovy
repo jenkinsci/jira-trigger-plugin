@@ -1,6 +1,8 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
+
 import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.Issue
+import com.ceilfors.jenkins.plugins.jiratrigger.changelog.ChangelogMatcher
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import groovy.util.logging.Log
 import hudson.Extension
@@ -9,11 +11,11 @@ import hudson.model.Cause
 import hudson.model.Item
 import hudson.triggers.Trigger
 import hudson.triggers.TriggerDescriptor
+import jenkins.model.Jenkins
 import org.kohsuke.stapler.DataBoundConstructor
 import org.kohsuke.stapler.DataBoundSetter
 
 import javax.inject.Inject
-
 /**
  * @author ceilfors
  */
@@ -22,6 +24,7 @@ class JiraChangelogTrigger extends Trigger<BuildableItem> {
 
     private int quietPeriod
     private String jqlFilter = ""
+    private List<ChangelogMatcher> changelogMatchers = []
 
     @DataBoundConstructor
     JiraChangelogTrigger() {
@@ -29,6 +32,12 @@ class JiraChangelogTrigger extends Trigger<BuildableItem> {
 
     void setQuietPeriod(int quietPeriod) {
         this.quietPeriod = quietPeriod
+    }
+
+    @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins DataBoundSetter
+    @DataBoundSetter
+    void setChangelogMatchers(List<ChangelogMatcher> changelogMatchers) {
+        this.changelogMatchers = changelogMatchers
     }
 
     String getJqlFilter() {
@@ -62,12 +71,20 @@ class JiraChangelogTrigger extends Trigger<BuildableItem> {
         @Inject
         private JiraClient jiraClient
 
+        @Inject
+        private Jenkins jenkins
+
         public boolean isApplicable(Item item) {
             return item instanceof BuildableItem
         }
 
         public String getDisplayName() {
             return "Build when an issue is updated in JIRA"
+        }
+
+        @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly
+        public List<ChangelogMatcher.ChangelogMatcherDescriptor> getChangelogMatcherDescriptors() {
+            return jenkins.getDescriptorList(ChangelogMatcher)
         }
     }
 

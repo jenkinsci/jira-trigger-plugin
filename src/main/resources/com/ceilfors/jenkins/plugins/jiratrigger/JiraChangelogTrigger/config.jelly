@@ -3,4 +3,11 @@
     <f:entry title="JQL Filter" field="jqlFilter">
         <f:textbox  />
     </f:entry>
+
+    <f:entry title="Changelog Matcher">
+        <f:hetero-list name="changelogMatchers" items="${instance.changelogMatchers}" hasHeader="true"
+                       descriptors="${descriptor.changelogMatcherDescriptors}"
+                       targetType="com.ceilfors.jenkins.plugins.jiratrigger.changelog.ChangelogMatcher" />
+    </f:entry>
+
 </j:jelly>
