@@ -4,7 +4,6 @@ import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.util.logging.Level
@@ -174,7 +173,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-    @Ignore
     def 'Triggers a job when issue status is updated to Done'() {
         given:
         def issueKey = jira.createIssue("original description")
@@ -188,7 +186,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    @Ignore
     def 'Does not trigger a job when issue status is updated to In Progress whilst Done is expected'() {
         given:
         def issueKey = jira.createIssue("original description")
@@ -231,7 +228,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
-    // Trigger job when issue is updated - filter by field
+    // Trigger job when issue is updated - filter by multiple fields. There is a bug now as if one of the changelog matcher failed, it will not check the othe rmatcher
     // Trigger job when issue is updated - filter by from and to value
     // -- 0.2.0 --
 

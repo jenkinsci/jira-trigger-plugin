@@ -1,5 +1,9 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.ceilfors.jenkins.plugins.jiratrigger.changelog.BuiltInFieldChangelogMatcher
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor
+import com.gargoylesoftware.htmlunit.html.HtmlButton
+import com.gargoylesoftware.htmlunit.html.HtmlDivision
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput
 import hudson.triggers.Trigger
@@ -25,4 +29,24 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
         getField("jqlFilter")
     }
 
+
+    void addChangelogMatcher(String field, String newValue) {
+        HtmlButton addButton = getFirstByXPath(configPage, "add changelog matcher button", '//button[contains(@suffix, "changelogMatchers")]')
+        addButton.click()
+
+        HtmlDivision parameterMappingDiv = addButton.parentNode.parentNode.parentNode as HtmlDivision
+        HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv, "changelog matcher button", "//a[contains(text(), '${BuiltInFieldChangelogMatcher.BuiltInFieldChangelogMatcherDescriptor.DISPLAY_NAME}')]")
+        attribute.click()
+
+        lastFieldText.setValueAttribute(field)
+        lastNewValueText.setValueAttribute(newValue)
+    }
+
+    private HtmlTextInput getLastFieldText() {
+        getLastByXPath("field", '//input[contains(@name, "field")]')
+    }
+
+    private HtmlTextInput getLastNewValueText() {
+        getLastByXPath("newValue", '//input[contains(@name, "newValue")]')
+    }
 }

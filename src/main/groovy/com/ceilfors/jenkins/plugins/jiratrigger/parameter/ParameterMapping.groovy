@@ -9,7 +9,7 @@ abstract class ParameterMapping extends AbstractDescribableImpl<ParameterMapping
     private String jenkinsParameter
 
     ParameterMapping(String jenkinsParameter) {
-        this.jenkinsParameter = jenkinsParameter
+        this.jenkinsParameter = jenkinsParameter.trim()
     }
 
     String getJenkinsParameter() {

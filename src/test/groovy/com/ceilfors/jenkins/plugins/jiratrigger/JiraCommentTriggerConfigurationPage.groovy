@@ -41,7 +41,7 @@ class JiraCommentTriggerConfigurationPage extends JiraTriggerConfigurationPage {
     }
 
     private HtmlTextInput getLastJenkinsParameterText() {
-        getLastByXPath("attributePath", '//input[contains(@name, "jenkinsParameter")]')
+        getLastByXPath("jenkinsParameter", '//input[contains(@name, "jenkinsParameter")]')
     }
 
     private HtmlTextInput getLastAttributePathText() {

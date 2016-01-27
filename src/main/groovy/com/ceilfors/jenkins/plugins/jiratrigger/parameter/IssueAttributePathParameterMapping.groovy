@@ -12,7 +12,7 @@ class IssueAttributePathParameterMapping extends ParameterMapping {
     @DataBoundConstructor
     IssueAttributePathParameterMapping(String jenkinsParameter, String issueAttributePath) {
         super(jenkinsParameter)
-        this.issueAttributePath = issueAttributePath
+        this.issueAttributePath = issueAttributePath.trim()
     }
 
     String getIssueAttributePath() {

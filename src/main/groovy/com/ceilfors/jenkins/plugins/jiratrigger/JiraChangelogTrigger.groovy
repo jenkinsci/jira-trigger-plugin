@@ -34,6 +34,10 @@ class JiraChangelogTrigger extends Trigger<BuildableItem> {
         this.quietPeriod = quietPeriod
     }
 
+    List<ChangelogMatcher> getChangelogMatchers() {
+        return changelogMatchers
+    }
+
     @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins DataBoundSetter
     @DataBoundSetter
     void setChangelogMatchers(List<ChangelogMatcher> changelogMatchers) {
@@ -56,6 +60,12 @@ class JiraChangelogTrigger extends Trigger<BuildableItem> {
     }
 
     boolean run(Issue issue, ChangelogGroup changelogGroup) {
+        for (changelogMatcher in changelogMatchers) {
+            if (!changelogMatcher.matches(changelogGroup)) {
+                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} changelog doesn't match with the changelog matcher ${changelogMatcher}")
+                return false
+            }
+        }
         if (jqlFilter) {
             if (!descriptor.jiraClient.validateIssueKey(issue.key, jqlFilter)) {
                 log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} doesn't match with the jqlFilter [$jqlFilter]")

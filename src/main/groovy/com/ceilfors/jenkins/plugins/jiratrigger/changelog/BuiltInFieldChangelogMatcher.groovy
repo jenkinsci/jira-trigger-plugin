@@ -1,11 +1,15 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.changelog
 
+import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
+import com.atlassian.jira.rest.client.api.domain.FieldType
+import groovy.transform.ToString
 import hudson.Extension
 import org.kohsuke.stapler.DataBoundConstructor
 
 /**
  * @author ceilfors
  */
+@ToString
 class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
 
     private final String field
@@ -13,8 +17,8 @@ class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
 
     @DataBoundConstructor
     BuiltInFieldChangelogMatcher(String field, String newValue) {
-        this.field = field
-        this.newValue = newValue
+        this.field = field.trim()
+        this.newValue = newValue.trim()
     }
 
     String getField() {
@@ -25,13 +29,24 @@ class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
         return newValue
     }
 
+    @Override
+    boolean matches(ChangelogGroup changelogGroup) {
+        changelogGroup.items.find {
+            it.fieldType == FieldType.JIRA &&
+                    it.field == field &&
+                    it.toString == newValue
+        }
+    }
+
     @SuppressWarnings("UnnecessaryQualifiedReference") // Can't remove qualifier, IntelliJ bug?
     @Extension
     static class BuiltInFieldChangelogMatcherDescriptor extends ChangelogMatcher.ChangelogMatcherDescriptor{
 
+        public static final String DISPLAY_NAME = "Built-in Field Matcher"
+
         @Override
         String getDisplayName() {
-            "Built-in Field Matcher"
+            DISPLAY_NAME
         }
     }
 }
