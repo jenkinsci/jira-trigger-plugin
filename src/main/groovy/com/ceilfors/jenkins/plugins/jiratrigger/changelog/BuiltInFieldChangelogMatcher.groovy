@@ -34,7 +34,7 @@ class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
         changelogGroup.items.find {
             it.fieldType == FieldType.JIRA &&
                     it.field == field &&
-                    it.toString == newValue
+                    it.toString.equalsIgnoreCase(newValue)
         }
     }
 
