@@ -23,9 +23,11 @@ class IssueAttributePathParameterMapping extends ParameterMapping {
     @Extension
     static class IssueAttributePathParameterMappingDescriptor extends ParameterMapping.ParameterMappingDescriptor {
 
+        public static final String DISPLAY_NAME = "Issue Attribute Path"
+
         @Override
         String getDisplayName() {
-            "Issue Attribute Path"
+            DISPLAY_NAME
         }
     }
 }
