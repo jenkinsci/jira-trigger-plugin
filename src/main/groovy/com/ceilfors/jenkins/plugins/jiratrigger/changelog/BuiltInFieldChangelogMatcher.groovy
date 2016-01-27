@@ -9,7 +9,7 @@ import org.kohsuke.stapler.DataBoundConstructor
 /**
  * @author ceilfors
  */
-@ToString
+@ToString(includeFields = true)
 class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
 
     private final String field
