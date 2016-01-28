@@ -1,9 +1,12 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.AbstractProject
 import jenkins.model.Jenkins
+import org.jvnet.hudson.test.JenkinsRule
 
-import static org.hamcrest.Matchers.*
+import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
 
 /**
@@ -31,7 +34,9 @@ class JenkinsChangelogRunner {
     }
 
     JiraChangelogTriggerConfigurationPage configure() {
-        HtmlPage htmlPage = jenkinsRunner.createWebClient().goTo("job/$jobName/configure")
+        JenkinsRule.WebClient webClient = jenkinsRunner.createWebClient()
+        webClient.setThrowExceptionOnScriptError(false)
+        HtmlPage htmlPage = webClient.goTo("job/$jobName/configure")
         return new JiraChangelogTriggerConfigurationPage(htmlPage)
     }
 

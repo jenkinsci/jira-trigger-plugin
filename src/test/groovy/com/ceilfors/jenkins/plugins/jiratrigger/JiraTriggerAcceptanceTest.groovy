@@ -228,7 +228,6 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
-    // Trigger job when issue is updated - filter by multiple fields. There is a bug now as if one of the changelog matcher failed, it will not check the othe rmatcher
     // Trigger job when issue is updated - filter by from and to value
     // -- 0.2.0 --
 

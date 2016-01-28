@@ -2,8 +2,10 @@ package com.ceilfors.jenkins.plugins.jiratrigger.changelog
 
 import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.FieldType
+import com.atlassian.jira.rest.client.api.domain.IssueFieldId
 import groovy.transform.ToString
 import hudson.Extension
+import hudson.util.ComboBoxModel
 import org.kohsuke.stapler.DataBoundConstructor
 
 /**
@@ -47,6 +49,11 @@ class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
         @Override
         String getDisplayName() {
             DISPLAY_NAME
+        }
+
+        @SuppressWarnings("GroovyUnusedDeclaration") // jelly
+        public ComboBoxModel doFillFieldItems() {
+            return new ComboBoxModel(IssueFieldId.ids().toList())
         }
     }
 }
