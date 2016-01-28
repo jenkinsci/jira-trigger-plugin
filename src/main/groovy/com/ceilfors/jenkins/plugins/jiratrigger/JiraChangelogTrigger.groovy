@@ -62,7 +62,7 @@ class JiraChangelogTrigger extends Trigger<BuildableItem> {
     boolean run(Issue issue, ChangelogGroup changelogGroup) {
         for (changelogMatcher in changelogMatchers) {
             if (!changelogMatcher.matches(changelogGroup)) {
-                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} changelog doesn't match with the changelog matcher ${changelogMatcher}")
+                log.fine("[${job.fullName}] - Not scheduling build: The changelog [${changelogGroup}] doesn't match with the changelog matcher [${changelogMatcher}]")
                 return false
             }
         }
