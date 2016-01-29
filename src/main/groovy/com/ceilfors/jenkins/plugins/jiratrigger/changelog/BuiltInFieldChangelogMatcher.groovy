@@ -16,11 +16,13 @@ class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
 
     private final String field
     private final String newValue
+    private final String oldValue
 
     @DataBoundConstructor
-    BuiltInFieldChangelogMatcher(String field, String newValue) {
+    BuiltInFieldChangelogMatcher(String field, String newValue, String oldValue) {
         this.field = field.trim()
         this.newValue = newValue.trim()
+        this.oldValue = oldValue.trim()
     }
 
     String getField() {
@@ -29,6 +31,10 @@ class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
 
     String getNewValue() {
         return newValue
+    }
+
+    String getOldValue() {
+        return oldValue
     }
 
     @Override

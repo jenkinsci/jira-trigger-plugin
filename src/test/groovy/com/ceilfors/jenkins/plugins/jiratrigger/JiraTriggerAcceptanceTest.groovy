@@ -4,6 +4,7 @@ import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.util.logging.Level
@@ -186,6 +187,20 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
+    @Ignore
+    def 'Triggers a job when issue status is updated from To Do to Done'() {
+        given:
+        def issueKey = jira.createIssue("original description")
+        def project = jenkins.createJiraChangelogTriggeredProject("job")
+        project.addChangelogMatcher("status", "To Do", "Done")
+
+        when:
+        jira.updateStatus(issueKey, "Done")
+
+        then:
+        jenkins.buildShouldBeScheduled("job")
+    }
+
     def 'Does not trigger a job when issue status is updated to In Progress whilst Done is expected'() {
         given:
         def issueKey = jira.createIssue("original description")
@@ -194,6 +209,21 @@ class JiraTriggerAcceptanceTest extends Specification {
 
         when:
         jira.updateStatus(issueKey, "In Progress")
+
+        then:
+        jenkins.noBuildShouldBeScheduled()
+    }
+
+    @Ignore
+    def 'Does not trigger a job when issue status is updated from In Progress to Done whilst the original status should have been To Do'() {
+        given:
+        def issueKey = jira.createIssue("original description")
+        jira.updateStatus(issueKey, "In Progress")
+        def project = jenkins.createJiraChangelogTriggeredProject("job")
+        project.addChangelogMatcher("status", "To Do", "Done")
+
+        when:
+        jira.updateStatus(issueKey, "Done")
 
         then:
         jenkins.noBuildShouldBeScheduled()
@@ -228,7 +258,8 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
-    // Trigger job when issue is updated - filter by from and to value
+    // help files
+    // wiki
     // -- 0.2.0 --
 
     // Add default environment variable like GIT_BRANCH, e.g. JIRA_ISSUE_KEY.

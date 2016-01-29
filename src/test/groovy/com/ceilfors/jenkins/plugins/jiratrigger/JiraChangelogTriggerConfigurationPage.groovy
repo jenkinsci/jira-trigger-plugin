@@ -30,7 +30,7 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
     }
 
 
-    void addChangelogMatcher(String field, String newValue) {
+    void addChangelogMatcher(String field, String oldValue, String newValue) {
         HtmlButton addButton = getFirstByXPath(configPage, "add changelog matcher button", '//button[contains(@suffix, "changelogMatchers")]')
         addButton.click()
 
@@ -40,6 +40,7 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
 
         lastFieldText.setValueAttribute(field)
         lastNewValueText.setValueAttribute(newValue)
+        lastOldValueText.setValueAttribute(oldValue)
     }
 
     private HtmlTextInput getLastFieldText() {
@@ -48,5 +49,9 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
 
     private HtmlTextInput getLastNewValueText() {
         getLastByXPath("newValue", '//input[contains(@name, "newValue")]')
+    }
+
+    private HtmlTextInput getLastOldValueText() {
+        getLastByXPath("newValue", '//input[contains(@name, "oldValue")]')
     }
 }

@@ -7,4 +7,8 @@
     <f:entry field="newValue" title="New Value">
         <f:textbox/>
     </f:entry>
+
+    <f:entry field="oldValue" title="Old Value">
+        <f:textbox/>
+    </f:entry>
 </j:jelly>

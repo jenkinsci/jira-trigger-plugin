@@ -44,17 +44,22 @@ class JenkinsChangelogRunner {
         instance.getItemByFullName(jobName, AbstractProject).getTrigger(JiraChangelogTrigger)
     }
 
-    void addChangelogMatcher(String fieldId, String newValue) {
+    void addChangelogMatcher(String fieldId, String oldValue, String newValue) {
         JiraChangelogTrigger jiraChangelogTrigger = getTrigger()
         def originalChangelogMatcherSize = jiraChangelogTrigger.changelogMatchers.size()
 
         JiraChangelogTriggerConfigurationPage configPage = configure()
-        configPage.addChangelogMatcher(fieldId, newValue)
+        configPage.addChangelogMatcher(fieldId, oldValue, newValue)
         configPage.save()
 
         jiraChangelogTrigger = getTrigger()
         assertThat("Changelog matcher is not added", jiraChangelogTrigger.changelogMatchers.size(), equalTo(originalChangelogMatcherSize + 1))
         assertThat(jiraChangelogTrigger.changelogMatchers.last().field, is(fieldId))
         assertThat(jiraChangelogTrigger.changelogMatchers.last().newValue, is(newValue))
+        assertThat(jiraChangelogTrigger.changelogMatchers.last().oldValue, is(oldValue))
+    }
+
+    void addChangelogMatcher(String fieldId, String newValue) {
+        addChangelogMatcher(fieldId, "", newValue)
     }
 }
