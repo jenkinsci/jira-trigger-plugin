@@ -42,7 +42,8 @@ class BuiltInFieldChangelogMatcher extends ChangelogMatcher {
         changelogGroup.items.find {
             it.fieldType == FieldType.JIRA &&
                     it.field == field &&
-                    it.toString.equalsIgnoreCase(newValue)
+                    it.toString.equalsIgnoreCase(newValue) &&
+                    (oldValue ? it.fromString.equalsIgnoreCase(oldValue) : true)
         }
     }
 
