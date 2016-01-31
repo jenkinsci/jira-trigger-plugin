@@ -9,6 +9,7 @@ import hudson.model.AbstractProject
 import jenkins.model.Jenkins
 
 import javax.inject.Inject
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * @author ceilfors
@@ -19,7 +20,7 @@ class JiraTriggerExecutor implements JiraWebhookListener {
 
     private Jenkins jenkins
     private JiraClient jira
-    private List<JiraTriggerListener> jiraTriggerListeners = []
+    private List<JiraTriggerListener> jiraTriggerListeners = new CopyOnWriteArrayList<>()
     private int quietPeriod = 0
 
     @Inject
