@@ -241,21 +241,12 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("simpleJob")
     }
 
-    def 'Comment pattern by default must not be empty'() {
-        when:
-        def project = jenkins.createJiraCommentTriggeredProject("job")
-
-        then:
-        project.commentPatternShouldNotBeEmpty()
-    }
-
     // what happen when an issue contains changelog and event?
     // What happen if a job have two of the trigger configured? Maybe only allow one type of trigger by using dropdownDescriptorSelector?
     // Think should trigger once even though two triggers are configured
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
-    // Getting SocketException: Bad file descriptor. Close HtmlUnit properly?
     // help files
     // wiki
     // -- 0.2.0 --
@@ -271,7 +262,6 @@ class JiraTriggerAcceptanceTest extends Specification {
     // -- 0.4.0 --
 
     // Register webhook from Jenkins configuration page
-    // Document log names in wiki
     // Make AcceptanceTest independent of JIRA
     // Run CI in CloudBees Jenkins
     // --- 1.0.0 ---
