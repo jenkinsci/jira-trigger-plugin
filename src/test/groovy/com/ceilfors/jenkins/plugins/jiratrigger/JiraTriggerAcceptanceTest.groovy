@@ -247,19 +247,17 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
+    // Add default environment variable like GIT_BRANCH, e.g. JIRA_ISSUE_KEY.
     // help files
     // wiki
     // -- 0.2.0 --
-
-    // Add default environment variable like GIT_BRANCH, e.g. JIRA_ISSUE_KEY.
-    // -- 0.3.0 --
 
     // Add comment - when changelog is added
     // Add comment - when there is a comment pattern that matches, but no jobs have been triggered
     // Add comment - Visibility to jira-administrators
     // Add comment - Visibility must be configured in global configuration i.e. role/group
     // Don't process comment from the user configured in Jenkins due to potential infinite loop?
-    // -- 0.4.0 --
+    // -- 0.3.0 --
 
     // Register webhook from Jenkins configuration page
     // Make AcceptanceTest independent of JIRA
