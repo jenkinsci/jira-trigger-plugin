@@ -1,4 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
+
+import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhookListener
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.WebhookChangelogEvent
@@ -44,49 +46,54 @@ class JiraTriggerExecutor implements JiraWebhookListener {
 
     @Override
     void commentCreated(WebhookCommentEvent commentEvent) {
-        def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraCommentTrigger) }
-        if (jobs) {
-            log.finest("Found jobs with JiraCommentTrigger configuration: ${jobs.collect { it.name }}")
-            List<AbstractProject> scheduledProjects = []
-            for (job in jobs) {
-                JiraCommentTrigger trigger = job.getTrigger(JiraCommentTrigger)
-                trigger.setQuietPeriod(quietPeriod)
-                boolean scheduled = trigger.run(commentEvent.issue, commentEvent.comment)
-                if (scheduled) {
-                    scheduledProjects << job
-                }
-            }
-            if (scheduledProjects) {
-                jiraTriggerListeners*.buildScheduled(commentEvent.issue, scheduledProjects)
-            } else {
-                jiraTriggerListeners*.buildNotScheduled(commentEvent.issue)
-            }
-        } else {
-            log.fine("Couldn't find any jobs that have JiraCommentTrigger configured")
-        }
+        List<AbstractProject> scheduledProjects = scheduleBuilds(JiraCommentTrigger,
+                commentEvent.issue,
+                commentEvent.comment)
+        fireListeners(scheduledProjects, commentEvent.issue)
     }
 
     @Override
     void changelogCreated(WebhookChangelogEvent changelogEvent) {
-        def jobs = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(JiraChangelogTrigger) }
-        if (jobs) {
-            log.finest("Found jobs with JiraChangelogTrigger configuration: ${jobs.collect { it.name }}")
-            List<AbstractProject> scheduledProjects = []
-            for (job in jobs) {
-                JiraChangelogTrigger trigger = job.getTrigger(JiraChangelogTrigger)
-                trigger.setQuietPeriod(quietPeriod)
-                boolean scheduled = trigger.run(changelogEvent.issue, changelogEvent.changelog)
-                if (scheduled) {
-                    scheduledProjects << job
-                }
-            }
-            if (scheduledProjects) {
-                jiraTriggerListeners*.buildScheduled(changelogEvent.issue, scheduledProjects)
-            } else {
-                jiraTriggerListeners*.buildNotScheduled(changelogEvent.issue)
-            }
+        List<AbstractProject> scheduledProjects = scheduleBuilds(JiraChangelogTrigger,
+                changelogEvent.issue,
+                changelogEvent.changelog)
+        fireListeners(scheduledProjects, changelogEvent.issue)
+    }
+
+    private void fireListeners(List<AbstractProject> scheduledProjects, Issue issue) {
+        if (scheduledProjects) {
+            jiraTriggerListeners*.buildScheduled(issue, scheduledProjects)
         } else {
-            log.fine("Couldn't find any jobs that have JiraChangelogTrigger configured")
+            jiraTriggerListeners*.buildNotScheduled(issue)
+        }
+    }
+
+    /**
+     * @return the scheduled projects
+     */
+    private List<AbstractProject> scheduleBuilds(
+            Class<? extends JiraTrigger> triggerClass, Issue issue, Object jiraObject) {
+        def projects = getProjectsWithTrigger(triggerClass)
+        List<AbstractProject> scheduledProjects = []
+        for (project in projects) {
+            JiraTrigger trigger = project.getTrigger(triggerClass)
+            trigger.setQuietPeriod(quietPeriod)
+            boolean scheduled = trigger.run(issue, jiraObject)
+            if (scheduled) {
+                scheduledProjects << project
+            }
+        }
+        return scheduledProjects
+    }
+
+    private List<AbstractProject> getProjectsWithTrigger(Class<? extends JiraTrigger> triggerClass) {
+        def projects = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(triggerClass) }
+        if (projects) {
+            log.finest("Found projects with ${triggerClass.simpleName} configuration: ${projects*.name}")
+            return projects
+        } else {
+            log.fine("Couldn't find any projects that have ${triggerClass.simpleName} configured")
+            return []
         }
     }
 }
