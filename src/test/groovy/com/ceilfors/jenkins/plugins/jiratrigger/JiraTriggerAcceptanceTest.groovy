@@ -226,7 +226,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-
     def 'Jobs is triggered when JIRA configuration is set from the UI'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
@@ -247,7 +246,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
-    // Add default environment variable like GIT_BRANCH, e.g. JIRA_ISSUE_KEY.
+    // custom fields?
     // help files
     // wiki
     // -- 0.2.0 --

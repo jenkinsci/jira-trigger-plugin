@@ -18,7 +18,7 @@ import javax.inject.Inject
  * @author ceilfors
  */
 @Log
-abstract class JiraTrigger<T> extends Trigger<BuildableItem> {
+abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
 
     private int quietPeriod
     private String jqlFilter = ""
@@ -67,6 +67,7 @@ abstract class JiraTrigger<T> extends Trigger<BuildableItem> {
         if (parameterMappings) {
             actions << new ParametersAction(collectParameterValues(issue, t))
         }
+        actions << new JiraIssueEnvironmentContributingAction(issue: issue)
         log.fine("[${job.fullName}] - Scheduling build for ${issue.key} - ${getId(t)}")
         return job.scheduleBuild(quietPeriod, getCause(issue, t), *actions)
     }
@@ -101,7 +102,7 @@ abstract class JiraTrigger<T> extends Trigger<BuildableItem> {
         protected ParameterResolver parameterResolver
 
         public boolean isApplicable(Item item) {
-            return item instanceof BuildableItem
+            return item instanceof AbstractProject
         }
 
         @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly

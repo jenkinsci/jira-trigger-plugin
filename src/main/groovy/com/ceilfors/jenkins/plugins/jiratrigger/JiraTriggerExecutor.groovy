@@ -1,5 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
+import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhookListener
@@ -46,17 +48,13 @@ class JiraTriggerExecutor implements JiraWebhookListener {
 
     @Override
     void commentCreated(WebhookCommentEvent commentEvent) {
-        List<AbstractProject> scheduledProjects = scheduleBuilds(JiraCommentTrigger,
-                commentEvent.issue,
-                commentEvent.comment)
+        List<AbstractProject> scheduledProjects = scheduleBuilds(commentEvent.issue, commentEvent.comment)
         fireListeners(scheduledProjects, commentEvent.issue)
     }
 
     @Override
     void changelogCreated(WebhookChangelogEvent changelogEvent) {
-        List<AbstractProject> scheduledProjects = scheduleBuilds(JiraChangelogTrigger,
-                changelogEvent.issue,
-                changelogEvent.changelog)
+        List<AbstractProject> scheduledProjects = scheduleBuilds(changelogEvent.issue, changelogEvent.changelog)
         fireListeners(scheduledProjects, changelogEvent.issue)
     }
 
@@ -68,10 +66,18 @@ class JiraTriggerExecutor implements JiraWebhookListener {
         }
     }
 
+    List<AbstractProject> scheduleBuilds(Issue issue, Comment comment) {
+        return scheduleBuildsInternal(JiraCommentTrigger, issue, comment)
+    }
+
+    List<AbstractProject> scheduleBuilds(Issue issue, ChangelogGroup changelogGroup) {
+        return scheduleBuildsInternal(JiraChangelogTrigger, issue, changelogGroup)
+    }
+
     /**
      * @return the scheduled projects
      */
-    private List<AbstractProject> scheduleBuilds(
+    private List<AbstractProject> scheduleBuildsInternal(
             Class<? extends JiraTrigger> triggerClass, Issue issue, Object jiraObject) {
         def projects = getProjectsWithTrigger(triggerClass)
         List<AbstractProject> scheduledProjects = []

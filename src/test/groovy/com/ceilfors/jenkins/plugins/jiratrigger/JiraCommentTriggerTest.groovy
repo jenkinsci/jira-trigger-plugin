@@ -1,12 +1,12 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
 import com.atlassian.jira.rest.client.api.domain.Comment
-import hudson.model.BuildableItem
+import hudson.model.AbstractProject
+import hudson.model.ItemGroup
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.ceilfors.jenkins.plugins.jiratrigger.TestUtils.createIssue
-
 /**
  * @author ceilfors
  */
@@ -17,8 +17,11 @@ class JiraCommentTriggerTest extends Specification {
 
     def setup() {
         given:
-        project = Mock(BuildableItem)
-        project.getFullName() >> "project"
+        def projectParent = Mock(ItemGroup)
+        projectParent.getFullName() >> ""
+        project = Mock(AbstractProject)
+        project.getParent() >> projectParent
+        project.getName() >> "project"
     }
 
     @Unroll
@@ -32,7 +35,7 @@ class JiraCommentTriggerTest extends Specification {
         trigger.run(createIssue("TEST-123"), comment)
 
         then:
-        1 * project.scheduleBuild(_, _)
+        1 * project.scheduleBuild(_, _, _)
 
         where:
         commentBody                       | commentPattern
@@ -53,7 +56,7 @@ class JiraCommentTriggerTest extends Specification {
         trigger.run(createIssue("TEST-123"), comment)
 
         then:
-        0 * project.scheduleBuild(_, _)
+        0 * project.scheduleBuild(_, _, _)
 
         where:
         commentBody              | commentPattern

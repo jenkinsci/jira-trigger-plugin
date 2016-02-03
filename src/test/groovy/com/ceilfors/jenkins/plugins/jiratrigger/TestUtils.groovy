@@ -8,9 +8,8 @@ import com.atlassian.jira.rest.client.api.domain.Issue
  */
 class TestUtils {
 
-    static Comment createCommentWithIssueId(String issueId) {
-        URI commentUri = "http://localhost:2990/jira/rest/api/2/issue/${issueId}/comment/10000".toURI()
-        new Comment(commentUri, null, null, null, null, null, null, null)
+    static Comment createComment(String body) {
+        new Comment(null, body, null, null, null, null, null, null)
     }
 
     static Issue createIssue(String issueKey) {
