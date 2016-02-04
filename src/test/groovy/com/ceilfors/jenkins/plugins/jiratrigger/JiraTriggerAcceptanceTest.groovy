@@ -240,9 +240,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("simpleJob")
     }
 
-    // what happen when an issue contains changelog and event?
-    // What happen if a job have two of the trigger configured? Maybe only allow one type of trigger by using dropdownDescriptorSelector?
-    // Think should trigger once even though two triggers are configured
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
