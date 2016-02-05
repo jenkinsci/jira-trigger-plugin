@@ -3,28 +3,17 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
-import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.google.inject.Singleton
 import hudson.model.StringParameterValue
 
-import javax.inject.Inject
 /**
  * @author ceilfors
  */
 @Singleton
 class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttributePathParameterMapping, StringParameterValue> {
 
-    private JiraClient jiraClient
-
-    @Inject
-    IssueAttributePathParameterResolver(JiraClient jiraClient) {
-        this.jiraClient = jiraClient
-    }
-
     StringParameterValue resolve(Issue issue, Comment comment, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
-        // KLUDGE: Hits JIRA multiple times, might want to handle multiple parameters at one time
-        def issueMap = jiraClient.getIssueMap(issue.key)
-        String attributeValue = resolveProperty(issueMap, issueAttributePathParameterMapping.issueAttributePath)
+        String attributeValue = resolveProperty(issue.properties, issueAttributePathParameterMapping.issueAttributePath)
         new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
     }
 
@@ -42,7 +31,7 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
                 throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE)
             }
             Eval.x(map, 'x.' + property)
-        } catch (NullPointerException e) {
+        } catch (MissingPropertyException e) {
             throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE, e)
         }
     }

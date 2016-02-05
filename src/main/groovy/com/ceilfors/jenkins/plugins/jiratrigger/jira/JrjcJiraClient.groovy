@@ -6,11 +6,9 @@ import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFacto
 import com.atlassian.jira.rest.client.internal.async.DisposableHttpClient
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.google.inject.Singleton
-import groovy.json.JsonSlurper
 import groovy.util.logging.Log
 
 import javax.inject.Inject
-import javax.ws.rs.core.UriBuilder
 import java.util.concurrent.TimeUnit
 
 /**
@@ -43,16 +41,6 @@ class JrjcJiraClient implements JiraClient {
 
     protected JbRestClient getJiraRestClient() {
         return new JbRestClient(serverUri, httpClient)
-    }
-
-    @Override
-    Map getIssueMap(String issueKeyOrId) {
-        final URI uri = UriBuilder.fromUri(serverUri)
-                .path("/rest/api/latest")
-                .path("issue")
-                .path(issueKeyOrId)
-                .build()
-        return new JsonSlurper().parseText(httpClient.newRequest(uri).setAccept("application/json").get().get(timeout, timeoutUnit).entity) as Map
     }
 
     @Override

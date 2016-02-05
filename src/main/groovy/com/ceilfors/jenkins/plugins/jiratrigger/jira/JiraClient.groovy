@@ -10,7 +10,5 @@ interface JiraClient {
 
     void addComment(String issueKey, String comment)
 
-    Map getIssueMap(String issueKeyOrId)
-
     boolean validateIssueKey(String issueKey, String jqlFilter)
 }

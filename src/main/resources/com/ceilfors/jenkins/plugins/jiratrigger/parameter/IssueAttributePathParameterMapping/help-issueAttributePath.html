@@ -1,8 +1,9 @@
 <div>
     <p>
-        JIRA attribute path resolves an attribute from the JSON response returned by
-        <a href="https://docs.atlassian.com/jira/REST/latest/#api/2/issue-getIssue">JIRA Get Issue REST API</a> e.g.
-        host:port/jira/rest/api/2/issue/10509/. To understand how the path works, refer to the example below.
+        JIRA attribute path resolves an attribute value from the JIRA issue that has triggered the job. The attribute
+        value is resolved from
+        <a href="https://docs.atlassian.com/jira-rest-java-client-api/2.0.0-m31/jira-rest-java-client-api/apidocs/">JRJC Issue Object</a>
+        To understand how the attribute path works, refer to the example below.
     </p>
 
     <p>
@@ -21,22 +22,26 @@
             <td>11120</td>
         </tr>
         <tr>
-            <td>fields.description</td>
+            <td>description</td>
             <td>description body</td>
         </tr>
         <tr>
-            <td>fields.summary</td>
+            <td>summary</td>
             <td>summary content</td>
         </tr>
         <tr>
-            <td>fields.status.name</td>
+            <td>status.name</td>
             <td>To Do</td>
+        </tr>
+        <tr>
+            <td>timeTracking.originalEstimateMinutes</td>
+            <td>5</td>
         </tr>
         </tbody>
     </table>
 
     <p>
-        <span style="text-decoration: underline">Example JSON response from JIRA REST API</span>
+        <span style="text-decoration: underline">Example Issue JSON that will be parsed to become JRJC Issue Object</span>
     </p>
     <pre>
 {
@@ -52,6 +57,12 @@
     "status": {
       "name": "To Do",
         ...
+    },
+    "timetracking": {
+      "originalEstimate": "5m",
+      "remainingEstimate": "10m",
+      "originalEstimateSeconds": 300,
+      "remainingEstimateSeconds": 600
     }
   }
 }

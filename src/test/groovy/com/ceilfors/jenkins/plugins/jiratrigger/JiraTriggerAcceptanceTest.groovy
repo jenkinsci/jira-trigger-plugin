@@ -82,7 +82,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
         def project = jenkins.createJiraCommentTriggeredProject("simpleJob", "jenkins_description", "jenkins_key")
-        project.addParameterMapping("jenkins_description", "fields.description")
+        project.addParameterMapping("jenkins_description", "description")
         project.addParameterMapping("jenkins_key", "key")
 
         when:
@@ -260,7 +260,6 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Run CI in CloudBees Jenkins
     // --- 1.0.0 ---
 
-    // Jira returned result should be cached. Use Guava.
     // void method in JrjcJiraClient should be async. Be careful on concurrency issues in this test case.
     // How to enable JenkinsRule as ClassRule to make the build faster
     // JiraTriggerCause should contain issue key and link
