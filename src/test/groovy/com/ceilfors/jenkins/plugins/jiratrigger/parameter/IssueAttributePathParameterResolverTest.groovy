@@ -25,7 +25,7 @@ class IssueAttributePathParameterResolverTest extends Specification {
 
         when:
         IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping("parameter", attributePath)
-        StringParameterValue result = resolver.resolve(createIssueFromFile("TEST-136"), null, mapping)
+        StringParameterValue result = resolver.resolve(createIssueFromFile("TEST-136"), mapping)
 
         then:
         result != null
@@ -49,7 +49,7 @@ class IssueAttributePathParameterResolverTest extends Specification {
 
         when:
         IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping("unused", attributePath)
-        resolver.resolve(createIssueFromFile("TEST-136"), null, mapping)
+        resolver.resolve(createIssueFromFile("TEST-136"), mapping)
 
         then:
         thrown JiraTriggerException

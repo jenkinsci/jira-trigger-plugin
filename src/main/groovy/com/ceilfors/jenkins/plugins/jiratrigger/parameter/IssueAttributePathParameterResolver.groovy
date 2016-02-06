@@ -1,6 +1,5 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
-import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
 import com.google.inject.Singleton
@@ -12,7 +11,7 @@ import hudson.model.StringParameterValue
 @Singleton
 class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttributePathParameterMapping, StringParameterValue> {
 
-    StringParameterValue resolve(Issue issue, Comment comment, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
+    StringParameterValue resolve(Issue issue, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
         String attributeValue = resolveProperty(issue.properties, issueAttributePathParameterMapping.issueAttributePath)
         new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
     }

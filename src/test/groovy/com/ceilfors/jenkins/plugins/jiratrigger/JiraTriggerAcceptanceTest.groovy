@@ -95,6 +95,23 @@ class JiraTriggerAcceptanceTest extends Specification {
         ])
     }
 
+    def 'Trigger job with built-in field when an issue is updated'() {
+        given:
+        def issueKey = jira.createIssue("Dummy issue description")
+        def project = jenkins.createJiraChangelogTriggeredProject("job")
+        project.addParameterMapping("jenkins_description", "description")
+        project.addParameterMapping("jenkins_key", "key")
+
+        when:
+        jira.updateDescription(issueKey, "New description")
+
+        then:
+        jenkins.buildShouldBeScheduledWithParameter("job", [
+                "jenkins_description": "New description",
+                "jenkins_key"        : issueKey
+        ])
+    }
+
     def 'Job is triggered when a comment matches the comment pattern'() {
         given:
         def issueKey = jira.createIssue()

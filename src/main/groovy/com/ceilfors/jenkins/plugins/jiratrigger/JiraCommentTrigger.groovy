@@ -2,16 +2,11 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
-import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
 import groovy.util.logging.Log
 import hudson.Extension
 import hudson.model.Cause
-import hudson.model.ParameterValue
 import org.kohsuke.stapler.DataBoundConstructor
 import org.kohsuke.stapler.DataBoundSetter
-
-import java.util.logging.Level
-
 /**
  * @author ceilfors
  */
@@ -45,21 +40,6 @@ class JiraCommentTrigger extends JiraTrigger<Comment> {
             }
         }
         return true
-    }
-
-   protected List<ParameterValue> collectParameterValues(Issue issue, Comment comment) {
-        return parameterMappings.collect {
-            if (it instanceof IssueAttributePathParameterMapping) {
-                try {
-                    return descriptor.parameterResolver.resolve(issue, comment, it)
-                } catch (JiraTriggerException e) {
-                    log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. Example: fields.description, key, fields.project.key", e)
-                    return null
-                }
-            } else {
-                throw new UnsupportedOperationException("Unsupported parameter mapping ${it.class}")
-            }
-        } - null
     }
 
     @Override

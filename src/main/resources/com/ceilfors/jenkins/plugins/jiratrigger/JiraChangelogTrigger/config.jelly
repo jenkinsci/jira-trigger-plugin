@@ -10,4 +10,10 @@
                        targetType="com.ceilfors.jenkins.plugins.jiratrigger.changelog.ChangelogMatcher" />
     </f:entry>
 
+    <f:entry title="Parameter Mapping">
+        <f:hetero-list name="parameterMappings" items="${instance.parameterMappings}" hasHeader="true"
+                       descriptors="${descriptor.parameterMappingDescriptors}"
+                       targetType="com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping" />
+    </f:entry>
+
 </j:jelly>

@@ -44,6 +44,21 @@ class JenkinsChangelogRunner {
         instance.getItemByFullName(jobName, AbstractProject).getTrigger(JiraChangelogTrigger)
     }
 
+
+    void addParameterMapping(String jenkinsParameter, String issueAttributePath) {
+        JiraChangelogTrigger jiraChangelogTrigger = getTrigger()
+        def originalParameterMappingSize = jiraChangelogTrigger.parameterMappings.size()
+
+        JiraTriggerConfigurationPage configPage = configure()
+        configPage.addParameterMapping(jenkinsParameter, issueAttributePath)
+        configPage.save()
+
+        jiraChangelogTrigger = getTrigger()
+        assertThat("Parameter mapping is not added", jiraChangelogTrigger.parameterMappings.size(), equalTo(originalParameterMappingSize + 1))
+        assertThat(jiraChangelogTrigger.parameterMappings.last().jenkinsParameter, is(jenkinsParameter))
+        assertThat(jiraChangelogTrigger.parameterMappings.last().issueAttributePath, is(issueAttributePath))
+    }
+
     void addChangelogMatcher(String fieldId, String oldValue, String newValue) {
         JiraChangelogTrigger jiraChangelogTrigger = getTrigger()
         def originalChangelogMatcherSize = jiraChangelogTrigger.changelogMatchers.size()

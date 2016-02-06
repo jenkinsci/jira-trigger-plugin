@@ -6,7 +6,6 @@ import com.ceilfors.jenkins.plugins.jiratrigger.changelog.ChangelogMatcher
 import groovy.util.logging.Log
 import hudson.Extension
 import hudson.model.Cause
-import hudson.model.ParameterValue
 import org.kohsuke.stapler.DataBoundConstructor
 import org.kohsuke.stapler.DataBoundSetter
 
@@ -40,11 +39,6 @@ class JiraChangelogTrigger extends JiraTrigger<ChangelogGroup> {
             }
         }
         return true
-    }
-
-    @Override
-    protected List<ParameterValue> collectParameterValues(Issue issue, ChangelogGroup changelogGroup) {
-        return []
     }
 
     @Override

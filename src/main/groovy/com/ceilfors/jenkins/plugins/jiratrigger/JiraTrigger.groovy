@@ -3,6 +3,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.AddressableEntity
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
+import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterResolver
 import groovy.util.logging.Log
@@ -13,7 +14,7 @@ import jenkins.model.Jenkins
 import org.kohsuke.stapler.DataBoundSetter
 
 import javax.inject.Inject
-
+import java.util.logging.Level
 /**
  * @author ceilfors
  */
@@ -65,7 +66,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
 
         List<Action> actions = []
         if (parameterMappings) {
-            actions << new ParametersAction(collectParameterValues(issue, t))
+            actions << new ParametersAction(collectParameterValues(issue))
         }
         actions << new JiraIssueEnvironmentContributingAction(issue: issue)
         log.fine("[${job.fullName}] - Scheduling build for ${issue.key} - ${getId(t)}")
@@ -73,7 +74,21 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
     }
 
     abstract boolean filter(Issue issue, T t)
-    protected abstract List<ParameterValue> collectParameterValues(Issue issue, T t)
+
+    protected List<ParameterValue> collectParameterValues(Issue issue) {
+        return parameterMappings.collect {
+            if (it instanceof IssueAttributePathParameterMapping) {
+                try {
+                    return descriptor.parameterResolver.resolve(issue, it)
+                } catch (JiraTriggerException e) {
+                    log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. Example: fields.description, key, fields.project.key", e)
+                    return null
+                }
+            } else {
+                throw new UnsupportedOperationException("Unsupported parameter mapping ${it.class}")
+            }
+        } - null
+    }
 
     private String getId(T t) {
         if (t instanceof AddressableEntity) {

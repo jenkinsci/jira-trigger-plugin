@@ -1,6 +1,5 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
-import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
 import hudson.model.ParameterValue
 
@@ -11,5 +10,5 @@ import hudson.model.ParameterValue
  */
 interface ParameterResolver<M extends ParameterMapping, V extends ParameterValue > {
 
-    V resolve(Issue issue, Comment comment, M parameterMapping)
+    V resolve(Issue issue, M parameterMapping)
 }
