@@ -1,6 +1,8 @@
-package com.ceilfors.jenkins.plugins.jiratrigger
+package com.ceilfors.jenkins.plugins.jiratrigger.integration
 
 import com.atlassian.jira.rest.client.api.domain.Issue
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerExecutor
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerListener
 import hudson.model.AbstractProject
 import hudson.model.Queue
 import jenkins.model.Jenkins

@@ -1,4 +1,4 @@
-package com.ceilfors.jenkins.plugins.jiratrigger
+package com.ceilfors.jenkins.plugins.jiratrigger.integration
 
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 

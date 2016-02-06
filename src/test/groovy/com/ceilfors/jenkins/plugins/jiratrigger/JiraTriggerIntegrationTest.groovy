@@ -1,5 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import hudson.model.AbstractBuild
 import hudson.model.Queue
 import org.junit.Rule

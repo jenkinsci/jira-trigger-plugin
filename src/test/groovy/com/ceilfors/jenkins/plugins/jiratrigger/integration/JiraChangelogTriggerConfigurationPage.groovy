@@ -1,5 +1,6 @@
-package com.ceilfors.jenkins.plugins.jiratrigger
+package com.ceilfors.jenkins.plugins.jiratrigger.integration
 
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraChangelogTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.changelog.BuiltInFieldChangelogMatcher
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor
 import com.gargoylesoftware.htmlunit.html.HtmlButton

@@ -1,4 +1,6 @@
-package com.ceilfors.jenkins.plugins.jiratrigger
+package com.ceilfors.jenkins.plugins.jiratrigger.integration
+
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.AbstractProject
 import jenkins.model.Jenkins

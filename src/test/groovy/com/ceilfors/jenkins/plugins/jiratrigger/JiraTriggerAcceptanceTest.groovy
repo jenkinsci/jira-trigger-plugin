@@ -1,5 +1,9 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraRunner
 import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.ExternalResource

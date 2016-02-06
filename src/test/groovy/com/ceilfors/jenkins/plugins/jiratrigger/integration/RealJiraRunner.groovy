@@ -1,10 +1,11 @@
-package com.ceilfors.jenkins.plugins.jiratrigger
+package com.ceilfors.jenkins.plugins.jiratrigger.integration
 
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder
 import com.atlassian.jira.rest.client.api.IssueRestClient
 import com.atlassian.jira.rest.client.api.domain.*
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
 import com.atlassian.jira.rest.client.api.domain.input.TransitionInput
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JrjcJiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.Webhook
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.WebhookInput

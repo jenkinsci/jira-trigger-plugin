@@ -1,4 +1,9 @@
-package com.ceilfors.jenkins.plugins.jiratrigger
+package com.ceilfors.jenkins.plugins.jiratrigger.integration
+
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraChangelogTrigger
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerExecutor
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.*
