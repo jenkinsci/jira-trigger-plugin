@@ -33,6 +33,14 @@ abstract class JiraTriggerConfigurationPage {
         lastAttributePathText.setValueAttribute(attributePath)
     }
 
+    void setJqlFilter(String jqlFilter) {
+        jqlFilterText.setValueAttribute(jqlFilter)
+    }
+
+    protected HtmlTextInput getJqlFilterText() {
+        getField("jqlFilter")
+    }
+
     protected HtmlTextInput getLastJenkinsParameterText() {
         getLastByXPath("jenkinsParameter", '//input[contains(@name, "jenkinsParameter")]')
     }

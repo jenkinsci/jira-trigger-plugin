@@ -22,10 +22,6 @@ class JiraCommentTriggerConfigurationPage extends JiraTriggerConfigurationPage {
         commentPatternText.setValueAttribute(commentPattern)
     }
 
-    void setJqlFilter(String jqlFilter) {
-        jqlFilterText.setValueAttribute(jqlFilter)
-    }
-
     String getCommentPattern() {
         commentPatternText.valueAttribute
     }
@@ -33,9 +29,4 @@ class JiraCommentTriggerConfigurationPage extends JiraTriggerConfigurationPage {
     private HtmlTextInput getCommentPatternText() {
         getField("commentPattern")
     }
-
-    private HtmlTextInput getJqlFilterText() {
-        getField("jqlFilter")
-    }
-
 }

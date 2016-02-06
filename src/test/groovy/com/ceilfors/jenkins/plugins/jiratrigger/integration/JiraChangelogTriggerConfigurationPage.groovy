@@ -22,15 +22,6 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
         return JiraChangelogTrigger
     }
 
-    void setJqlFilter(String jqlFilter) {
-        jqlFilterText.setValueAttribute(jqlFilter)
-    }
-
-    private HtmlTextInput getJqlFilterText() {
-        getField("jqlFilter")
-    }
-
-
     void addChangelogMatcher(String field, String oldValue, String newValue) {
         HtmlButton addButton = getFirstByXPath(configPage, "add changelog matcher button", '//button[contains(@suffix, "changelogMatchers")]')
         addButton.click()
