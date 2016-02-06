@@ -12,13 +12,13 @@ import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
  */
-class JenkinsChangelogRunner {
+class JiraChangelogTriggerConfigurer {
 
     private JenkinsRunner jenkinsRunner
     private Jenkins instance
     private String jobName
 
-    public JenkinsChangelogRunner(JenkinsRunner jenkinsRunner, String jobName) {
+    public JiraChangelogTriggerConfigurer(JenkinsRunner jenkinsRunner, String jobName) {
         this.jenkinsRunner = jenkinsRunner
         this.instance = jenkinsRunner.instance
         this.jobName = jobName

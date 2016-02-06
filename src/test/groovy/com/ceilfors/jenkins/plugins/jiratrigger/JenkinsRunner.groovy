@@ -54,10 +54,10 @@ class JenkinsRunner extends JenkinsRule {
         return "${getURL().toString()}${jiraWebhook.urlName}/"
     }
 
-    JenkinsChangelogRunner createJiraChangelogTriggeredProject(String name) {
+    JiraChangelogTriggerConfigurer createJiraChangelogTriggeredProject(String name) {
         FreeStyleProject project = createFreeStyleProject(name)
 
-        JenkinsChangelogRunner jenkinsChangelogRunner = new JenkinsChangelogRunner(this, name)
+        JiraChangelogTriggerConfigurer jenkinsChangelogRunner = new JiraChangelogTriggerConfigurer(this, name)
         JiraTriggerConfigurationPage configPage = jenkinsChangelogRunner.configure()
         configPage.activate()
         configPage.save()
@@ -66,13 +66,13 @@ class JenkinsRunner extends JenkinsRule {
         return jenkinsChangelogRunner
     }
 
-    JenkinsCommentRunner createJiraCommentTriggeredProject(String name, String... parameters) {
+    JiraCommentTriggerConfigurer createJiraCommentTriggeredProject(String name, String... parameters) {
         FreeStyleProject project = createFreeStyleProject(name)
         project.addProperty(new ParametersDefinitionProperty(parameters.collect {
             new StringParameterDefinition(it, "")
         }))
 
-        JenkinsCommentRunner jenkinsCommentRunner = new JenkinsCommentRunner(this, name)
+        JiraCommentTriggerConfigurer jenkinsCommentRunner = new JiraCommentTriggerConfigurer(this, name)
         JiraTriggerConfigurationPage configPage = jenkinsCommentRunner.configure()
         configPage.activate()
         configPage.save()

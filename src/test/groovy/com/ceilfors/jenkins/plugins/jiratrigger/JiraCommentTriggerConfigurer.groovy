@@ -12,13 +12,13 @@ import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
  */
-class JenkinsCommentRunner {
+class JiraCommentTriggerConfigurer {
 
     private JenkinsRunner jenkinsRunner
     private Jenkins instance
     private String jobName
 
-    public JenkinsCommentRunner(JenkinsRunner jenkinsRunner, String jobName) {
+    public JiraCommentTriggerConfigurer(JenkinsRunner jenkinsRunner, String jobName) {
         this.jenkinsRunner = jenkinsRunner
         this.instance = jenkinsRunner.instance
         this.jobName = jobName
