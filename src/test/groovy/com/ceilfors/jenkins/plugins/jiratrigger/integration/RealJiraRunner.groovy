@@ -2,54 +2,34 @@ package com.ceilfors.jenkins.plugins.jiratrigger.integration
 
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder
 import com.atlassian.jira.rest.client.api.IssueRestClient
-import com.atlassian.jira.rest.client.api.domain.*
+import com.atlassian.jira.rest.client.api.domain.CimProject
+import com.atlassian.jira.rest.client.api.domain.Comment
+import com.atlassian.jira.rest.client.api.domain.Issue
+import com.atlassian.jira.rest.client.api.domain.Transition
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
 import com.atlassian.jira.rest.client.api.domain.input.TransitionInput
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JrjcJiraClient
-import com.ceilfors.jenkins.plugins.jiratrigger.jira.Webhook
-import com.ceilfors.jenkins.plugins.jiratrigger.jira.WebhookInput
-import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import groovy.util.logging.Log
 import hudson.model.Job
 import hudson.model.Queue
-import jenkins.model.Jenkins
+import jenkins.model.GlobalConfiguration
 
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
-
 /**
  * @author ceilfors
  */
 @Log
 class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
-    private static final WEBHOOK_NAME = "Jenkins JIRA Trigger"
-    private Jenkins jenkins
     JenkinsBlockingQueue jenkinsQueue
+    JenkinsRunner jenkinsRunner
 
-    RealJiraRunner(JenkinsRunner jenkinsRunner, JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
-        super(jiraTriggerGlobalConfiguration)
-        this.jenkins = jenkinsRunner.jenkins
-        jenkinsQueue = new JenkinsBlockingQueue(jenkins)
-    }
-
-    void registerWebhook(String url) {
-        jiraRestClient.webhookRestClient.registerWebhook(new WebhookInput(
-                url: "$url",
-                name: WEBHOOK_NAME,
-                events: [JiraWebhook.WEBHOOK_EVENT],
-        )).claim()
-    }
-
-    void deleteAllWebhooks() {
-        Iterable<Webhook> webhooks = jiraRestClient.webhookRestClient.getWebhooks().claim()
-        // TODO: Should find by base URL
-        // TODO: Expose only 1 method: re-registerWebhook() when moving functionality to Jenkins
-        def webhook = webhooks.find { it.name == WEBHOOK_NAME } as Webhook
-        if (webhook) {
-            jiraRestClient.webhookRestClient.unregisterWebhook(webhook.selfUri).claim()
-        }
+    RealJiraRunner(JenkinsRunner jenkinsRunner) {
+        super(GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration))
+        this.jenkinsQueue = new JenkinsBlockingQueue(jenkinsRunner.instance)
+        this.jenkinsRunner = jenkinsRunner
     }
 
     String createIssue() {
@@ -96,7 +76,7 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
         def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
         Comment lastComment = issue.getComments().last()
-        Job job = jenkins.getItemByFullName(jobName, Job)
+        Job job = jenkinsRunner.instance.getItemByFullName(jobName, Job)
         assertThat("$issueKey was not notified by Jenkins!", lastComment.body, containsString(job.absoluteUrl))
     }
 

@@ -1,10 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraRunner
-import jenkins.model.GlobalConfiguration
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.*
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
@@ -18,28 +14,18 @@ import static JiraCommentTrigger.DEFAULT_COMMENT
  */
 class JiraTriggerAcceptanceTest extends Specification {
 
-    String jiraRootUrl = "http://localhost:2990/jira"
-    String jiraUsername = "admin"
-    String jiraPassword = "admin"
-
     JenkinsRunner jenkins = new JenkinsRunner()
 
     @Rule
     RuleChain ruleChain = RuleChain
             .outerRule(new JulLogLevelRule(Level.FINEST))
             .around(jenkins)
+            .around(new JiraSetupRule(jenkins))
             .around(
             new ExternalResource() {
                 @Override
                 protected void before() throws Throwable {
-                    JiraTriggerGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
-                    configuration.jiraRootUrl = jiraRootUrl
-                    configuration.jiraUsername = jiraUsername
-                    configuration.jiraPassword = jiraPassword
-                    configuration.save()
-                    jira = new RealJiraRunner(jenkins, configuration)
-                    jira.deleteAllWebhooks()
-                    jira.registerWebhook(jenkins.webhookUrl.replace("localhost", "10.0.2.2"))
+                    jira = new RealJiraRunner(jenkins)
                 }
             })
 
@@ -265,6 +251,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     // ** Incremental features: **
     // custom fields?
+    // move Jira configuration UI test to Integration Test round trip
     // help files
     // wiki
     // -- 0.2.0 --

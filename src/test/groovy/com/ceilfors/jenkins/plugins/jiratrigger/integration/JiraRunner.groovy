@@ -7,10 +7,6 @@ import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
  */
 interface JiraRunner extends JiraClient {
 
-    void registerWebhook(String url)
-
-    void deleteAllWebhooks()
-
     String createIssue()
 
     String createIssue(String description)

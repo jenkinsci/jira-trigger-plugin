@@ -51,7 +51,7 @@ class JenkinsRunner extends JenkinsRule {
         instance.getInjector().getInstance(JiraTriggerExecutor)
     }
 
-    private JiraWebhook getJiraWebhook() {
+    public JiraWebhook getJiraWebhook() {
         instance.getActions().find { it instanceof JiraWebhook } as JiraWebhook
     }
 

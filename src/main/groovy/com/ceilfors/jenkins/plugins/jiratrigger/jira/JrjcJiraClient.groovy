@@ -39,7 +39,7 @@ class JrjcJiraClient implements JiraClient {
                 new BasicHttpAuthenticationHandler(jiraTriggerGlobalConfiguration.jiraUsername, jiraTriggerGlobalConfiguration.jiraPassword.plainText));
     }
 
-    protected JbRestClient getJiraRestClient() {
+    JbRestClient getJiraRestClient() {
         return new JbRestClient(serverUri, httpClient)
     }
 
