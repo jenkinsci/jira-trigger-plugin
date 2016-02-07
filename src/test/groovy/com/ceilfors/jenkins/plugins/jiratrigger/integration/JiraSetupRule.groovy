@@ -21,11 +21,11 @@ class JiraSetupRule extends ExternalResource {
 
     protected void before() throws Throwable {
         JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration = jenkinsConfiguration()
-        JbRestClient jiraRestClient = new JrjcJiraClient(jiraTriggerGlobalConfiguration).jiraRestClient
+        ExtendedJiraRestClient jiraRestClient = new JrjcJiraClient(jiraTriggerGlobalConfiguration).jiraRestClient
         webhookConfiguration(jiraRestClient)
     }
 
-    def webhookConfiguration(JbRestClient jiraRestClient) {
+    def webhookConfiguration(ExtendedJiraRestClient jiraRestClient) {
         WebhookRestClient webhookRestClient = jiraRestClient.webhookRestClient
         Iterable<Webhook> webhooks = webhookRestClient.getWebhooks().claim()
         webhooks = webhooks.findAll { it.name.contains("Acceptance Test") || it.name.contains("Local Jenkins")}
