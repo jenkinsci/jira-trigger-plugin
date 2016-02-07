@@ -4,6 +4,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import hudson.model.AbstractBuild
 import hudson.model.Queue
+import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import spock.lang.Specification
@@ -22,6 +23,17 @@ class JiraTriggerIntegrationTest extends Specification {
             .outerRule(new JulLogLevelRule(Level.FINEST))
             .around(jenkins)
 
+    def 'Global configuration round trip'() {
+        JiraTriggerGlobalConfiguration before = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
+        before.jiraRootUrl = "localhost:2990/jira"
+        before.jiraUsername = "admin"
+        before.jiraPassword = "admin"
+        before.save()
+
+        jenkins.configRoundtrip()
+        JiraTriggerGlobalConfiguration after = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
+        jenkins.assertEqualBeans(before, after, "jiraRootUrl,jiraUsername,jiraPassword")
+    }
 
     def 'Comment pattern by default must not be empty'() {
         when:
@@ -52,6 +64,4 @@ class JiraTriggerIntegrationTest extends Specification {
         }
         environment.get("JIRA_ISSUE_KEY") == "TEST-1234"
     }
-
-    // Add jenkins.configRoundTrip for testing
 }

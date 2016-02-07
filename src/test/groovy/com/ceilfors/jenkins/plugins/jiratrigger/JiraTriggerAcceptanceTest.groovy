@@ -233,20 +233,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-    def 'Jobs is triggered when JIRA configuration is set from the UI'() {
-        given:
-        def issueKey = jira.createIssue("Dummy issue description")
-        def project = jenkins.createJiraCommentTriggeredProject("simpleJob", "jenkins_description")
-        project.setJqlFilter('type=task and description~"dummy description" and status="To Do"')
-
-        when:
-        jenkins.setJiraTriggerGlobalConfig(jiraRootUrl, jiraUsername, jiraPassword)
-        jira.addComment(issueKey, DEFAULT_COMMENT)
-
-        then:
-        jenkins.buildShouldBeScheduled("simpleJob")
-    }
-
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
