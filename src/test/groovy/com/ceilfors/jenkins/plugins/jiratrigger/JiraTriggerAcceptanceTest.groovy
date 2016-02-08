@@ -237,7 +237,6 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     // ** Incremental features: **
     // custom fields?
-    // move Jira configuration UI test to Integration Test round trip
     // help files
     // wiki
     // -- 0.2.0 --

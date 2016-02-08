@@ -3,6 +3,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger.integration
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.*
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
+import groovyx.net.http.HTTPBuilder
 import jenkins.model.GlobalConfiguration
 import org.junit.rules.ExternalResource
 /**
@@ -20,15 +21,57 @@ class JiraSetupRule extends ExternalResource {
     }
 
     protected void before() throws Throwable {
-        JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration = jenkinsConfiguration()
-        ExtendedJiraRestClient jiraRestClient = new JrjcJiraClient(jiraTriggerGlobalConfiguration).jiraRestClient
-        webhookConfiguration(jiraRestClient)
+        configureJenkinsWithNormalUser()
+
+        ExtendedJiraRestClient jiraRestClient = new JrjcJiraClient(new JiraTriggerGlobalConfiguration(jiraRootUrl, "admin", "admin")).jiraRestClient
+        configureWebhook(jiraRestClient.webhookRestClient)
+        configureCustomField()
     }
 
-    def webhookConfiguration(ExtendedJiraRestClient jiraRestClient) {
-        WebhookRestClient webhookRestClient = jiraRestClient.webhookRestClient
+    /**
+     * This method hits JIRA Test Kit plugin REST API as the official REST API doesn't
+     * support listing screen ids. The Test Kit client is however not used due to dependency hell.
+     * There are a lot of transitive dependencies
+     * that are dependent on by the test kit but not being declared explicitly. Trying to pull them manually seems
+     * almost pull the entire Atlassian SDK which is huge. Because of the issue, http builder is
+     * used instead.
+     */
+    private configureCustomField() {
+        def http = new HTTPBuilder(jiraRootUrl + "/rest/testkit-test/1.0/")
+        http.auth.basic 'admin', 'admin'
+
+        def customFieldName = "MyCustomer"
+        def customFieldAlreadyAdded = false
+        http.get(path: 'customFields/get') { resp, json ->
+            customFieldAlreadyAdded = json.find{ it.name == customFieldName } ? true : false
+        }
+        if (!customFieldAlreadyAdded) {
+            http.post(path: 'customFields/create', requestContentType: 'application/json', body: [
+                    name       : customFieldName,
+                    description: "A custom field that contains customer name",
+                    type       : "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+            ])
+        }
+
+        List<String> screensWithoutCustomField = []
+        http.get(path: 'screens') { resp, screens ->
+            screens.each { screen ->
+                boolean fieldAlreadyAdded = screen.tabs.find { tab -> tab.fields.find {it.name == customFieldName } }
+                if (!fieldAlreadyAdded) {
+                    screensWithoutCustomField.add(screen.name)
+                }
+            }
+
+        }
+
+        for (String screen : screensWithoutCustomField) {
+            http.get(path: 'screens/addField', query: [screen: screen, field: customFieldName])
+        }
+    }
+
+    def configureWebhook(WebhookRestClient webhookRestClient) {
         Iterable<Webhook> webhooks = webhookRestClient.getWebhooks().claim()
-        webhooks = webhooks.findAll { it.name.contains("Acceptance Test") || it.name.contains("Local Jenkins")}
+        webhooks = webhooks.findAll { it.name.contains("Acceptance Test") || it.name.contains("Local Jenkins") }
         webhooks.each { webhook ->
             webhookRestClient.unregisterWebhook(webhook.selfUri).claim()
         }
@@ -38,12 +81,11 @@ class JiraSetupRule extends ExternalResource {
         webhookRestClient.registerWebhook(new WebhookInput(name: "Local Jenkins", events: [JiraWebhook.WEBHOOK_EVENT], url: "http://localhost:8080/${jenkinsRunner.jiraWebhook.urlName}/")).claim()
     }
 
-    JiraTriggerGlobalConfiguration jenkinsConfiguration() {
+    def configureJenkinsWithNormalUser() {
         JiraTriggerGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
         configuration.jiraRootUrl = jiraRootUrl
         configuration.jiraUsername = jiraUsername
         configuration.jiraPassword = jiraPassword
         configuration.save()
-        return configuration
     }
 }
