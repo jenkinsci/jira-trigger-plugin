@@ -9,6 +9,7 @@ import spock.lang.Specification
 import java.util.logging.Level
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
+import static com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraSetupRule.CUSTOM_FIELD_NAME
 /**
  * @author ceilfors
  */
@@ -184,7 +185,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.addChangelogMatcher("status", "Done")
+        project.addJiraFieldChangelogMatcher("status", "Done")
 
         when:
         jira.updateStatus(issueKey, "Done")
@@ -197,7 +198,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.addChangelogMatcher("status", "To Do", "Done")
+        project.addJiraFieldChangelogMatcher("status", "To Do", "Done")
 
         when:
         jira.updateStatus(issueKey, "Done")
@@ -210,7 +211,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.addChangelogMatcher("status", "Done")
+        project.addJiraFieldChangelogMatcher("status", "Done")
 
         when:
         jira.updateStatus(issueKey, "In Progress")
@@ -224,7 +225,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         def issueKey = jira.createIssue("original description")
         jira.updateStatus(issueKey, "In Progress")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.addChangelogMatcher("status", "To Do", "Done")
+        project.addJiraFieldChangelogMatcher("status", "To Do", "Done")
 
         when:
         jira.updateStatus(issueKey, "Done")
@@ -233,10 +234,24 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
+    def 'Triggers a job when a custom field is updated'() {
+        given:
+        def issueKey = jira.createIssue("original description")
+        def project = jenkins.createJiraChangelogTriggeredProject("job")
+        project.addCustomFieldChangelogMatcher(CUSTOM_FIELD_NAME, "Barclays")
+
+        when:
+        jira.updateCustomField(issueKey, CUSTOM_FIELD_NAME, "Barclays")
+
+        then:
+        jenkins.buildShouldBeScheduled("job")
+    }
+
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
-    // custom fields?
+    // Empty value in oldValue and newValue is ambiguous. Add a checkbox to differentiate if user wants empty value or optional
+    // Unit test changelog matcher, toString and fromString can be null!
     // help files
     // wiki
     // -- 0.2.0 --

@@ -29,12 +29,12 @@ class JiraChangelogTriggerConfigurer extends JiraTriggerConfigurer {
         instance.getItemByFullName(jobName, AbstractProject).getTrigger(JiraChangelogTrigger)
     }
 
-    void addChangelogMatcher(String fieldId, String oldValue, String newValue) {
+    void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {
         JiraChangelogTrigger jiraChangelogTrigger = getTrigger()
         def originalChangelogMatcherSize = jiraChangelogTrigger.changelogMatchers.size()
 
         JiraChangelogTriggerConfigurationPage configPage = configure()
-        configPage.addChangelogMatcher(fieldId, oldValue, newValue)
+        configPage.addJiraFieldChangelogMatcher(fieldId, oldValue, newValue)
         configPage.save()
 
         jiraChangelogTrigger = getTrigger()
@@ -44,7 +44,26 @@ class JiraChangelogTriggerConfigurer extends JiraTriggerConfigurer {
         assertThat(jiraChangelogTrigger.changelogMatchers.last().oldValue, is(oldValue))
     }
 
-    void addChangelogMatcher(String fieldId, String newValue) {
-        addChangelogMatcher(fieldId, "", newValue)
+    void addJiraFieldChangelogMatcher(String fieldId, String newValue) {
+        addJiraFieldChangelogMatcher(fieldId, "", newValue)
+    }
+
+    void addCustomFieldChangelogMatcher(String fieldName, String oldValue, String newValue) {
+        JiraChangelogTrigger jiraChangelogTrigger = getTrigger()
+        def originalChangelogMatcherSize = jiraChangelogTrigger.changelogMatchers.size()
+
+        JiraChangelogTriggerConfigurationPage configPage = configure()
+        configPage.addCustomFieldChangelogMatcher(fieldName, oldValue, newValue)
+        configPage.save()
+
+        jiraChangelogTrigger = getTrigger()
+        assertThat("Changelog matcher is not added", jiraChangelogTrigger.changelogMatchers.size(), equalTo(originalChangelogMatcherSize + 1))
+        assertThat(jiraChangelogTrigger.changelogMatchers.last().field, is(fieldName))
+        assertThat(jiraChangelogTrigger.changelogMatchers.last().newValue, is(newValue))
+        assertThat(jiraChangelogTrigger.changelogMatchers.last().oldValue, is(oldValue))
+    }
+
+    void addCustomFieldChangelogMatcher(String fieldName, String newValue) {
+        addCustomFieldChangelogMatcher(fieldName, "", newValue)
     }
 }

@@ -4,10 +4,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-import java.util.logging.ConsoleHandler
-import java.util.logging.Handler
-import java.util.logging.Level
-import java.util.logging.Logger
+import java.util.logging.*
 
 /**
  * @author ceilfors
@@ -29,6 +26,7 @@ class JulLogLevelRule implements TestRule {
             consoleHandler = new ConsoleHandler();
             topLogger.addHandler(consoleHandler);
         }
+
         consoleHandler.setLevel(pluginLogLevel)
         Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF)
         Logger.getLogger("com.ceilfors.jenkins.plugins").setLevel(pluginLogLevel)

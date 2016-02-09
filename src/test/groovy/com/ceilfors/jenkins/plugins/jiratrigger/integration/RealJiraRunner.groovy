@@ -80,6 +80,17 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
         assertThat("$issueKey was not notified by Jenkins!", lastComment.body, containsString(job.absoluteUrl))
     }
 
+    @Override
+    void updateCustomField(String issueKey, String fieldName, String value) {
+        String fieldId
+        if (fieldName == JiraSetupRule.CUSTOM_FIELD_NAME) {
+            fieldId = JiraSetupRule.CUSTOM_FIELD_ID
+        } else {
+            throw new UnsupportedOperationException("$fieldName not supported")
+        }
+        jiraRestClient.issueClient.updateIssue(issueKey, new IssueInputBuilder().setFieldValue(fieldId, value).build()).get(timeout, timeoutUnit)
+    }
+
     private Long getIssueTypeId(String project, String issueTypeName) {
         Iterable<CimProject> metadata = jiraRestClient.issueClient.getCreateIssueMetadata(new GetCreateIssueMetadataOptionsBuilder().withProjectKeys(project).withIssueTypeNames(issueTypeName).build()).claim()
         return metadata[0].issueTypes[0].id

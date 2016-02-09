@@ -41,7 +41,7 @@ class JenkinsRunner extends JenkinsRule {
 
     void buildShouldBeScheduledWithParameter(String jobName, Map<String, String> parameterMap) {
         Queue.Item scheduledItem = jenkinsQueue.scheduledItem
-        assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))
+        assertThat("Build is not scheduled, check logs!", scheduledItem, is(not(nullValue())))
         assertThat("Last build scheduled doesn't match the job name asserted", (scheduledItem.task as Project).fullName, is(jobName))
         def parametersAction = scheduledItem.getAction(ParametersAction)
         assertThat(parametersAction.parameters, containsInAnyOrder(*parameterMap.collect { key, value -> new StringParameterValue(key, value) }))

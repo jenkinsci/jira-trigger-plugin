@@ -16,4 +16,6 @@ interface JiraRunner extends JiraClient {
     void updateStatus(String issueKey, String status)
 
     void shouldBeNotifiedWithComment(String issueKey, String jobName)
+
+    void updateCustomField(String issueKey, String fieldName, String value)
 }
