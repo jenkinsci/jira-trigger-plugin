@@ -34,6 +34,15 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     JiraRunner jira
 
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        protected void starting(Description description) {
+            System.err.println("-------------------------------------------------------")
+            System.err.println("Starting test: " + description.getMethodName())
+            System.err.println("-------------------------------------------------------")
+        }
+    }
+
     def 'Should trigger a job when a comment is added'() {
         given:
         def issueKey = jira.createIssue()
