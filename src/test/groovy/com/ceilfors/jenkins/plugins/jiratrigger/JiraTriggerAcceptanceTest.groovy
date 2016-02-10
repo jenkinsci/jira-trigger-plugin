@@ -4,9 +4,11 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.*
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
+import org.junit.rules.TestRule
+import org.junit.rules.TestWatcher
+import org.junit.runner.Description
+import spock.lang.IgnoreRest
 import spock.lang.Specification
-
-import java.util.logging.Level
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
 import static com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraSetupRule.CUSTOM_FIELD_NAME
@@ -19,7 +21,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     @Rule
     RuleChain ruleChain = RuleChain
-            .outerRule(new JulLogLevelRule(Level.FINEST))
+            .outerRule(new JulLogLevelRule())
             .around(jenkins)
             .around(new JiraSetupRule(jenkins))
             .around(

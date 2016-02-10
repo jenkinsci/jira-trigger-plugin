@@ -24,6 +24,8 @@ class JenkinsRunner extends JenkinsRule {
         super.before()
         jiraTriggerExecutor.setQuietPeriod(100)
         jenkinsQueue = new JenkinsBlockingQueue(instance)
+
+        JulLogLevelRule.configureLog() // Needed when @IgnoreRest is used in acceptance tests
     }
 
     void buildShouldBeScheduled(String jobName) {

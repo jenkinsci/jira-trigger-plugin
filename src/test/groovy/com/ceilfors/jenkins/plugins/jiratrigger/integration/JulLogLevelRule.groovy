@@ -11,10 +11,7 @@ import java.util.logging.*
  */
 class JulLogLevelRule implements TestRule {
 
-    private Level pluginLogLevel
-
-    public JulLogLevelRule(Level pluginLogLevel) {
-        this.pluginLogLevel = pluginLogLevel
+    public JulLogLevelRule() {
     }
 
     @Override
@@ -27,9 +24,15 @@ class JulLogLevelRule implements TestRule {
             topLogger.addHandler(consoleHandler);
         }
 
-        consoleHandler.setLevel(pluginLogLevel)
-        Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF)
-        Logger.getLogger("com.ceilfors.jenkins.plugins").setLevel(pluginLogLevel)
+        consoleHandler.setLevel(Level.FINEST)
+
+        // Required when all of the test cases is in acceptance tests without @Ignore or @IgnoreRest
+        configureLog()
         return base
+    }
+
+    public static void configureLog() {
+        Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF)
+        Logger.getLogger("com.ceilfors.jenkins.plugins").setLevel(Level.FINEST)
     }
 }

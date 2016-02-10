@@ -10,7 +10,7 @@ import org.kohsuke.stapler.StaplerRequest
 import org.kohsuke.stapler.interceptor.RequirePOST
 
 import javax.inject.Inject
-
+import java.util.logging.Level
 /**
  * The HTTP endpoint that receives JIRA Webhook.
  *
@@ -54,8 +54,7 @@ class JiraWebhook implements UnprotectedRootAction {
     }
 
     public void processEvent(StaplerRequest request, String webhookEvent) {
-        log.finest("Webhook event body:")
-        log.finest(JsonOutput.prettyPrint(webhookEvent))
+        logJson(webhookEvent)
         Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
         String eventType = webhookEventMap['webhookEvent']
         boolean validEvent = false
@@ -79,6 +78,13 @@ class JiraWebhook implements UnprotectedRootAction {
         if (!validEvent) {
             log.warning("Received Webhook callback with an invalid event type or a body without comment/changelog. " +
                     "Event type: ${eventType}. Event body contains: ${webhookEventMap.keySet()}.")
+        }
+    }
+
+    private void logJson(String webhookEvent) {
+        if (log.isLoggable(Level.FINEST)) {
+            log.finest("Webhook event body:")
+            log.finest(JsonOutput.prettyPrint(webhookEvent))
         }
     }
 

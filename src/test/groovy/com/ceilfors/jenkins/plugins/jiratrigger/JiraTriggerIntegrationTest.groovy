@@ -8,9 +8,6 @@ import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import spock.lang.Specification
-
-import java.util.logging.Level
-
 /**
  * @author ceilfors
  */
@@ -20,7 +17,7 @@ class JiraTriggerIntegrationTest extends Specification {
 
     @Rule
     RuleChain ruleChain = RuleChain
-            .outerRule(new JulLogLevelRule(Level.FINEST))
+            .outerRule(new JulLogLevelRule())
             .around(jenkins)
 
     def 'Global configuration round trip'() {
