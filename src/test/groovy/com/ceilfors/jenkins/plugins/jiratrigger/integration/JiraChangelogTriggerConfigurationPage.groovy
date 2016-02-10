@@ -5,7 +5,6 @@ import com.ceilfors.jenkins.plugins.jiratrigger.changelog.CustomFieldChangelogMa
 import com.ceilfors.jenkins.plugins.jiratrigger.changelog.JiraFieldChangelogMatcher
 import com.gargoylesoftware.htmlunit.html.*
 import hudson.triggers.Trigger
-
 /**
  * @author ceilfors
  */
@@ -21,29 +20,26 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
     }
 
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {
-        HtmlButton addButton = getFirstByXPath(configPage, "add changelog matcher button", '//button[contains(@suffix, "changelogMatchers")]')
-        addButton.click()
-
-        HtmlDivision parameterMappingDiv = addButton.parentNode.parentNode.parentNode as HtmlDivision
-        HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv, "jira field changelog matcher button", "//a[contains(text(), '${JiraFieldChangelogMatcher.JiraFieldChangelogMatcherDescriptor.DISPLAY_NAME}')]")
-        attribute.click()
-
+        addChangelogMatcher(JiraFieldChangelogMatcher.JiraFieldChangelogMatcherDescriptor.DISPLAY_NAME)
         lastFieldText.setValueAttribute(fieldId)
         lastNewValueText.setValueAttribute(newValue)
         lastOldValueText.setValueAttribute(oldValue)
     }
 
     def addCustomFieldChangelogMatcher(String fieldName, String oldValue, String newValue) {
+        addChangelogMatcher(CustomFieldChangelogMatcher.CustomFieldChangelogMatcherDescriptor.DISPLAY_NAME)
+        lastFieldText.setValueAttribute(fieldName)
+        lastNewValueText.setValueAttribute(newValue)
+        lastOldValueText.setValueAttribute(oldValue)
+    }
+
+    private void addChangelogMatcher(String displayName) {
         HtmlButton addButton = getFirstByXPath(configPage, "add changelog matcher button", '//button[contains(@suffix, "changelogMatchers")]')
         addButton.click()
 
         HtmlDivision parameterMappingDiv = addButton.parentNode.parentNode.parentNode as HtmlDivision
-        HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv, "custom field changelog matcher button", "//a[contains(text(), '${CustomFieldChangelogMatcher.CustomFieldChangelogMatcherDescriptor.DISPLAY_NAME}')]")
+        HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv, "custom field changelog matcher button", "//a[contains(text(), '${displayName}')]")
         attribute.click()
-
-        lastFieldText.setValueAttribute(fieldName)
-        lastNewValueText.setValueAttribute(newValue)
-        lastOldValueText.setValueAttribute(oldValue)
     }
 
     private HtmlTextInput getLastFieldText() {
