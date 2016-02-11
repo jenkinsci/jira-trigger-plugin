@@ -10,6 +10,8 @@ import org.kohsuke.stapler.DataBoundConstructor
 import org.kohsuke.stapler.DataBoundSetter
 
 /**
+ * Responsible for processing <tt>ChangelogGroup</tt> and determine if a build should be scheduled.
+ *
  * @author ceilfors
  */
 @Log
