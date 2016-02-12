@@ -5,8 +5,8 @@ package com.ceilfors.jenkins.plugins.jiratrigger
  */
 class JiraTriggerException extends RuntimeException {
 
-    private ErrorCode errorCode
-    private Map attributes = [:]
+    final ErrorCode errorCode
+    final Map attributes = [:]
 
     JiraTriggerException(ErrorCode errorCode) {
         this.errorCode = errorCode
@@ -20,14 +20,6 @@ class JiraTriggerException extends RuntimeException {
     JiraTriggerException add(String key, String value) {
         attributes.put(key, value)
         return this
-    }
-
-    ErrorCode getErrorCode() {
-        return errorCode
-    }
-
-    Map getAttributes() {
-        return attributes
     }
 
     @Override

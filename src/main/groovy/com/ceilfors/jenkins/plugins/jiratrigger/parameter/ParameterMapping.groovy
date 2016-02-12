@@ -1,4 +1,5 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.parameter
+
 import hudson.model.AbstractDescribableImpl
 import hudson.model.Descriptor
 /**
@@ -6,14 +7,10 @@ import hudson.model.Descriptor
  */
 abstract class ParameterMapping extends AbstractDescribableImpl<ParameterMapping> {
 
-    private String jenkinsParameter
+    final String jenkinsParameter
 
     ParameterMapping(String jenkinsParameter) {
         this.jenkinsParameter = jenkinsParameter.trim()
-    }
-
-    String getJenkinsParameter() {
-        return jenkinsParameter
     }
 
     static abstract class ParameterMappingDescriptor extends Descriptor<ParameterMapping> {

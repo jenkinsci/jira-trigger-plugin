@@ -9,14 +9,9 @@ enum ParameterErrorCode implements ErrorCode {
 
     FAILED_TO_RESOLVE("1")
 
-    private String code
+    final String code
 
     ParameterErrorCode(String code) {
         this.code = code
-    }
-
-    @Override
-    String getCode() {
-        return code
     }
 }

@@ -17,20 +17,11 @@ import org.kohsuke.stapler.DataBoundSetter
 @Log
 class JiraChangelogTrigger extends JiraTrigger<ChangelogGroup> {
 
-    private List<ChangelogMatcher> changelogMatchers = []
+    @DataBoundSetter
+    List<ChangelogMatcher> changelogMatchers = []
 
     @DataBoundConstructor
     JiraChangelogTrigger() {
-    }
-
-    List<ChangelogMatcher> getChangelogMatchers() {
-        return changelogMatchers
-    }
-
-    @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins DataBoundSetter
-    @DataBoundSetter
-    void setChangelogMatchers(List<ChangelogMatcher> changelogMatchers) {
-        this.changelogMatchers = changelogMatchers
     }
 
     boolean filter(Issue issue, ChangelogGroup changelogGroup) {

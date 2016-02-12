@@ -7,20 +7,12 @@ import com.atlassian.jira.rest.client.api.domain.Issue
  */
 class WebhookChangelogEvent extends AbstractWebhookEvent {
 
-    private final ChangelogGroup changelog
-    private final Issue issue
+    final ChangelogGroup changelog
+    final Issue issue
 
     WebhookChangelogEvent(long timestamp, String webhookEventType, Issue issue, ChangelogGroup changelog) {
         super(timestamp, webhookEventType)
         this.issue = issue
         this.changelog = changelog
-    }
-
-    ChangelogGroup getChangelog() {
-        return changelog
-    }
-
-    Issue getIssue() {
-        return issue
     }
 }

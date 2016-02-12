@@ -21,35 +21,13 @@ import java.util.logging.Level
 @Log
 abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
 
-    private int quietPeriod
-    private String jqlFilter = ""
-    private List<ParameterMapping> parameterMappings = []
-
-    int getQuietPeriod() {
-        return quietPeriod
-    }
-
-    void setQuietPeriod(int quietPeriod) {
-        this.quietPeriod = quietPeriod
-    }
-
-    String getJqlFilter() {
-        return jqlFilter
-    }
+    int quietPeriod
 
     @DataBoundSetter
-    void setJqlFilter(String jqlFilter) {
-        this.jqlFilter = jqlFilter
-    }
-
-    List<ParameterMapping> getParameterMappings() {
-        return Collections.unmodifiableList(parameterMappings)
-    }
+    String jqlFilter = ""
 
     @DataBoundSetter
-    void setParameterMappings(List<ParameterMapping> parameterMappings) {
-        this.parameterMappings = parameterMappings
-    }
+    List<ParameterMapping> parameterMappings = []
 
     final boolean run(Issue issue, T t) {
         log.fine("[${job.fullName}] - Processing ${issue.key} - ${getId(t)}")

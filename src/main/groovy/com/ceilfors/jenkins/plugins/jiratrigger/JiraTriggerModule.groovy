@@ -1,4 +1,5 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
+
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JrjcJiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterResolver
@@ -8,6 +9,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.Scopes
 import com.google.inject.multibindings.Multibinder
 import hudson.Extension
+
 /**
  * @author ceilfors
  */

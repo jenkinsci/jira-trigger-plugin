@@ -17,20 +17,12 @@ import org.kohsuke.stapler.DataBoundSetter
 class JiraCommentTrigger extends JiraTrigger<Comment> {
 
     public static final String DEFAULT_COMMENT = "build this please"
-    private String commentPattern = JiraCommentTriggerDescriptor.DEFAULT_COMMENT_PATTERN
+
+    @DataBoundSetter
+    String commentPattern = JiraCommentTriggerDescriptor.DEFAULT_COMMENT_PATTERN
 
     @DataBoundConstructor
     JiraCommentTrigger() {
-    }
-
-    String getCommentPattern() {
-        return commentPattern
-    }
-
-    @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins DataBoundSetter
-    @DataBoundSetter
-    void setCommentPattern(String commentPattern) {
-        this.commentPattern = commentPattern
     }
 
     @Override
