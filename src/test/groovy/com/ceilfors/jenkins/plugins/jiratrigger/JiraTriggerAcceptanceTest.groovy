@@ -7,7 +7,6 @@ import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
@@ -265,6 +264,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Unit test changelog matcher, toString and fromString can be null!
     // help files
     // wiki
+    // Release notes? Should release 1.0 due to change in issue attribute path?
     // -- 0.2.0 --
 
     // Add comment - when changelog is added

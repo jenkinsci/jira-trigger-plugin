@@ -5,6 +5,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.changelog.CustomFieldChangelogMa
 import com.ceilfors.jenkins.plugins.jiratrigger.changelog.JiraFieldChangelogMatcher
 import com.gargoylesoftware.htmlunit.html.*
 import hudson.triggers.Trigger
+
 /**
  * @author ceilfors
  */
@@ -22,25 +23,33 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {
         addChangelogMatcher(JiraFieldChangelogMatcher.JiraFieldChangelogMatcherDescriptor.DISPLAY_NAME)
         lastFieldText.setValueAttribute(fieldId)
+        setNewValue(newValue)
+        setOldValue(oldValue)
+    }
+
+    def addCustomFieldChangelogMatcher(String fieldName, String oldValue, String newValue) {
+        addChangelogMatcher(CustomFieldChangelogMatcher.CustomFieldChangelogMatcherDescriptor.DISPLAY_NAME)
+        lastFieldText.setValueAttribute(fieldName)
+        setNewValue(newValue)
+        setOldValue(oldValue)
+    }
+
+    private void setNewValue(String newValue) {
         if (newValue) {
             lastComparingNewValueCheckBox.setChecked(true)
             lastNewValueText.setValueAttribute(newValue)
         } else {
             lastComparingNewValueCheckBox.setChecked(false)
         }
+    }
+
+    private void setOldValue(String oldValue) {
         if (oldValue) {
             lastComparingOldValueCheckBox.setChecked(true)
             lastOldValueText.setValueAttribute(oldValue)
         } else {
             lastComparingOldValueCheckBox.setChecked(false)
         }
-    }
-
-    def addCustomFieldChangelogMatcher(String fieldName, String oldValue, String newValue) {
-        addChangelogMatcher(CustomFieldChangelogMatcher.CustomFieldChangelogMatcherDescriptor.DISPLAY_NAME)
-        lastFieldText.setValueAttribute(fieldName)
-        lastNewValueText.setValueAttribute(newValue)
-        lastOldValueText.setValueAttribute(oldValue)
     }
 
     private void addChangelogMatcher(String displayName) {

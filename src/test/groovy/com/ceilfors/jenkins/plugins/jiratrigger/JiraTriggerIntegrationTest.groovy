@@ -1,13 +1,17 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.ceilfors.jenkins.plugins.jiratrigger.changelog.CustomFieldChangelogMatcher
+import com.ceilfors.jenkins.plugins.jiratrigger.changelog.JiraFieldChangelogMatcher
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import hudson.model.AbstractBuild
+import hudson.model.FreeStyleProject
 import hudson.model.Queue
 import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import spock.lang.Specification
+
 /**
  * @author ceilfors
  */
@@ -30,6 +34,22 @@ class JiraTriggerIntegrationTest extends Specification {
         jenkins.configRoundtrip()
         JiraTriggerGlobalConfiguration after = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
         jenkins.assertEqualBeans(before, after, "jiraRootUrl,jiraUsername,jiraPassword")
+    }
+
+    def 'JiraChangelogTrigger configuration round trip'() {
+        FreeStyleProject p = jenkins.createFreeStyleProject()
+        JiraChangelogTrigger before = new JiraChangelogTrigger()
+        before.changelogMatchers = [
+                new JiraFieldChangelogMatcher("status", "new value", "old value", true, true),
+                new CustomFieldChangelogMatcher("custom field", "new value", "old value", true, true)
+        ]
+        p.addTrigger(before)
+
+        jenkins.submit(jenkins.createWebClient().getPage(p, "configure").getFormByName("config"));
+
+        JiraChangelogTrigger after = p.getTrigger(JiraChangelogTrigger)
+
+        jenkins.assertEqualBeans(before, after, "changelogMatchers");
     }
 
     def 'Comment pattern by default must not be empty'() {

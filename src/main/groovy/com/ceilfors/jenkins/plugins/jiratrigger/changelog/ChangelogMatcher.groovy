@@ -1,20 +1,43 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.changelog
 
 import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
+import com.atlassian.jira.rest.client.api.domain.FieldType
+import hudson.Util
 import hudson.model.AbstractDescribableImpl
 import hudson.model.Descriptor
+
 /**
  * @author ceilfors
  */
 abstract class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher> {
 
-    abstract boolean matches(ChangelogGroup changelogGroup)
+    final FieldType fieldType
+    final String field
+    final String newValue
+    final String oldValue
+    final boolean comparingNewValue
+    final boolean comparingOldValue
+
+    ChangelogMatcher(FieldType fieldType, String field, String newValue, String oldValue,
+                     boolean comparingNewValue, boolean comparingOldValue) {
+        this.fieldType = fieldType
+        this.field = field
+        this.newValue = newValue
+        this.oldValue = oldValue
+        this.comparingNewValue = comparingNewValue
+        this.comparingOldValue = comparingOldValue
+    }
+
+    boolean matches(ChangelogGroup changelogGroup) {
+        changelogGroup.items.find {
+            it.fieldType == fieldType &&
+                    it.field == field &&
+                    Util.fixNull(it.toString).equalsIgnoreCase(newValue) &&
+                    (oldValue ? Util.fixNull(it.fromString).equalsIgnoreCase(oldValue) : true)
+        }
+    }
 
     static abstract class ChangelogMatcherDescriptor extends Descriptor<ChangelogMatcher> {
 
-        @Override
-        String getDisplayName() {
-            "Changelog matcher"
-        }
     }
 }
