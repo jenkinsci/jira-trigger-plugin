@@ -22,8 +22,18 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {
         addChangelogMatcher(JiraFieldChangelogMatcher.JiraFieldChangelogMatcherDescriptor.DISPLAY_NAME)
         lastFieldText.setValueAttribute(fieldId)
-        lastNewValueText.setValueAttribute(newValue)
-        lastOldValueText.setValueAttribute(oldValue)
+        if (newValue) {
+            lastComparingNewValueCheckBox.setChecked(true)
+            lastNewValueText.setValueAttribute(newValue)
+        } else {
+            lastComparingNewValueCheckBox.setChecked(false)
+        }
+        if (oldValue) {
+            lastComparingOldValueCheckBox.setChecked(true)
+            lastOldValueText.setValueAttribute(oldValue)
+        } else {
+            lastComparingOldValueCheckBox.setChecked(false)
+        }
     }
 
     def addCustomFieldChangelogMatcher(String fieldName, String oldValue, String newValue) {
@@ -51,6 +61,14 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
     }
 
     private HtmlTextInput getLastOldValueText() {
-        getLastByXPath("newValue", '//input[contains(@name, "oldValue")]')
+        getLastByXPath("oldValue", '//input[contains(@name, "oldValue")]')
+    }
+
+    private HtmlCheckBoxInput getLastComparingNewValueCheckBox() {
+        getLastByXPath("comparingNewValue", '//input[contains(@name, "comparingNewValue")]')
+    }
+
+    private HtmlCheckBoxInput getLastComparingOldValueCheckBox() {
+        getLastByXPath("comparingOldValue", '//input[contains(@name, "comparingOldValue")]')
     }
 }

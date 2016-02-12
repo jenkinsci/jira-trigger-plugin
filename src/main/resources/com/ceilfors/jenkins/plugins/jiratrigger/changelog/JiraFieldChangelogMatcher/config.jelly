@@ -4,11 +4,19 @@
         <f:combobox/>
     </f:entry>
 
-    <f:entry field="newValue" title="New Value">
-        <f:textbox/>
-    </f:entry>
+    <f:optionalBlock name="comparingNewValue" checked="${instance.comparingNewValue}"
+                     title="Compare new value"
+                     inline="true">
+        <f:entry field="newValue" title="New Value">
+            <f:textbox/>
+        </f:entry>
+    </f:optionalBlock>
 
-    <f:entry field="oldValue" title="Old Value">
-        <f:textbox/>
-    </f:entry>
+    <f:optionalBlock name="comparingOldValue" checked="${instance.comparingOldValue}"
+                     title="Compare old value"
+                     inline="true">
+        <f:entry field="oldValue" title="Old Value">
+            <f:textbox/>
+        </f:entry>
+    </f:optionalBlock>
 </j:jelly>

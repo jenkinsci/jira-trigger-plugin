@@ -18,12 +18,16 @@ class JiraFieldChangelogMatcher extends ChangelogMatcher {
     private final String field
     private final String newValue
     private final String oldValue
+    private final boolean comparingNewValue
+    private final boolean comparingOldValue
 
     @DataBoundConstructor
-    JiraFieldChangelogMatcher(String field, String newValue, String oldValue) {
+    JiraFieldChangelogMatcher(String field, String newValue, String oldValue, boolean comparingNewValue, boolean comparingOldValue) {
         this.field = field.trim()
         this.newValue = newValue.trim()
         this.oldValue = oldValue.trim()
+        this.comparingOldValue = comparingOldValue
+        this.comparingNewValue = comparingNewValue
     }
 
     String getField() {
@@ -36,6 +40,14 @@ class JiraFieldChangelogMatcher extends ChangelogMatcher {
 
     String getOldValue() {
         return oldValue
+    }
+
+    boolean isComparingOldValue() {
+        return comparingOldValue
+    }
+
+    boolean isComparingNewValue() {
+        return comparingNewValue
     }
 
     @Override
