@@ -1,13 +1,13 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
     <f:section title="JIRA Trigger Configuration">
-        <f:entry title="JIRA Root URL" field="jiraRootUrl">
+        <f:entry title="JIRA root URL" field="jiraRootUrl">
             <f:textbox />
         </f:entry>
-        <f:entry title="JIRA Username" field="jiraUsername">
+        <f:entry title="JIRA username" field="jiraUsername">
             <f:textbox />
         </f:entry>
-        <f:entry title="JIRA Password" field="jiraPassword">
+        <f:entry title="JIRA password" field="jiraPassword">
             <f:password />
         </f:entry>
         <f:entry title="Reply to JIRA for build updates?" field="jiraCommentReply">

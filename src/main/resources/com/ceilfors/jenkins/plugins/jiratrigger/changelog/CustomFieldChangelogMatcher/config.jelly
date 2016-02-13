@@ -1,21 +1,21 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-    <f:entry field="field" title="Custom Field Name">
+    <f:entry field="field" title="Custom field name">
         <f:textbox/>
     </f:entry>
 
-    <f:optionalBlock name="comparingNewValue" checked="${instance.comparingNewValue}"
+    <f:optionalBlock name="comparingNewValue" field="comparingNewValue" checked="${instance.comparingNewValue}"
                      title="Compare new value"
                      inline="true">
-        <f:entry field="newValue" title="New Value">
+        <f:entry field="newValue" title="New value">
             <f:textbox/>
         </f:entry>
     </f:optionalBlock>
 
-    <f:optionalBlock name="comparingOldValue" checked="${instance.comparingOldValue}"
+    <f:optionalBlock name="comparingOldValue" field="comparingOldValue" checked="${instance.comparingOldValue}"
                      title="Compare old value"
                      inline="true">
-        <f:entry field="oldValue" title="Old Value">
+        <f:entry field="oldValue" title="Old value">
             <f:textbox/>
         </f:entry>
     </f:optionalBlock>

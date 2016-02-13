@@ -1,19 +1,22 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-    <f:entry title="JQL Filter" field="jqlFilter">
-        <f:textbox  />
+    <f:entry title="JQL filter" field="jqlFilter">
+        <f:textbox/>
     </f:entry>
 
-    <f:entry title="Changelog Matcher">
+    <f:entry title="Changelog matcher">
         <f:hetero-list name="changelogMatchers" items="${instance.changelogMatchers}" hasHeader="true"
                        descriptors="${descriptor.changelogMatcherDescriptors}"
-                       targetType="com.ceilfors.jenkins.plugins.jiratrigger.changelog.ChangelogMatcher" />
+                       targetType="com.ceilfors.jenkins.plugins.jiratrigger.changelog.ChangelogMatcher"
+                       addCaption="Add changelog matcher"/>
     </f:entry>
 
-    <f:entry title="Parameter Mapping">
+    <f:entry title="Parameter mapping">
         <f:hetero-list name="parameterMappings" items="${instance.parameterMappings}" hasHeader="true"
                        descriptors="${descriptor.parameterMappingDescriptors}"
-                       targetType="com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping" />
+                       targetType="com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping"
+                       addCaption="Add parameter mapping"
+        />
     </f:entry>
 
 </j:jelly>
