@@ -9,7 +9,7 @@ import hudson.model.Descriptor
 /**
  * @author ceilfors
  */
-abstract class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher> {
+class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher> {
 
     final FieldType fieldType
     final String field
@@ -32,12 +32,11 @@ abstract class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher
         changelogGroup.items.find {
             it.fieldType == fieldType &&
                     it.field == field &&
-                    Util.fixNull(it.toString).equalsIgnoreCase(newValue) &&
-                    (oldValue ? Util.fixNull(it.fromString).equalsIgnoreCase(oldValue) : true)
+                    (comparingNewValue ? Util.fixNull(it.toString as String).equalsIgnoreCase(newValue) : true) &&
+                    (comparingOldValue ? Util.fixNull(it.fromString as String).equalsIgnoreCase(oldValue) : true)
         }
     }
 
     static abstract class ChangelogMatcherDescriptor extends Descriptor<ChangelogMatcher> {
-
     }
 }
