@@ -20,7 +20,7 @@ import java.util.logging.Level
 @Extension
 class JiraWebhook implements UnprotectedRootAction {
 
-    public static final URL_NAME = "jira-trigger"
+    public static final URL_NAME = "jira-trigger-webhook-receiver"
     public static final WEBHOOK_EVENT = "jira:issue_updated"
     private JiraWebhookListener jiraWebhookListener
 
