@@ -1,5 +1,7 @@
 # JIRA Trigger Plugin
 
+Plugin statistics can be found in [Jenkins wiki](http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin).
+
 ## Features
 
 - [x] Triggers a build when a comment is added to JIRA
