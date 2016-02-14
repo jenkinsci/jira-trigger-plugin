@@ -22,7 +22,7 @@ Check src/test/groovy/*AcceptanceTest to see how these features are expected to 
 
 To troubleshoot:
 
-1. Enable Jenkins logging at FINE level for troubleshooting: com.ceilfors.jenkins.plugins.jiratrigger.webhook
+1. Enable Jenkins logging at FINE level for troubleshooting: `com.ceilfors.jenkins.plugins.jiratrigger.webhook`
 2. You should see "Received Webhook callback ..." log messages when Jenkins is receiving webhook events
 
 ### Jenkins global configuration (One time)
@@ -51,7 +51,7 @@ JIRA Trigger Plugin sets environment variables you can use during the build:
 - `JIRA_ISSUE_KEY` - The JIRA issue key that triggers the build 
 
 ## Troubleshooting
-Enable Jenkins logging for package: com.ceilfors.jenkins.plugins.jiratrigger. If nothing comes out in the log as you
+Enable Jenkins logging for package: `com.ceilfors.jenkins.plugins.jiratrigger`. If nothing comes out in the log as you
 expect, it is possible
 that your JIRA instance is unable to hit your Jenkins instance due to network connectivity issue. 
 
