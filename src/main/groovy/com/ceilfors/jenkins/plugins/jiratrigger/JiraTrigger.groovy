@@ -59,7 +59,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
                 try {
                     return descriptor.parameterResolver.resolve(issue, it)
                 } catch (JiraTriggerException e) {
-                    log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. Example: fields.description, key, fields.project.key", e)
+                    log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. Example: description, key, status.name. Read help for more information.", e)
                     return null
                 }
             } else {
