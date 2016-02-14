@@ -1,16 +1,51 @@
 # JIRA Trigger plugin
-Triggers a build when a comment is added to JIRA.
 
-![Jira Trigger Configuration](docs/jira-trigger-configuration.png?raw=true "Jira Trigger Configuration")
+## Features
 
-## Setting up JIRA Webhook
+- [x] Triggers a build when a comment is added to JIRA
+- [x] Triggers a build when an issue is updated in JIRA
 
-1. Go to JIRA > Cog > System > Advanced > WebHooks
+Check src/test/groovy/*AcceptanceTest to see how these features are expected to behave.
+
+## Setup
+
+### Add new JIRA webhook (One time) 
+
+1. Go to JIRA > Cog > System > Advanced > WebHooks (Requires admin permission)
 2. Create a new Webhook
-3. Set URL to: ${Jenkins URL}/jira-trigger/ e.g. http://localhost:8080/jenkins/jira-trigger/
-4. Set Events to: _comment created_ or _issue updated_
-5. Enable Jenkins logging at FINE level for troubleshooting: com.ceilfors.jenkins.plugins.jiratrigger.webhook
-6. You should see "Received Webhook callback ..." log messages when Jenkins is receiving webhook events
+3. Set URL to: ${Jenkins URL}/jira-trigger-webhook-receiver/ e.g. http://localhost:8080/jenkins/jira-trigger-webhook-receiver/
+4. Set Events to: _issue updated_
+5. Do **not** check *Exclude body* as this plugin requires the JSON to operate
+6. Save!
+
+To troubleshoot:
+
+1. Enable Jenkins logging at FINE level for troubleshooting: com.ceilfors.jenkins.plugins.jiratrigger.webhook
+2. You should see "Received Webhook callback ..." log messages when Jenkins is receiving webhook events
+
+### Jenkins global configuration (One time)
+
+This configuration is crucial, especially for *JQL filter* usage. 
+
+1. Go to Jenkins global configuration (${Jenkins URL}/configure)
+2. Configure *JIRA Trigger Configuration*
+
+### Job configuration
+
+New triggers will be made available after you have successfully install this plugin from Jenkins plugin center.
+More in depth documentation about how you can configure the job are documented in the help files. Be sure to hit
+those question mark buttons in Jenkins configuration page!
+
+#### Comment trigger
+![Comment Trigger Configuration](docs/jira-comment-trigger-configuration_50.png?raw=true "Comment Trigger Configuration")
+
+#### Changelog trigger
+![Changelog Trigger Configuration](docs/jira-changelog-trigger-configuration_50.png?raw=true "Changelog Trigger Configuration")
+
+## Troubleshooting
+Enable Jenkins logging for package: com.ceilfors.jenkins.plugins.jiratrigger. If nothing comes out in the log as you
+expect, it is possible
+that your JIRA instance is unable to hit your Jenkins instance due to network connectivity issue. 
 
 ## Running Acceptance Test
 
@@ -27,6 +62,6 @@ Quick start:
 5. Setup JIRA project with name TEST
 6. Increase the maximum number of file descriptor opened e.g. `ulimit -n 8192`. You will hit `java.net.SocketException: Bad file descriptor` otherwise.
 6. ./gradlew test acceptanceTest
-7. Restart JIRA every 3 hours (It is using [timebomb license](https://developer.atlassian.com/market/add-on-licensing-for-developers/timebomb-licenses-for-testing) by default). 
+7. Restart JIRA if it starts to complain about license (It is using [timebomb license](https://developer.atlassian.com/market/add-on-licensing-for-developers/timebomb-licenses-for-testing) by default). 
 
 Result of the acceptance test will be available at $buildDir/reports/acceptanceTests/index.html.

@@ -260,11 +260,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
 
     // ** Incremental features: **
-    // Empty value in oldValue and newValue is ambiguous. Add a checkbox to differentiate if user wants empty value or optional
-    // Unit test changelog matcher, toString and fromString can be null!
-    // help files
     // wiki
-    // Release notes? Should release 1.0 due to change in issue attribute path?
     // -- 0.2.0 --
 
     // Add comment - when changelog is added
