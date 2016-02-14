@@ -42,7 +42,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         }
     }
 
-    def 'Should trigger a job when a comment is added'() {
+    def 'Should trigger a build when a comment is added'() {
         given:
         def issueKey = jira.createIssue()
         jenkins.createJiraCommentTriggeredProject("job")
@@ -54,7 +54,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    def 'Should trigger a job when an issue is updated'() {
+    def 'Should trigger a build when an issue is updated'() {
         given:
         def issueKey = jira.createIssue("Original description")
         jenkins.createJiraChangelogTriggeredProject("job")
@@ -79,7 +79,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jira.shouldBeNotifiedWithComment(issueKey, "job")
     }
 
-    def 'Trigger job with built-in field when a comment is created'() {
+    def 'Should map parameters to the triggered build when a comment is created'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
         def project = jenkins.createJiraCommentTriggeredProject("simpleJob", "jenkins_description", "jenkins_key")
@@ -96,7 +96,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         ])
     }
 
-    def 'Trigger job with built-in field when an issue is updated'() {
+    def 'Should map parameters to the triggered build when an issue is updated'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
@@ -113,7 +113,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         ])
     }
 
-    def 'Job is triggered when a comment matches the comment pattern'() {
+    def 'Should trigger a build when a comment matches the comment pattern'() {
         given:
         def issueKey = jira.createIssue()
         def project = jenkins.createJiraCommentTriggeredProject("job")
@@ -126,7 +126,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    def 'Job is not triggered when a comment does not match the comment pattern'() {
+    def 'Should not trigger a build when a comment does not match the comment pattern'() {
         given:
         def issueKey = jira.createIssue()
         def project = jenkins.createJiraCommentTriggeredProject("job")
@@ -139,7 +139,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-    def 'Triggers a job when an issue is updated and the issue matches the JQL filter'() {
+    def 'Should trigger a build when an issue is updated and the issue key matches the JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
@@ -152,7 +152,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    def 'Does not trigger a job when an issue is updated and the issue does not match the JQL filter'() {
+    def 'Should not trigger a build when an issue is updated but the issue does not match the JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
@@ -165,7 +165,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-    def 'Job is triggered when a comment is added and the issue matches the JQL filter'() {
+    def 'Should trigger a build when a comment is added and the issue matches the JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
         def project = jenkins.createJiraCommentTriggeredProject("job")
@@ -178,7 +178,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    def 'Job is not triggered when the issue does not match JQL filter'() {
+    def 'Should trigger a build when a comment is added but the issue does not match JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
         def project = jenkins.createJiraCommentTriggeredProject("job")
@@ -191,7 +191,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-    def 'Triggers a job when issue status is updated to Done'() {
+    def 'Should trigger a build when issue status is updated to Done'() {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
@@ -204,7 +204,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    def 'Triggers a job when issue status is updated from To Do to Done'() {
+    def 'Should trigger a build when issue status is updated from To Do to Done'() {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
@@ -217,7 +217,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    def 'Does not trigger a job when issue status is updated to In Progress whilst Done is expected'() {
+    def 'Should not trigger a build when issue status is updated to In Progress whilst Done is expected'() {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
@@ -230,7 +230,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-    def 'Does not trigger a job when issue status is updated from In Progress to Done whilst the original status should have been To Do'() {
+    def 'Should not trigger a build when issue status is updated from In Progress to Done whilst the original status should have been To Do'() {
         given:
         def issueKey = jira.createIssue("original description")
         jira.updateStatus(issueKey, "In Progress")
@@ -244,7 +244,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-    def 'Triggers a job when a custom field is updated'() {
+    def 'Should trigger a build when a custom field is updated'() {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
@@ -257,30 +257,24 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    // Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
-
-    // ** Incremental features: **
-    // wiki
-    // -- 0.2.0 --
-
-    // Add comment - when changelog is added
-    // Add comment - when there is a comment pattern that matches, but no jobs have been triggered
-    // Add comment - Visibility to jira-administrators
-    // Add comment - Visibility must be configured in global configuration i.e. role/group
-    // Don't process comment from the user configured in Jenkins due to potential infinite loop?
+    // Test button - JIRA Trigger Configuration from Jenkins Global Configuration
+    // Reply - when changelog is added
+    // Reply - when there is a comment pattern that matches, but no jobs have been triggered
+    // Reply - Visibility to jira-administrators
+    // Reply - Visibility must be configured in global configuration i.e. role/group
+    // Reply - Don't process comment from the user configured in Jenkins due to potential infinite loop?
     // -- 0.3.0 --
 
-    // Register webhook from Jenkins configuration page
-    // Make AcceptanceTest independent of JIRA
-    // Run CI in CloudBees Jenkins
+    // Auto register webhook from Jenkins configuration page
+    // Run AcceptanceTest in CloudBees Jenkins - Make AcceptanceTest independent of JIRA?
     // --- 1.0.0 ---
 
-    // void method in JrjcJiraClient should be async. Be careful on concurrency issues in this test case.
-    // How to enable JenkinsRule as ClassRule to make the build faster
-    // JiraTriggerCause should contain issue key and link
-    // Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
-    // Form Validation in Global Config by hitting JIRA
-    // Check SequentialExecutionQueue that is used by GitHubWebHook
-    // Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
-    // Translate JiraTriggerException to error messages
+    // Acceptance Test - Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
+    // Improvement - void method in JrjcJiraClient should be async. Be careful on concurrency issues in this test case.
+    // How to enable JenkinsRule as ClassRule to make the build faster?
+    // Trigger - JiraTriggerCause should contain issue key and link
+    // Acceptance Test - Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
+    // Improvement - Check SequentialExecutionQueue that is used by GitHubWebHook
+    // Improvement - Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
+    // Improvement - Translate JiraTriggerException to error messages
 }

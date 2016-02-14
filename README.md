@@ -1,9 +1,11 @@
-# JIRA Trigger plugin
+# JIRA Trigger Plugin
 
 ## Features
 
 - [x] Triggers a build when a comment is added to JIRA
 - [x] Triggers a build when an issue is updated in JIRA
+- [x] Reply back to JIRA for scheduled builds
+- [x] Sets JIRA information as environment variables to the triggered build 
 
 Check src/test/groovy/*AcceptanceTest to see how these features are expected to behave.
 
@@ -41,6 +43,12 @@ those question mark buttons in Jenkins configuration page!
 
 #### Changelog trigger
 ![Changelog Trigger Configuration](docs/jira-changelog-trigger-configuration_50.png?raw=true "Changelog Trigger Configuration")
+
+## Environment variables
+
+JIRA Trigger Plugin sets environment variables you can use during the build:
+
+- `JIRA_ISSUE_KEY` - The JIRA issue key that triggers the build 
 
 ## Troubleshooting
 Enable Jenkins logging for package: com.ceilfors.jenkins.plugins.jiratrigger. If nothing comes out in the log as you
