@@ -9,6 +9,9 @@ Plugin statistics can be found in [Jenkins wiki](http://wiki.jenkins-ci.org/disp
 - [x] Reply back to JIRA for scheduled builds
 - [x] Sets JIRA information as environment variables to the triggered build 
 
+This plugin has been tested against JIRA 7.0.0, although theoretically it should work with older version of JIRA
+as long as it supports the webhook type required (see Setup section below). 
+
 Check src/test/groovy/*AcceptanceTest to see how these features are expected to behave.
 
 ## Setup
