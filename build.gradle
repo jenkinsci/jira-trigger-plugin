@@ -45,6 +45,7 @@ jenkinsPlugin {
     displayName = 'JIRA Trigger Plugin'
     url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin'
     gitHubUrl = 'https://github.com/ceilfors/jira-trigger-plugin'
+    compatibleSinceVersion = '0.2.0'
 
     // enable injection of additional tests for checking the syntax of Jelly and other things
     disabledTestInjection = false
