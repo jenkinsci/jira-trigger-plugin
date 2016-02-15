@@ -86,9 +86,14 @@ class JiraSetupRule extends ExternalResource {
             webhookRestClient.unregisterWebhook(webhook.selfUri).claim()
         }
 
-        webhookRestClient.registerWebhook(new WebhookInput(name: "Acceptance Test", events: [JiraWebhook.WEBHOOK_EVENT], url: jenkinsRunner.webhookUrl)).claim()
-        webhookRestClient.registerWebhook(new WebhookInput(name: "Acceptance Test (Vagrant)", events: [JiraWebhook.WEBHOOK_EVENT], url: jenkinsRunner.webhookUrl.replace("localhost", "10.0.2.2"))).claim()
-        webhookRestClient.registerWebhook(new WebhookInput(name: "Local Jenkins (gradlew server)", events: [JiraWebhook.WEBHOOK_EVENT], url: "http://localhost:8080/${jenkinsRunner.jiraWebhook.urlName}/")).claim()
+        webhookRestClient.registerWebhook(new WebhookInput(name: "Acceptance Test", events: [JiraWebhook.WEBHOOK_EVENT],
+                url: jenkinsRunner.webhookUrl)).claim()
+        webhookRestClient.registerWebhook(new WebhookInput(name: "Acceptance Test (Vagrant)", events: [JiraWebhook.WEBHOOK_EVENT],
+                url: jenkinsRunner.webhookUrl.replace("localhost", "10.0.2.2"))).claim()
+        webhookRestClient.registerWebhook(new WebhookInput(name: "Local Jenkins (gradlew server)", events: [JiraWebhook.WEBHOOK_EVENT],
+                url: "http://localhost:8080/${jenkinsRunner.jiraWebhook.urlName}/")).claim()
+        webhookRestClient.registerWebhook(new WebhookInput(name: "Local Jenkins (gradlew server) (Vagrant)", events: [JiraWebhook.WEBHOOK_EVENT],
+                url: "http://localhost:8080/${jenkinsRunner.jiraWebhook.urlName}/".replace("localhost", "10.0.2.2"))).claim()
     }
 
     def configureJenkinsWithNormalUser() {

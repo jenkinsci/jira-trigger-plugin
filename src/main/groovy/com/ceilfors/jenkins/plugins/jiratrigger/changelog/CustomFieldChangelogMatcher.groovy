@@ -7,7 +7,7 @@ import org.kohsuke.stapler.DataBoundConstructor
 /**
  * @author ceilfors
  */
-@ToString(includeFields = true)
+@ToString(includeSuper = true)
 class CustomFieldChangelogMatcher extends ChangelogMatcher {
 
     @DataBoundConstructor

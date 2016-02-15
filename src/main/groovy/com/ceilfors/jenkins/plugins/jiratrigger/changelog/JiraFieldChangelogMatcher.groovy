@@ -9,7 +9,7 @@ import org.kohsuke.stapler.DataBoundConstructor
 /**
  * @author ceilfors
  */
-@ToString(includeFields = true)
+@ToString(includeSuper = true)
 class JiraFieldChangelogMatcher extends ChangelogMatcher {
 
     @DataBoundConstructor
