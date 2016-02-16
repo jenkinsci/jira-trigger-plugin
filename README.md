@@ -1,6 +1,6 @@
 # JIRA Trigger Plugin
 
-Plugin statistics can be found in [Jenkins wiki](http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin).
+This plugin is published through Jenkins official plugin center. Plugin statistics can be found in [Jenkins wiki](http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin).
 
 ## Features
 
