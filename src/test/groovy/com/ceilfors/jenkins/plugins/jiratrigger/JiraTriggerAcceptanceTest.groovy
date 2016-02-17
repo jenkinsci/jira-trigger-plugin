@@ -257,7 +257,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    // Test button - JIRA Trigger Configuration from Jenkins Global Configuration
     // Reply - when changelog is added
     // Reply - when there is a comment pattern that matches, but no jobs have been triggered
     // Reply - Visibility to jira-administrators
