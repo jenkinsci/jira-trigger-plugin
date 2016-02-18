@@ -257,10 +257,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    // Reply - when changelog is added
-    // Reply - when there is a comment pattern that matches, but no jobs have been triggered
-    // Reply - Visibility to jira-administrators
-    // Reply - Visibility must be configured in global configuration i.e. role/group
     // Reply - Don't process comment from the user configured in Jenkins due to potential infinite loop?
     // -- 0.3.0 --
 
