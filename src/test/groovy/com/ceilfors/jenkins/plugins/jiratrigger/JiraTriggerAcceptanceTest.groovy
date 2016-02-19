@@ -257,13 +257,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    // Reply - Don't process comment from the user configured in Jenkins due to potential infinite loop?
-    // -- 0.3.0 --
-
-    // Auto register webhook from Jenkins configuration page
-    // Run AcceptanceTest in CloudBees Jenkins - Make AcceptanceTest independent of JIRA?
-    // --- 1.0.0 ---
-
     // Acceptance Test - Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
     // Improvement - void method in JrjcJiraClient should be async. Be careful on concurrency issues in this test case.
     // How to enable JenkinsRule as ClassRule to make the build faster?
