@@ -58,8 +58,7 @@ JIRA Trigger Plugin sets environment variables you can use during the build:
 ## Troubleshooting
 
 ### Enable logging
-Enable Jenkins logging for package: `com.ceilfors.jenkins.plugins.jiratrigger`. If nothing comes out in the log as you
-expect, it is possible
+Enable Jenkins logging for package: `com.ceilfors.jenkins.plugins.jiratrigger`. If nothing comes out in the log, it is possible
 that your JIRA instance is unable to hit your Jenkins instance due to network connectivity issue. 
 
 ### Getting help
