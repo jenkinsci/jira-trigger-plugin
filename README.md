@@ -62,7 +62,7 @@ Enable Jenkins logging for package: `com.ceilfors.jenkins.plugins.jiratrigger`. 
 that your JIRA instance is unable to hit your Jenkins instance due to network connectivity issue. 
 
 ### Getting help
-Either post a question to StackOverflow with `jenkins-jira-trigger` tag or file a bug to [JENKINS issue tracker](https://issues.jenkins-ci.org/secure/Dashboard.jspa) with `jira-trigger-plugin` component.
+File a bug to [JENKINS issue tracker](https://issues.jenkins-ci.org/secure/Dashboard.jspa) with `jira-trigger-plugin` component.
 
 ## Running Acceptance Test
 
