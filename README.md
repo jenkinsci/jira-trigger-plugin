@@ -7,6 +7,7 @@ This plugin is published through Jenkins official plugin center. Plugin statisti
 - [x] Triggers a build when a comment is added to JIRA
 - [x] Triggers a build when an issue is updated in JIRA
 - [x] Reply back to JIRA for scheduled builds
+- [x] Transforms JIRA Webhook POST data to Jenkins parameters
 - [x] Sets JIRA information as environment variables to the triggered build 
 
 This plugin has been tested against JIRA 7.0.0, although theoretically it should work with older version of JIRA
