@@ -1,12 +1,17 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.*
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraSetupRule
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraRunner
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
+import org.jvnet.hudson.test.RandomlyFails
 import spock.lang.Specification
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
@@ -66,6 +71,10 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
+    @RandomlyFails("""Threading issue. Sometimes the test will fail with 'Build is not scheduled!' error.
+                      This problem is happening because when a comment is added to JIRA, another webhook is triggered.
+                      Because of this JenkinsBlockingQueue will not be able to know which event was the original one
+                      that we want to listen to.""")
     def "Should reply back to JIRA when a build is scheduled"() {
         given:
         def issueKey = jira.createIssue()

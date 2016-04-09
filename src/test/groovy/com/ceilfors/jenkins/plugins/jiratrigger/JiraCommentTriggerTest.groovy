@@ -3,10 +3,13 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.domain.Comment
 import hudson.model.AbstractProject
 import hudson.model.ItemGroup
+import org.junit.Rule
+import org.jvnet.hudson.test.JenkinsRule
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.ceilfors.jenkins.plugins.jiratrigger.TestUtils.createIssue
+
 /**
  * @author ceilfors
  */
@@ -14,6 +17,9 @@ import static com.ceilfors.jenkins.plugins.jiratrigger.TestUtils.createIssue
 class JiraCommentTriggerTest extends Specification {
 
     def project
+
+    @Rule
+    public JenkinsRule jenkinsRule = new JenkinsRule()
 
     def setup() {
         given:

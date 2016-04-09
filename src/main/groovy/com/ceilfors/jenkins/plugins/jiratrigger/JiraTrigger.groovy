@@ -14,7 +14,9 @@ import jenkins.model.Jenkins
 import org.kohsuke.stapler.DataBoundSetter
 
 import javax.inject.Inject
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.logging.Level
+
 /**
  * @author ceilfors
  */
@@ -51,6 +53,22 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
         return job.scheduleBuild(quietPeriod, getCause(issue, t), *actions)
     }
 
+    @Override
+    void start(AbstractProject project, boolean newInstance) {
+        super.start(project, newInstance)
+        getDescriptor().addTrigger(this)
+    }
+
+    @Override
+    void stop() {
+        super.stop()
+        getDescriptor().removeTrigger(this)
+    }
+
+    AbstractProject getJob() {
+        super.job
+    }
+
     abstract boolean filter(Issue issue, T t)
 
     protected List<ParameterValue> collectParameterValues(Issue issue) {
@@ -83,6 +101,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
 
     abstract Cause getCause(Issue issue, T t)
 
+    @Log
     static abstract class JiraTriggerDescriptor extends TriggerDescriptor {
 
         @Inject
@@ -94,6 +113,8 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
         @Inject
         protected ParameterResolver parameterResolver
 
+        private transient final List<JiraTrigger> triggers = new CopyOnWriteArrayList<>()
+
         public boolean isApplicable(Item item) {
             return item instanceof AbstractProject
         }
@@ -101,6 +122,26 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
         @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly
         public List<ParameterMapping.ParameterMappingDescriptor> getParameterMappingDescriptors() {
             return jenkins.getDescriptorList(ParameterMapping)
+        }
+
+        protected void addTrigger(JiraTrigger jiraTrigger) {
+            triggers.add(jiraTrigger)
+            log.finest("Added [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] to triggers list")
+        }
+
+        protected void removeTrigger(JiraTrigger jiraTrigger) {
+            def result = triggers.remove(jiraTrigger)
+            if (result) {
+                log.finest("Removed [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] from triggers list")
+            } else {
+                log.warning(
+                        "Bug! Failed to remove [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] from triggers list. " +
+                        "The job might accidentally be triggered by JIRA. Restart Jenkins to recover.")
+            }
+        }
+
+        List<JiraTrigger> allTriggers() {
+            return Collections.unmodifiableList(triggers)
         }
     }
 }

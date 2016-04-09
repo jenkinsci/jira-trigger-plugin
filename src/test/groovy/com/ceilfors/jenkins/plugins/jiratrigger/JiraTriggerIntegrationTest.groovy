@@ -7,9 +7,13 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import hudson.model.AbstractBuild
 import hudson.model.FreeStyleProject
 import hudson.model.Queue
+import hudson.security.GlobalMatrixAuthorizationStrategy
+import hudson.security.HudsonPrivateSecurityRealm
 import jenkins.model.GlobalConfiguration
+import org.acegisecurity.context.SecurityContextHolder
 import org.junit.Rule
 import org.junit.rules.RuleChain
+import org.jvnet.hudson.test.Issue
 import spock.lang.Specification
 
 /**
@@ -80,5 +84,33 @@ class JiraTriggerIntegrationTest extends Specification {
             environment = (item.getFuture().startCondition.get() as AbstractBuild).environment
         }
         environment.get("JIRA_ISSUE_KEY") == "TEST-1234"
+    }
+
+    @Issue("JENKINS-34135")
+    def 'Should be able to schedule jobs with anonymous user does not have read permission'() {
+        setup:
+        jenkins.createJiraCommentTriggeredProject("job")
+
+        when: "Security is enabled in Jenkins and anonymous access is taken off with empty GlobalMatrixAuthorizationStrategy settings"
+        jenkins.instance.securityRealm = new HudsonPrivateSecurityRealm(true)
+        jenkins.instance.authorizationStrategy = new GlobalMatrixAuthorizationStrategy()
+
+        then: "Item should still visible before we make the thread anonymous"
+        jenkins.instance.allItems.size() == 1
+
+        when: "Thread is made anonymous"
+        SecurityContextHolder.clearContext()
+
+        then: "Item should now disappear"
+        jenkins.instance.allItems.size() == 0
+
+        when: "Trigger item"
+        def scheduledProjects = jenkins.jiraTriggerExecutor.scheduleBuilds(
+                TestUtils.createIssue("TEST-1234"),
+                TestUtils.createComment(JiraCommentTrigger.DEFAULT_COMMENT))
+
+        then: "Item is scheduled"
+        scheduledProjects.size() != 0
+        scheduledProjects[0].queueItem.task.name == "job"
     }
 }

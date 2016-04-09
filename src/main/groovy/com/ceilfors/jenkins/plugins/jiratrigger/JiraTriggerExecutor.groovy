@@ -79,27 +79,24 @@ class JiraTriggerExecutor implements JiraWebhookListener {
      */
     private List<AbstractProject> scheduleBuildsInternal(
             Class<? extends JiraTrigger> triggerClass, Issue issue, Object jiraObject) {
-        def projects = getProjectsWithTrigger(triggerClass)
         List<AbstractProject> scheduledProjects = []
-        for (project in projects) {
-            JiraTrigger trigger = project.getTrigger(triggerClass)
+        def triggers = getTriggers(triggerClass)
+        for (trigger in triggers) {
             trigger.setQuietPeriod(quietPeriod)
             boolean scheduled = trigger.run(issue, jiraObject)
             if (scheduled) {
-                scheduledProjects << project
+                scheduledProjects << trigger.job
             }
         }
         return scheduledProjects
     }
 
-    private List<AbstractProject> getProjectsWithTrigger(Class<? extends JiraTrigger> triggerClass) {
-        def projects = jenkins.getAllItems(AbstractProject).findAll { it.getTrigger(triggerClass) }
-        if (projects) {
-            log.finest("Found projects with ${triggerClass.simpleName} configuration: ${projects*.name}")
-            return projects
-        } else {
+    private List<? extends JiraTrigger> getTriggers(Class<? extends JiraTrigger> triggerClass) {
+        def descriptor = jenkins.getDescriptor(triggerClass) as JiraTrigger.JiraTriggerDescriptor
+        List<? extends JiraTrigger> triggers = descriptor.allTriggers()
+        if (!triggers) {
             log.fine("Couldn't find any projects that have ${triggerClass.simpleName} configured")
-            return []
         }
+        return triggers
     }
 }
