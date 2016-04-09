@@ -1,5 +1,8 @@
 # JIRA Trigger Plugin
 
+[![Build Status](https://jenkins.ci.cloudbees.com/buildStatus/icon?job=plugins/jira-trigger-plugin)](https://jenkins.ci.cloudbees.com/job/plugins/job/jira-trigger-plugin/)
+[![Java 1.8.0_71](https://img.shields.io/badge/java-1.8.0__71-red.svg)](https://java.com)
+
 This plugin is published through Jenkins official plugin center. Plugin statistics can be found in [Jenkins wiki](http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin).
 
 ## Features
