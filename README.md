@@ -62,9 +62,6 @@ JIRA Trigger Plugin sets environment variables you can use during the build:
 Enable Jenkins logging for package: `com.ceilfors.jenkins.plugins.jiratrigger`. If nothing comes out in the log, it is possible
 that your JIRA instance is unable to hit your Jenkins instance due to network connectivity issue.
 
-## Couldn't find any projects that have JiraChangelogTrigger configured
-If you have configured everything correctly and you get this message in Jenkins logs, you have hit the current limitation of this plugin. This plugin requires anonymous user to have `Job Read` permission. A [bug is already raised](https://issues.jenkins-ci.org/browse/JENKINS-34135) for this.
-
 ### Getting help
 File a bug to [JENKINS issue tracker](https://issues.jenkins-ci.org/secure/Dashboard.jspa) with `jira-trigger-plugin` component.
 
