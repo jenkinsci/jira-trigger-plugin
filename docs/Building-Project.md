@@ -29,3 +29,4 @@ Result of the acceptance test will be available at `$buildDir/reports/acceptance
 1. `git tag vx.x.x`
 2. `./gradlew clean publish`
 3. `git push --tags`
+4. Update github release page.
