@@ -4,6 +4,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.changelog.CustomFieldChangelogMa
 import com.ceilfors.jenkins.plugins.jiratrigger.changelog.JiraFieldChangelogMatcher
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException
 import hudson.model.AbstractBuild
 import hudson.model.FreeStyleProject
 import hudson.model.Queue
@@ -14,6 +15,7 @@ import org.acegisecurity.context.SecurityContextHolder
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import org.jvnet.hudson.test.Issue
+import spock.lang.FailsWith
 import spock.lang.Specification
 
 /**
@@ -112,5 +114,22 @@ class JiraTriggerIntegrationTest extends Specification {
         then: "Item is scheduled"
         scheduledProjects.size() != 0
         scheduledProjects[0].queueItem.task.name == "job"
+    }
+
+    @FailsWith(value=Throwable, reason="Not Yet Implemented")
+    @Issue('JENKINS-34301')
+    def 'Should not swallow Jenkins security exception'() {
+        setup:
+        jenkins.createJiraCommentTriggeredProject("job")
+        def webClient = jenkins.createWebClient()
+
+        when: 'Security is enabled in Jenkins and anonymous access is taken off with empty GlobalMatrixAuthorizationStrategy settings'
+        jenkins.instance.securityRealm = new HudsonPrivateSecurityRealm(true)
+        jenkins.instance.authorizationStrategy = new GlobalMatrixAuthorizationStrategy()
+        webClient.getPage(webClient.contextPath)
+
+        then:
+        FailingHttpStatusCodeException exception = thrown(FailingHttpStatusCodeException)
+        exception.statusCode == 403
     }
 }
