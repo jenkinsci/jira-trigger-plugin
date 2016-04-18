@@ -15,7 +15,6 @@ import org.acegisecurity.context.SecurityContextHolder
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import org.jvnet.hudson.test.Issue
-import spock.lang.FailsWith
 import spock.lang.Specification
 
 /**
@@ -116,7 +115,6 @@ class JiraTriggerIntegrationTest extends Specification {
         scheduledProjects[0].queueItem.task.name == "job"
     }
 
-    @FailsWith(value=Throwable, reason="Not Yet Implemented")
     @Issue('JENKINS-34301')
     def 'Should not swallow Jenkins security exception'() {
         setup:
