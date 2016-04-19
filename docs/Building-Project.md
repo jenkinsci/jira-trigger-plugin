@@ -26,7 +26,7 @@ Result of the acceptance test will be available at `$buildDir/reports/acceptance
 # Release
 
 1. Run acceptance test! It's not integrated in CI yet.
-2. `git tag vx.x.x`
+2. `git tag -m vx.x.x vx.x.x`
 3. `./gradlew clean publish`
 4. `git push --tags`
 5. Update github release page.
