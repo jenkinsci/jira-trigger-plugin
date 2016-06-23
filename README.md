@@ -18,6 +18,10 @@ as long as it supports the webhook type required (see Setup section below).
 
 Check src/test/groovy/*AcceptanceTest to see how these features are expected to behave.
 
+## Getting help
+- Generic questions (how to, etc), ask a question at stackoverflow with [jenkins-jira-trigger tag](http://stackoverflow.com/questions/tagged/jenkins-jira-trigger).
+- Ideas or bugs, file an issue to [JENKINS issue tracker](https://issues.jenkins-ci.org/secure/Dashboard.jspa) with `jira-trigger-plugin` component.
+
 ## Setup
 
 ### Add new JIRA webhook (One time) 
@@ -64,9 +68,6 @@ JIRA Trigger Plugin sets environment variables you can use during the build:
 ### Enable logging
 Enable Jenkins logging for package: `com.ceilfors.jenkins.plugins.jiratrigger`. If nothing comes out in the log, it is possible
 that your JIRA instance is unable to hit your Jenkins instance due to network connectivity issue.
-
-### Getting help
-File a bug to [JENKINS issue tracker](https://issues.jenkins-ci.org/secure/Dashboard.jspa) with `jira-trigger-plugin` component.
 
 ## Building Project
 To build, run acceptance test, and release commands, refer to [this document](docs/Building-Project.md)
