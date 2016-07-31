@@ -10,6 +10,14 @@ import spock.lang.Specification
  */
 class ChangelogMatcherTest extends Specification {
 
+    private class BasicChangelogMatcher extends ChangelogMatcher {
+
+        BasicChangelogMatcher(FieldType fieldType, String field, String newValue, String oldValue,
+                              boolean comparingNewValue, boolean comparingOldValue) {
+            super(fieldType, field, newValue, oldValue, comparingNewValue, comparingOldValue)
+        }
+    }
+
     def "Should compare field value"(String fieldId, String matcherField, boolean result) {
         given:
         ChangelogGroup changelogGroup = new ChangelogGroup(null, null, [
@@ -17,7 +25,7 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new ChangelogMatcher(FieldType.JIRA, matcherField, "", "", false, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, matcherField, "", "", false, false)
 
         then:
         matcher.matches(changelogGroup) == result
@@ -37,7 +45,7 @@ class ChangelogMatcherTest extends Specification {
         })
 
         when:
-        def matcher = new ChangelogMatcher(FieldType.JIRA, "status", "", "", false, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", "", false, false)
 
         then:
         matcher.matches(changelogGroup) == result
@@ -58,7 +66,7 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new ChangelogMatcher(FieldType.JIRA, "status", matcherNewValue, "", true, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", matcherNewValue, "", true, false)
 
         then:
         matcher.matches(changelogGroup) == result
@@ -81,7 +89,7 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new ChangelogMatcher(FieldType.JIRA, "status", matcherNewValue, "", false, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", matcherNewValue, "", false, false)
 
         then:
         matcher.matches(changelogGroup)
@@ -100,7 +108,7 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new ChangelogMatcher(FieldType.JIRA, "status", "", matcherOldValue, false, true)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", matcherOldValue, false, true)
 
         then:
         matcher.matches(changelogGroup) == result
@@ -123,7 +131,7 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new ChangelogMatcher(FieldType.JIRA, "status", "", matcherOldValue, false, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", matcherOldValue, false, false)
 
         then:
         matcher.matches(changelogGroup) == result

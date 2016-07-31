@@ -11,7 +11,7 @@ import hudson.model.Descriptor
  * @author ceilfors
  */
 @ToString(includeNames = true)
-class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher> {
+abstract class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher> {
 
     final FieldType fieldType
     final String field
