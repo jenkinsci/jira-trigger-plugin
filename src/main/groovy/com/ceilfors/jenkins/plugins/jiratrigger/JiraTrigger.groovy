@@ -38,7 +38,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
             return false
         }
         if (jqlFilter) {
-            if (!descriptor.jiraClient.validateIssueKey(issue.key, jqlFilter)) {
+            if (!jiraTriggerDescriptor.jiraClient.validateIssueKey(issue.key, jqlFilter)) {
                 log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} doesn't match with the jqlFilter [$jqlFilter]")
                 return false
             }
@@ -56,13 +56,13 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
     @Override
     void start(AbstractProject project, boolean newInstance) {
         super.start(project, newInstance)
-        getDescriptor().addTrigger(this)
+        jiraTriggerDescriptor.addTrigger(this)
     }
 
     @Override
     void stop() {
         super.stop()
-        getDescriptor().removeTrigger(this)
+        jiraTriggerDescriptor.removeTrigger(this)
     }
 
     AbstractProject getJob() {
@@ -75,7 +75,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
         return parameterMappings.collect {
             if (it instanceof IssueAttributePathParameterMapping) {
                 try {
-                    return descriptor.parameterResolver.resolve(issue, it)
+                    return jiraTriggerDescriptor.parameterResolver.resolve(issue, it)
                 } catch (JiraTriggerException e) {
                     log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. Example: description, key, status.name. Read help for more information.", e)
                     return null
@@ -94,8 +94,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
         }
     }
 
-    @Override
-    JiraTriggerDescriptor getDescriptor() {
+    JiraTriggerDescriptor getJiraTriggerDescriptor() {
         return super.getDescriptor() as JiraTriggerDescriptor
     }
 
