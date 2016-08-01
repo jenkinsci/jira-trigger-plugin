@@ -28,5 +28,8 @@ Result of the acceptance test will be available at `$buildDir/reports/acceptance
 1. Run acceptance test! It's not integrated in CI yet.
 2. `git tag -m vx.x.x vx.x.x`
 3. `./gradlew clean publish`
+
+   Make sure your credentials are set correctly in ~/.jenkins-ci.org. Also check out [the official documentation](https://wiki.jenkins-ci.org/display/JENKINS/Gradle+JPI+Plugin) if there's problem.
+
 4. `git push --tags`
 5. Update github release page.
