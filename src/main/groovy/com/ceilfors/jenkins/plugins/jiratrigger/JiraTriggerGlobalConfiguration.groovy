@@ -42,6 +42,10 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
         this.jiraPassword = Secret.fromString(jiraPassword)
     }
 
+    /**
+     * Validates this global configuration. Do note that the validation must be called lazily as these
+     * values are only mandatory when Jenkins is required to hit JIRA.
+     */
     void validateConfiguration() {
         if (!jiraRootUrl) {
             throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraRootUrl")
