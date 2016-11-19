@@ -10,7 +10,6 @@ import groovy.util.logging.Log
 
 import javax.inject.Inject
 import java.util.concurrent.TimeUnit
-
 /**
  * @author ceilfors
  */
@@ -22,6 +21,8 @@ class JrjcJiraClient implements JiraClient {
     TimeUnit timeoutUnit = TimeUnit.SECONDS
 
     JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration
+
+    private ExtendedJiraRestClient extendedJiraRestClient
 
     @Inject
     public JrjcJiraClient(JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
@@ -40,7 +41,10 @@ class JrjcJiraClient implements JiraClient {
     }
 
     ExtendedJiraRestClient getJiraRestClient() {
-        return new ExtendedJiraRestClient(serverUri, httpClient)
+        if (extendedJiraRestClient == null) {
+            this.extendedJiraRestClient = new ExtendedJiraRestClient(serverUri, httpClient)
+        }
+        return extendedJiraRestClient
     }
 
     @Override
