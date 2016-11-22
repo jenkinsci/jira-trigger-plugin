@@ -7,9 +7,14 @@ import com.atlassian.jira.rest.client.internal.async.DisposableHttpClient
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.google.inject.Singleton
 import groovy.util.logging.Log
+import hudson.Extension
+import hudson.XmlFile
+import hudson.model.Saveable
+import hudson.model.listeners.SaveableListener
 
 import javax.inject.Inject
 import java.util.concurrent.TimeUnit
+
 /**
  * @author ceilfors
  */
@@ -57,5 +62,22 @@ class JrjcJiraClient implements JiraClient {
     void addComment(String issueKey, String comment) {
         def issue = jiraRestClient.issueClient.getIssue(issueKey).get(timeout, timeoutUnit)
         jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).get(timeout, timeoutUnit)
+    }
+
+    @Extension
+    static class ResourceCleaner extends SaveableListener {
+
+        @Inject
+        JrjcJiraClient jiraClient
+
+        @Override
+        void onChange(Saveable o, XmlFile file) {
+            if (o instanceof JiraTriggerGlobalConfiguration) {
+                if (jiraClient.extendedJiraRestClient != null) {
+                    jiraClient.extendedJiraRestClient.close()
+                    jiraClient.extendedJiraRestClient = null
+                }
+            }
+        }
     }
 }
