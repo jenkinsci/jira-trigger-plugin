@@ -23,8 +23,6 @@ import java.util.logging.Level
 @Log
 abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
 
-    int quietPeriod
-
     @DataBoundSetter
     String jqlFilter = ""
 
@@ -50,7 +48,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
         }
         actions << new JiraIssueEnvironmentContributingAction(issue: issue)
         log.fine("[${job.fullName}] - Scheduling build for ${issue.key} - ${getId(t)}")
-        return job.scheduleBuild(quietPeriod, getCause(issue, t), *actions)
+        return job.scheduleBuild(job.quietPeriod, getCause(issue, t), *actions)
     }
 
     @Override

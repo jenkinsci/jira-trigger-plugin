@@ -22,7 +22,7 @@ class JenkinsRunner extends JenkinsRule {
     @Override
     void before() throws Throwable {
         super.before()
-        jiraTriggerExecutor.setQuietPeriod(100)
+        jenkins.quietPeriod = 100
         jenkinsQueue = new JenkinsBlockingQueue(instance)
 
         JulLogLevelRule.configureLog() // Needed when @IgnoreRest is used in acceptance tests

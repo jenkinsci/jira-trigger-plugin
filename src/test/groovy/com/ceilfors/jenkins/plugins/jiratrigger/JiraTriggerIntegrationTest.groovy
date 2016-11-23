@@ -68,7 +68,7 @@ class JiraTriggerIntegrationTest extends Specification {
     def 'Injects environment variable to scheduled build'() {
         given:
         jenkins.createJiraCommentTriggeredProject("job")
-        jenkins.jiraTriggerExecutor.setQuietPeriod(0)
+        jenkins.quietPeriod = 0
 
         when:
         def scheduledProjects = jenkins.jiraTriggerExecutor.scheduleBuilds(

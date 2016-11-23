@@ -25,7 +25,6 @@ class JiraTriggerExecutor implements JiraWebhookListener {
     private Jenkins jenkins
     private JiraClient jira
     private List<JiraTriggerListener> jiraTriggerListeners = new CopyOnWriteArrayList<>()
-    private int quietPeriod = 3
 
     @Inject
     public JiraTriggerExecutor(Jenkins jenkins, JiraClient jira) {
@@ -40,10 +39,6 @@ class JiraTriggerExecutor implements JiraWebhookListener {
 
     void addJiraTriggerListener(JiraTriggerListener jiraTriggerListener) {
         jiraTriggerListeners << jiraTriggerListener
-    }
-
-    void setQuietPeriod(int quietPeriod) {
-        this.quietPeriod = quietPeriod
     }
 
     @Override
@@ -82,7 +77,6 @@ class JiraTriggerExecutor implements JiraWebhookListener {
         List<AbstractProject> scheduledProjects = []
         def triggers = getTriggers(triggerClass)
         for (trigger in triggers) {
-            trigger.setQuietPeriod(quietPeriod)
             boolean scheduled = trigger.run(issue, jiraObject)
             if (scheduled) {
                 scheduledProjects << trigger.job
