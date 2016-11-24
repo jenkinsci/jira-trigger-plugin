@@ -16,7 +16,6 @@ import org.junit.Rule
 import org.junit.rules.RuleChain
 import org.jvnet.hudson.test.Issue
 import spock.lang.Specification
-
 /**
  * @author ceilfors
  */
@@ -30,18 +29,23 @@ class JiraTriggerIntegrationTest extends Specification {
             .around(jenkins)
 
     def 'Global configuration round trip'() {
+        given:
         JiraTriggerGlobalConfiguration before = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
         before.jiraRootUrl = "localhost:2990/jira"
         before.jiraUsername = "admin"
         before.jiraPassword = "admin"
         before.save()
 
+        when:
         jenkins.configRoundtrip()
+
+        then:
         JiraTriggerGlobalConfiguration after = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
         jenkins.assertEqualBeans(before, after, "jiraRootUrl,jiraUsername,jiraPassword")
     }
 
     def 'JiraChangelogTrigger configuration round trip'() {
+        given:
         FreeStyleProject p = jenkins.createFreeStyleProject()
         JiraChangelogTrigger before = new JiraChangelogTrigger()
         before.changelogMatchers = [
@@ -49,11 +53,13 @@ class JiraTriggerIntegrationTest extends Specification {
                 new CustomFieldChangelogMatcher("custom field", "new value", "old value", true, true)
         ]
         p.addTrigger(before)
+        p.save()
 
-        jenkins.submit(jenkins.createWebClient().getPage(p, "configure").getFormByName("config"));
+        when:
+        jenkins.configRoundtrip()
 
+        then:
         JiraChangelogTrigger after = p.getTrigger(JiraChangelogTrigger)
-
         jenkins.assertEqualBeans(before, after, "changelogMatchers");
     }
 
