@@ -10,12 +10,14 @@ import hudson.model.FreeStyleProject
 import hudson.model.Queue
 import hudson.security.GlobalMatrixAuthorizationStrategy
 import hudson.security.HudsonPrivateSecurityRealm
+import hudson.util.Secret
 import jenkins.model.GlobalConfiguration
 import org.acegisecurity.context.SecurityContextHolder
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import org.jvnet.hudson.test.Issue
 import spock.lang.Specification
+
 /**
  * @author ceilfors
  */
@@ -33,7 +35,7 @@ class JiraTriggerIntegrationTest extends Specification {
         JiraTriggerGlobalConfiguration before = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
         before.jiraRootUrl = "localhost:2990/jira"
         before.jiraUsername = "admin"
-        before.jiraPassword = "admin"
+        before.jiraPassword = Secret.fromString('admin')
         before.save()
 
         when:

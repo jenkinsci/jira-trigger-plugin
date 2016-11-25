@@ -1,6 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.jira
 
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
+import hudson.util.Secret
 import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.jvnet.hudson.test.JenkinsRule
@@ -19,7 +20,7 @@ class JrjcJiraClientIntegrationTest extends Specification {
         JiraTriggerGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
         configuration.jiraRootUrl = "http://localhost:2990/jira"
         configuration.jiraUsername = "admin"
-        configuration.jiraPassword = "admin"
+        configuration.jiraPassword = Secret.fromString("admin")
         configuration.save()
 
         JrjcJiraClient jiraClient = jenkins.jenkins.injector.getInstance(JrjcJiraClient)

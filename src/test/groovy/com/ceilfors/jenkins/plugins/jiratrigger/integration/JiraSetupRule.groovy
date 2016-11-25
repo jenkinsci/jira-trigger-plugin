@@ -4,6 +4,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.*
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import groovyx.net.http.HTTPBuilder
+import hudson.util.Secret
 import jenkins.model.GlobalConfiguration
 import org.junit.rules.ExternalResource
 /**
@@ -100,7 +101,7 @@ class JiraSetupRule extends ExternalResource {
         JiraTriggerGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
         configuration.jiraRootUrl = jiraRootUrl
         configuration.jiraUsername = jiraUsername
-        configuration.jiraPassword = jiraPassword
+        configuration.jiraPassword = Secret.fromString(jiraPassword)
         configuration.save()
     }
 }

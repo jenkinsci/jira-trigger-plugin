@@ -14,7 +14,7 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
 
     String jiraRootUrl
     String jiraUsername
-    private Secret jiraPassword
+    Secret jiraPassword
     boolean jiraCommentReply = false
 
     JiraTriggerGlobalConfiguration() {
@@ -24,7 +24,7 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
     JiraTriggerGlobalConfiguration(String jiraRootUrl, String jiraUsername, String jiraPassword) {
         this.jiraRootUrl = jiraRootUrl
         this.jiraUsername = jiraUsername
-        this.setJiraPassword(jiraPassword)
+        this.setJiraPassword(Secret.fromString(jiraPassword))
     }
 
     @Override
@@ -32,14 +32,6 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
         req.bindJSON(this, formData)
         save();
         return true;
-    }
-
-    Secret getJiraPassword() {
-        return jiraPassword
-    }
-
-    void setJiraPassword(String jiraPassword) {
-        this.jiraPassword = Secret.fromString(jiraPassword)
     }
 
     /**
