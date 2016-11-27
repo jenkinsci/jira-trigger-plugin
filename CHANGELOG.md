@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [0.3.0] - 2016-11-27
 ### Fixed
 - [JENKINS-39572](https://issues.jenkins-ci.org/browse/JENKINS-39572) Jenkins crash because too many files are opened
 - [JENKINS-39995](https://issues.jenkins-ci.org/browse/JENKINS-39995) Password not saved in Jenkins Global Configuration
@@ -43,7 +45,8 @@
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.4...v0.3.0
 [0.2.4]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.1...v0.2.2
