@@ -44,7 +44,7 @@ dependencies {
 }
 
 jenkinsPlugin {
-    coreVersion = '1.565.3'
+    coreVersion = '1.642'
     shortName = 'jira-trigger'
     displayName = 'JIRA Trigger Plugin'
     url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin'
