@@ -7,10 +7,16 @@ import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathPara
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterResolver
 import groovy.util.logging.Log
-import hudson.model.*
+import hudson.model.Action
+import hudson.model.Cause
+import hudson.model.CauseAction
+import hudson.model.Item
+import hudson.model.ParameterValue
+import hudson.model.ParametersAction
 import hudson.triggers.Trigger
 import hudson.triggers.TriggerDescriptor
 import jenkins.model.Jenkins
+import jenkins.model.ParameterizedJobMixIn
 import org.kohsuke.stapler.DataBoundSetter
 
 import javax.inject.Inject
@@ -21,7 +27,7 @@ import java.util.logging.Level
  * @author ceilfors
  */
 @Log
-abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
+abstract class JiraTrigger<T> extends Trigger<ParameterizedJobMixIn.ParameterizedJob> {
 
     @DataBoundSetter
     String jqlFilter = ""
@@ -47,12 +53,14 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
             actions << new ParametersAction(collectParameterValues(issue))
         }
         actions << new JiraIssueEnvironmentContributingAction(issue: issue)
+        actions << new CauseAction(getCause(issue, t))
         log.fine("[${job.fullName}] - Scheduling build for ${issue.key} - ${getId(t)}")
-        return job.scheduleBuild(job.quietPeriod, getCause(issue, t), *actions)
+
+        return ParameterizedJobMixIn.scheduleBuild2(job, -1, *actions) != null
     }
 
     @Override
-    void start(AbstractProject project, boolean newInstance) {
+    void start(ParameterizedJobMixIn.ParameterizedJob project, boolean newInstance) {
         super.start(project, newInstance)
         jiraTriggerDescriptor.addTrigger(this)
     }
@@ -63,7 +71,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
         jiraTriggerDescriptor.removeTrigger(this)
     }
 
-    AbstractProject getJob() {
+    ParameterizedJobMixIn.ParameterizedJob getJob() {
         super.job
     }
 
@@ -113,7 +121,7 @@ abstract class JiraTrigger<T> extends Trigger<AbstractProject> {
         private transient final List<JiraTrigger> triggers = new CopyOnWriteArrayList<>()
 
         public boolean isApplicable(Item item) {
-            return item instanceof AbstractProject
+            return item instanceof ParameterizedJobMixIn.ParameterizedJob
         }
 
         @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly
