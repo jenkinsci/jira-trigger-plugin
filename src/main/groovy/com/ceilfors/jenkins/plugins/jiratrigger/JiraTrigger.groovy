@@ -11,6 +11,7 @@ import hudson.model.Action
 import hudson.model.Cause
 import hudson.model.CauseAction
 import hudson.model.Item
+import hudson.model.Job
 import hudson.model.ParameterValue
 import hudson.model.ParametersAction
 import hudson.triggers.Trigger
@@ -27,7 +28,7 @@ import java.util.logging.Level
  * @author ceilfors
  */
 @Log
-abstract class JiraTrigger<T> extends Trigger<ParameterizedJobMixIn.ParameterizedJob> {
+abstract class JiraTrigger<T> extends Trigger<Job> {
 
     @DataBoundSetter
     String jqlFilter = ""
@@ -60,7 +61,7 @@ abstract class JiraTrigger<T> extends Trigger<ParameterizedJobMixIn.Parameterize
     }
 
     @Override
-    void start(ParameterizedJobMixIn.ParameterizedJob project, boolean newInstance) {
+    void start(Job project, boolean newInstance) {
         super.start(project, newInstance)
         jiraTriggerDescriptor.addTrigger(this)
     }
@@ -71,7 +72,7 @@ abstract class JiraTrigger<T> extends Trigger<ParameterizedJobMixIn.Parameterize
         jiraTriggerDescriptor.removeTrigger(this)
     }
 
-    ParameterizedJobMixIn.ParameterizedJob getJob() {
+    Job getJob() {
         super.job
     }
 
@@ -121,7 +122,7 @@ abstract class JiraTrigger<T> extends Trigger<ParameterizedJobMixIn.Parameterize
         private transient final List<JiraTrigger> triggers = new CopyOnWriteArrayList<>()
 
         public boolean isApplicable(Item item) {
-            return item instanceof ParameterizedJobMixIn.ParameterizedJob
+            return item instanceof Job && item instanceof ParameterizedJobMixIn.ParameterizedJob
         }
 
         @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly

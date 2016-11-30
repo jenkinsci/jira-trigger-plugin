@@ -2,7 +2,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 
 import com.atlassian.jira.rest.client.api.domain.Comment
 import hudson.model.AbstractProject
-import hudson.model.ItemGroup
 import org.junit.Rule
 import org.jvnet.hudson.test.JenkinsRule
 import spock.lang.Specification
@@ -22,12 +21,9 @@ class JiraCommentTriggerTest extends Specification {
     public JenkinsRule jenkinsRule = new JenkinsRule()
 
     def setup() {
-        given:
-        def projectParent = Mock(ItemGroup)
-        projectParent.getFullName() >> ""
         project = Mock(AbstractProject)
-        project.getParent() >> projectParent
         project.getName() >> "project"
+        project.isBuildable() >> true
     }
 
     @Unroll
@@ -35,13 +31,13 @@ class JiraCommentTriggerTest extends Specification {
         given:
         def comment = new Comment(null, commentBody, null, null, null, null, null, null)
         JiraCommentTrigger trigger = new JiraCommentTrigger(commentPattern: commentPattern)
+        trigger.job = project
 
         when:
-        trigger.start(project, false)
-        trigger.run(createIssue("TEST-123"), comment)
+        boolean result = trigger.run(createIssue("TEST-123"), comment)
 
         then:
-        1 * project.scheduleBuild(_, _, _)
+        result
 
         where:
         commentBody                       | commentPattern
@@ -56,13 +52,13 @@ class JiraCommentTriggerTest extends Specification {
         given:
         def comment = new Comment(null, commentBody, null, null, null, null, null, null)
         JiraCommentTrigger trigger = new JiraCommentTrigger(commentPattern: commentPattern)
+        trigger.job = project
 
         when:
-        trigger.start(project, false)
-        trigger.run(createIssue("TEST-123"), comment)
+        boolean result = trigger.run(createIssue("TEST-123"), comment)
 
         then:
-        0 * project.scheduleBuild(_, _, _)
+        !result
 
         where:
         commentBody              | commentPattern
