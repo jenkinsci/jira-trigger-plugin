@@ -75,9 +75,11 @@ class JenkinsRunner extends JenkinsRule {
 
     JiraCommentTriggerConfigurer createJiraCommentTriggeredProject(String name, String... parameters) {
         FreeStyleProject project = createFreeStyleProject(name)
-        project.addProperty(new ParametersDefinitionProperty(parameters.collect {
-            new StringParameterDefinition(it, "")
-        }))
+        if (parameters) {
+            project.addProperty(new ParametersDefinitionProperty(parameters.collect {
+                new StringParameterDefinition(it, "")
+            }))
+        }
 
         JiraCommentTriggerConfigurer jenkinsCommentRunner = new JiraCommentTriggerConfigurer(this, name)
         JiraTriggerConfigurationPage configPage = jenkinsCommentRunner.configure()
