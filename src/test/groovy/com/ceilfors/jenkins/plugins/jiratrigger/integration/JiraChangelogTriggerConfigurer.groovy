@@ -20,7 +20,7 @@ class JiraChangelogTriggerConfigurer extends JiraTriggerConfigurer {
 
     JiraChangelogTriggerConfigurationPage configure() {
         JenkinsRule.WebClient webClient = jenkinsRunner.createWebClient()
-        webClient.setThrowExceptionOnScriptError(false)
+        webClient.options.setThrowExceptionOnScriptError(false)
         HtmlPage htmlPage = webClient.goTo("job/$jobName/configure")
         return new JiraChangelogTriggerConfigurationPage(htmlPage)
     }
