@@ -28,6 +28,7 @@ abstract class JiraTriggerConfigurationPage {
         HtmlDivision parameterMappingDiv = addButton.parentNode.parentNode.parentNode as HtmlDivision
         HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv, "issue attribute path parameter button", "//a[contains(text(), '${IssueAttributePathParameterMapping.IssueAttributePathParameterMappingDescriptor.DISPLAY_NAME}')]")
         attribute.click()
+        configPage.webClient.waitForBackgroundJavaScriptStartingBefore(1000)
 
         lastJenkinsParameterText.setValueAttribute(jenkinsParameter)
         lastAttributePathText.setValueAttribute(attributePath)

@@ -59,6 +59,7 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
         HtmlDivision parameterMappingDiv = addButton.parentNode.parentNode.parentNode as HtmlDivision
         HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv, "custom field changelog matcher button", "//a[contains(text(), '${displayName}')]")
         attribute.click()
+        configPage.webClient.waitForBackgroundJavaScriptStartingBefore(1000)
     }
 
     private HtmlTextInput getLastFieldText() {
