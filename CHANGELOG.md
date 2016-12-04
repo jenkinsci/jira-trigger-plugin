@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+### Added
+- [JENKINS-37044](https://issues.jenkins-ci.org/browse/JENKINS-37044) Support pipeline job
 
 ## [0.3.0] - 2016-11-27
 ### Fixed
