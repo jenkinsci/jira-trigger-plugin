@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [0.4.0] - 2016-12-05
 ### Added
 - [JENKINS-37044](https://issues.jenkins-ci.org/browse/JENKINS-37044) Support pipeline job
 
@@ -47,7 +49,8 @@
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.4...v0.3.0
 [0.2.4]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.2...v0.2.3
