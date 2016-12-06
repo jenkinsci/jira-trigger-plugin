@@ -2,6 +2,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 
 import com.atlassian.jira.rest.client.api.domain.Comment
 import hudson.model.AbstractProject
+import hudson.model.ItemGroup
 import org.junit.Rule
 import org.jvnet.hudson.test.JenkinsRule
 import spock.lang.Specification
@@ -21,7 +22,10 @@ class JiraCommentTriggerTest extends Specification {
     public JenkinsRule jenkinsRule = new JenkinsRule()
 
     def setup() {
+        def projectParent = Mock(ItemGroup)
+        projectParent.getFullName() >> ""
         project = Mock(AbstractProject)
+        project.getParent() >> projectParent
         project.getName() >> "project"
         project.isBuildable() >> true
     }
