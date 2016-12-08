@@ -6,6 +6,9 @@
 ### Added
 - [JENKINS-37044](https://issues.jenkins-ci.org/browse/JENKINS-37044) Support pipeline job
 
+### Changed
+- Update Jenkins core version from 1.565.3 to 1.642 
+
 ## [0.3.0] - 2016-11-27
 ### Fixed
 - [JENKINS-39572](https://issues.jenkins-ci.org/browse/JENKINS-39572) Jenkins crash because too many files are opened
