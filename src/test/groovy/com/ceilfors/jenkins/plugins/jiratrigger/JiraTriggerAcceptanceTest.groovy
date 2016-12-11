@@ -1,10 +1,11 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraSetupRule
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraRunner
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraSetupRule
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
@@ -15,7 +16,7 @@ import org.jvnet.hudson.test.RandomlyFails
 import spock.lang.Specification
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
-import static com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraSetupRule.CUSTOM_FIELD_NAME
+import static RealJiraSetupRule.CUSTOM_FIELD_NAME
 /**
  * @author ceilfors
  */
@@ -27,7 +28,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     RuleChain ruleChain = RuleChain
             .outerRule(new JulLogLevelRule())
             .around(jenkins)
-            .around(new JiraSetupRule(jenkins))
+            .around(new RealJiraSetupRule(jenkins))
             .around(
             new ExternalResource() {
                 @Override

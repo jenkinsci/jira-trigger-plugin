@@ -10,7 +10,7 @@ import org.junit.rules.ExternalResource
 /**
  * @author ceilfors
  */
-class JiraSetupRule extends ExternalResource {
+class RealJiraSetupRule extends ExternalResource {
 
     public static final String CUSTOM_FIELD_NAME = "My Customer Custom Field"
     public static String CUSTOM_FIELD_ID
@@ -20,7 +20,7 @@ class JiraSetupRule extends ExternalResource {
     String jiraPassword = "admin"
     JenkinsRunner jenkinsRunner
 
-    JiraSetupRule(JenkinsRunner jenkinsRunner) {
+    RealJiraSetupRule(JenkinsRunner jenkinsRunner) {
         this.jenkinsRunner = jenkinsRunner
     }
 

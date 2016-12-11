@@ -83,8 +83,8 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
     @Override
     void updateCustomField(String issueKey, String fieldName, String value) {
         String fieldId
-        if (fieldName == JiraSetupRule.CUSTOM_FIELD_NAME) {
-            fieldId = JiraSetupRule.CUSTOM_FIELD_ID
+        if (fieldName == RealJiraSetupRule.CUSTOM_FIELD_NAME) {
+            fieldId = RealJiraSetupRule.CUSTOM_FIELD_ID
         } else {
             throw new UnsupportedOperationException("$fieldName not supported")
         }
