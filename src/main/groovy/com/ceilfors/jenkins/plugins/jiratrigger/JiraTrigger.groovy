@@ -114,7 +114,7 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         protected Jenkins jenkins
 
         @Inject
-        protected JiraClient jiraClient
+        JiraClient jiraClient
 
         @Inject
         protected ParameterResolver parameterResolver

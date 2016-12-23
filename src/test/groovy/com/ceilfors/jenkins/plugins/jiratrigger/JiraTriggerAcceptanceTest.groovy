@@ -1,6 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraRunner
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraSetupRule
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraRunner
@@ -22,18 +23,20 @@ import static RealJiraSetupRule.CUSTOM_FIELD_NAME
  */
 class JiraTriggerAcceptanceTest extends Specification {
 
+    static boolean REAL_JIRA = false
+
     JenkinsRunner jenkins = new JenkinsRunner()
 
     @Rule
     RuleChain ruleChain = RuleChain
             .outerRule(new JulLogLevelRule())
             .around(jenkins)
-            .around(new RealJiraSetupRule(jenkins))
+            .around(REAL_JIRA ? new RealJiraSetupRule(jenkins) : new FakeJiraSetupRule(jenkins))
             .around(
             new ExternalResource() {
                 @Override
                 protected void before() throws Throwable {
-                    jira = new RealJiraRunner(jenkins)
+                    jira = REAL_JIRA ? new RealJiraRunner(jenkins) : new FakeJiraRunner(jenkins.webhookUrl)
                 }
             })
 
