@@ -20,6 +20,7 @@ import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
  */
+@Deprecated
 @Log
 class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 

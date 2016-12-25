@@ -1,12 +1,10 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraRunner
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraSetupRule
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraRunner
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraSetupRule
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraSetupRule
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
@@ -23,24 +21,24 @@ import static RealJiraSetupRule.CUSTOM_FIELD_NAME
  */
 class JiraTriggerAcceptanceTest extends Specification {
 
-    static boolean REAL_JIRA = false
-
     JenkinsRunner jenkins = new JenkinsRunner()
+    JiraRunner jira
 
     @Rule
     RuleChain ruleChain = RuleChain
             .outerRule(new JulLogLevelRule())
             .around(jenkins)
-            .around(REAL_JIRA ? new RealJiraSetupRule(jenkins) : new FakeJiraSetupRule(jenkins))
             .around(
             new ExternalResource() {
                 @Override
                 protected void before() throws Throwable {
-                    jira = REAL_JIRA ? new RealJiraRunner(jenkins) : new FakeJiraRunner(jenkins.webhookUrl)
+                    jira = new FakeJiraRunner(jenkins)
+
+                    // KLUDGE: Could not find a better way to override Guice injection
+                    jenkins.jenkins.getDescriptorByType(JiraChangelogTrigger.JiraChangelogTriggerDescriptor).jiraClient = jira
+                    jenkins.jenkins.getDescriptorByType(JiraCommentTrigger.JiraCommentTriggerDescriptor).jiraClient = jira
                 }
             })
-
-    JiraRunner jira
 
     @Rule
     public TestRule watcher = new TestWatcher() {
