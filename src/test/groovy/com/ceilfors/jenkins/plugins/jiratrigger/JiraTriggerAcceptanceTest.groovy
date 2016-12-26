@@ -5,6 +5,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraSetupRule
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
@@ -33,10 +34,7 @@ class JiraTriggerAcceptanceTest extends Specification {
                 @Override
                 protected void before() throws Throwable {
                     jira = new FakeJiraRunner(jenkins)
-
-                    // KLUDGE: Could not find a better way to override Guice injection
-                    jenkins.jenkins.getDescriptorByType(JiraChangelogTrigger.JiraChangelogTriggerDescriptor).jiraClient = jira
-                    jenkins.jenkins.getDescriptorByType(JiraCommentTrigger.JiraCommentTriggerDescriptor).jiraClient = jira
+                    jenkins.setJiraClient(jira)
                 }
             })
 
@@ -166,14 +164,20 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Should not trigger a build when an issue is updated but the issue does not match the JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
+        def jqlFilter = 'type=task and description~"New description" and status="Done"'
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.setJqlFilter('type=task and description~"New description" and status="Done"')
+        project.setJqlFilter(jqlFilter)
+
+        def jiraClient = Mock(JiraClient)
+        jiraClient.validateIssueKey(_, _) >> false
+        jenkins.setJiraClient(jiraClient)
 
         when:
         jira.updateDescription(issueKey, "New description")
 
         then:
         jenkins.noBuildShouldBeScheduled()
+        1 * jiraClient.validateIssueKey(issueKey, jqlFilter)
     }
 
     def 'Should trigger a build when a comment is added and the issue matches the JQL filter'() {
@@ -189,17 +193,23 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled("job")
     }
 
-    def 'Should trigger a build when a comment is added but the issue does not match JQL filter'() {
+    def 'Should not trigger a build when a comment is added but the issue does not match JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
         def project = jenkins.createJiraCommentTriggeredProject("job")
-        project.setJqlFilter('type=task and status="Done"')
+        def jqlFilter = 'type=task and status="Done"'
+        project.setJqlFilter(jqlFilter)
+
+        def jiraClient = Mock(JiraClient)
+        jiraClient.validateIssueKey(_, _) >> false
+        jenkins.setJiraClient(jiraClient)
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.noBuildShouldBeScheduled()
+        1 * jiraClient.validateIssueKey(issueKey, jqlFilter)
     }
 
     def 'Should trigger a build when issue status is updated to Done'() {

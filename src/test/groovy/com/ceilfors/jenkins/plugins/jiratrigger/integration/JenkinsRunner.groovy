@@ -4,14 +4,28 @@ import com.ceilfors.jenkins.plugins.jiratrigger.JiraChangelogTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerExecutor
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
-import hudson.model.*
+import hudson.model.FreeStyleProject
+import hudson.model.ParametersAction
+import hudson.model.ParametersDefinitionProperty
+import hudson.model.Project
+import hudson.model.Queue
+import hudson.model.StringParameterDefinition
+import hudson.model.StringParameterValue
 import jenkins.model.GlobalConfiguration
 import org.jvnet.hudson.test.JenkinsRule
 
-import static org.hamcrest.Matchers.*
+import static org.hamcrest.Matchers.containsInAnyOrder
+import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.hasItem
+import static org.hamcrest.Matchers.instanceOf
+import static org.hamcrest.Matchers.is
+import static org.hamcrest.Matchers.not
+import static org.hamcrest.Matchers.nullValue
 import static org.junit.Assert.assertThat
+
 /**
  * @author ceilfors
  */
@@ -114,5 +128,11 @@ class JenkinsRunner extends JenkinsRule {
 
         def globalConfig = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
         assertThat(globalConfig.jiraCommentReply, equalTo(active))
+    }
+
+    void setJiraClient(JiraClient jiraClient) {
+        // KLUDGE: Could not find a better way to override Guice injection
+        jenkins.getDescriptorByType(JiraChangelogTrigger.JiraChangelogTriggerDescriptor).jiraClient = jiraClient
+        jenkins.getDescriptorByType(JiraCommentTrigger.JiraCommentTriggerDescriptor).jiraClient = jiraClient
     }
 }
