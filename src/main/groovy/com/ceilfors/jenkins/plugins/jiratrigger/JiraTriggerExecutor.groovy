@@ -3,7 +3,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
-import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhookListener
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.WebhookChangelogEvent
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.WebhookCommentEvent
@@ -23,13 +22,11 @@ import java.util.concurrent.CopyOnWriteArrayList
 class JiraTriggerExecutor implements JiraWebhookListener {
 
     private Jenkins jenkins
-    private JiraClient jira
     private List<JiraTriggerListener> jiraTriggerListeners = new CopyOnWriteArrayList<>()
 
     @Inject
-    public JiraTriggerExecutor(Jenkins jenkins, JiraClient jira) {
+    public JiraTriggerExecutor(Jenkins jenkins) {
         this.jenkins = jenkins
-        this.jira = jira
     }
 
     @Inject
