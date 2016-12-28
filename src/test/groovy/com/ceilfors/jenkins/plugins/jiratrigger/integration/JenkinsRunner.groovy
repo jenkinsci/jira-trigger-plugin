@@ -1,6 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.integration
 
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraChangelogTrigger
+import com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentReplier
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerExecutor
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
@@ -25,7 +26,6 @@ import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.not
 import static org.hamcrest.Matchers.nullValue
 import static org.junit.Assert.assertThat
-
 /**
  * @author ceilfors
  */
@@ -134,5 +134,6 @@ class JenkinsRunner extends JenkinsRule {
         // KLUDGE: Could not find a better way to override Guice injection
         jenkins.getDescriptorByType(JiraChangelogTrigger.JiraChangelogTriggerDescriptor).jiraClient = jiraClient
         jenkins.getDescriptorByType(JiraCommentTrigger.JiraCommentTriggerDescriptor).jiraClient = jiraClient
+        jenkins.injector.getInstance(JiraTriggerExecutor).jiraTriggerListeners.grep(JiraCommentReplier)[0].jiraClient = jiraClient
     }
 }

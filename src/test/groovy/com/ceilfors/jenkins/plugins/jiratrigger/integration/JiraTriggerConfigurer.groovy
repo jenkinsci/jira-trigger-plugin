@@ -45,6 +45,10 @@ abstract class JiraTriggerConfigurer {
         assertThat(jiraTrigger.parameterMappings.last().issueAttributePath, is(issueAttributePath))
     }
 
+    String getAbsoluteUrl() {
+        jenkins.getItemByFullName(jobName).absoluteUrl
+    }
+
     abstract JiraTriggerConfigurationPage configure()
 
     abstract JiraTrigger getTrigger()
