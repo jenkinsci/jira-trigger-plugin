@@ -15,6 +15,10 @@ interface JiraRunner extends JiraClient {
 
     void updateStatus(String issueKey, String status)
 
+    /**
+     * @deprecated Was only used by RealJiraRunner which is now deprecated
+     */
+    @Deprecated
     void shouldBeNotifiedWithComment(String issueKey, String jobName)
 
     void updateCustomField(String issueKey, String fieldName, String value)
