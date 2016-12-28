@@ -21,7 +21,7 @@ class JiraCommentTriggerConfigurer extends JiraTriggerConfigurer {
     }
 
     JiraCommentTrigger getTrigger() {
-        instance.getItemByFullName(jobName, AbstractProject).getTrigger(JiraCommentTrigger)
+        jenkins.getItemByFullName(jobName, AbstractProject).getTrigger(JiraCommentTrigger)
     }
 
     def setCommentPattern(String commentPattern) {

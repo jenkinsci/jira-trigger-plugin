@@ -26,7 +26,7 @@ class JiraChangelogTriggerConfigurer extends JiraTriggerConfigurer {
     }
 
     JiraChangelogTrigger getTrigger() {
-        instance.getItemByFullName(jobName, AbstractProject).getTrigger(JiraChangelogTrigger)
+        jenkins.getItemByFullName(jobName, AbstractProject).getTrigger(JiraChangelogTrigger)
     }
 
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {

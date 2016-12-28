@@ -13,12 +13,12 @@ import static org.junit.Assert.assertThat
 abstract class JiraTriggerConfigurer {
 
     protected JenkinsRunner jenkinsRunner
-    protected Jenkins instance
+    protected Jenkins jenkins
     protected String jobName
 
     public JiraTriggerConfigurer(JenkinsRunner jenkinsRunner, String jobName) {
         this.jenkinsRunner = jenkinsRunner
-        this.instance = jenkinsRunner.instance
+        this.jenkins = jenkinsRunner.instance
         this.jobName = jobName
     }
 
