@@ -33,7 +33,6 @@ class JiraTriggerAcceptanceTest extends Specification {
                 @Override
                 protected void before() throws Throwable {
                     jira = new FakeJiraRunner(jenkins)
-                    jenkins.setJiraClient(jira)
                 }
             })
 
@@ -149,14 +148,19 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Should trigger a build when an issue is updated and the issue key matches the JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
+        def jqlFilter = 'type=task and description~"New description" and status="To Do"'
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.setJqlFilter('type=task and description~"New description" and status="To Do"')
+        project.setJqlFilter(jqlFilter)
+
+        def jiraClient = Mock(JiraClient)
+        jenkins.setJiraClient(jiraClient)
 
         when:
         jira.updateDescription(issueKey, "New description")
 
         then:
         jenkins.buildShouldBeScheduled("job")
+        1 * jiraClient.validateIssueKey(issueKey, jqlFilter) >> true
     }
 
     def 'Should not trigger a build when an issue is updated but the issue does not match the JQL filter'() {
@@ -181,14 +185,19 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Should trigger a build when a comment is added and the issue matches the JQL filter'() {
         given:
         def issueKey = jira.createIssue("dummy description")
+        def jqlFilter = 'type=task and description~"dummy description" and status="To Do"'
         def project = jenkins.createJiraCommentTriggeredProject("job")
-        project.setJqlFilter('type=task and description~"dummy description" and status="To Do"')
+        project.setJqlFilter(jqlFilter)
+
+        def jiraClient = Mock(JiraClient)
+        jenkins.setJiraClient(jiraClient)
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.buildShouldBeScheduled("job")
+        1 * jiraClient.validateIssueKey(issueKey, jqlFilter) >> true
     }
 
     def 'Should not trigger a build when a comment is added but the issue does not match JQL filter'() {
