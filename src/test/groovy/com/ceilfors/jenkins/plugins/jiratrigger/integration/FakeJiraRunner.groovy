@@ -32,18 +32,14 @@ class FakeJiraRunner implements JiraRunner {
     @Override
     void updateDescription(String issueKey, String description) {
         issueMap[issueKey].description = description
-        Map body = new JsonSlurper().parse(new FileReader(new File(this.class.getResource('updateDescription.json').toURI()))) as Map
-        body.issue.key = issueKey
-        body.issue.fields.description = issueMap[issueKey].description
+        Map body = createPostBody('updateDescription', issueKey)
         body.changelog.items[0].toString = description
         restClient.post(body: body)
     }
 
     @Override
     void updateStatus(String issueKey, String status) {
-        Map body = new JsonSlurper().parse(new FileReader(new File(this.class.getResource('updateStatus.json').toURI()))) as Map
-        body.issue.key = issueKey
-        body.issue.fields.description = issueMap[issueKey].description
+        Map body = createPostBody('updateStatus', issueKey)
         body.changelog.items[0].toString = status
         restClient.post(body: body)
     }
@@ -55,9 +51,7 @@ class FakeJiraRunner implements JiraRunner {
 
     @Override
     void updateCustomField(String issueKey, String fieldName, String value) {
-        Map body = new JsonSlurper().parse(new FileReader(new File(this.class.getResource('updateCustomField.json').toURI()))) as Map
-        body.issue.key = issueKey
-        body.issue.fields.description = issueMap[issueKey].description
+        Map body = createPostBody('updateCustomField', issueKey)
         body.changelog.items[0].field = fieldName
         body.changelog.items[0].toString = value
         restClient.post(body: body)
@@ -65,9 +59,7 @@ class FakeJiraRunner implements JiraRunner {
 
     @Override
     void addComment(String issueKey, String comment) {
-        Map body = new JsonSlurper().parse(new FileReader(new File(this.class.getResource('addComment.json').toURI()))) as Map
-        body.issue.key = issueKey
-        body.issue.fields.description = issueMap[issueKey].description
+        Map body = createPostBody('addComment', issueKey)
         body.comment.body = comment
         restClient.post(body: body)
     }
@@ -79,6 +71,13 @@ class FakeJiraRunner implements JiraRunner {
 
     private RESTClient createRestClient(String jenkinsUrl) {
         return new RESTClient(jenkinsUrl, ContentType.JSON)
+    }
+
+    private Map createPostBody(String method, String issueKey) {
+        Map body = new JsonSlurper().parse(new FileReader(new File(this.class.getResource("${method}.json").toURI()))) as Map
+        body.issue.key = issueKey
+        body.issue.fields.description = issueMap[issueKey].description
+        body
     }
 
     private class FakeIssue {
