@@ -171,7 +171,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         project.setJqlFilter(jqlFilter)
 
         def jiraClient = Mock(JiraClient)
-        jiraClient.validateIssueKey(_, _) >> false
         jenkins.setJiraClient(jiraClient)
 
         when:
@@ -179,7 +178,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
         then:
         jenkins.noBuildShouldBeScheduled()
-        1 * jiraClient.validateIssueKey(issueKey, jqlFilter)
+        1 * jiraClient.validateIssueKey(issueKey, jqlFilter) >> false
     }
 
     def 'Should trigger a build when a comment is added and the issue matches the JQL filter'() {
@@ -208,7 +207,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         project.setJqlFilter(jqlFilter)
 
         def jiraClient = Mock(JiraClient)
-        jiraClient.validateIssueKey(_, _) >> false
         jenkins.setJiraClient(jiraClient)
 
         when:
@@ -216,7 +214,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
         then:
         jenkins.noBuildShouldBeScheduled()
-        1 * jiraClient.validateIssueKey(issueKey, jqlFilter)
+        1 * jiraClient.validateIssueKey(issueKey, jqlFilter) >> false
     }
 
     def 'Should trigger a build when issue status is updated to Done'() {
