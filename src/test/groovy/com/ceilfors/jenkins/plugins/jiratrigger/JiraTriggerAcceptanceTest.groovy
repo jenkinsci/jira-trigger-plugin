@@ -4,7 +4,6 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
-import com.ceilfors.jenkins.plugins.jiratrigger.integration.RealJiraSetupRule
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import org.junit.Rule
 import org.junit.rules.ExternalResource
@@ -15,7 +14,8 @@ import org.junit.runner.Description
 import spock.lang.Specification
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
-import static RealJiraSetupRule.CUSTOM_FIELD_NAME
+import static com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraRunner.CUSTOM_FIELD_NAME
+
 /**
  * @author ceilfors
  */

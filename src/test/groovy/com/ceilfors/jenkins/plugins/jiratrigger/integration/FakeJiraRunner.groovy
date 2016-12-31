@@ -8,6 +8,8 @@ import groovyx.net.http.RESTClient
  */
 class FakeJiraRunner implements JiraRunner {
 
+    public static final String CUSTOM_FIELD_NAME = "My Customer Custom Field"
+
     private RESTClient restClient
     private int id = 1;
     private Map<String, FakeIssue> issueMap = [:]
