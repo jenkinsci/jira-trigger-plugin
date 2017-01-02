@@ -1,4 +1,4 @@
-package com.ceilfors.jenkins.plugins.jiratrigger.integration
+package com.ceilfors.jenkins.plugins.jiratrigger.ui
 
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraChangelogTrigger
 import com.gargoylesoftware.htmlunit.html.HtmlPage
@@ -8,18 +8,17 @@ import org.jvnet.hudson.test.JenkinsRule
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
-
 /**
  * @author ceilfors
  */
 class JiraChangelogTriggerConfigurer extends JiraTriggerConfigurer {
 
-    public JiraChangelogTriggerConfigurer(JenkinsRunner jenkinsRunner, String jobName) {
-        super(jenkinsRunner, jobName)
+    public JiraChangelogTriggerConfigurer(JenkinsRule jenkinsRule, String jobName) {
+        super(jenkinsRule, jobName)
     }
 
     JiraChangelogTriggerConfigurationPage configure() {
-        JenkinsRule.WebClient webClient = jenkinsRunner.createWebClient()
+        JenkinsRule.WebClient webClient = jenkinsRule.createWebClient()
         webClient.options.setThrowExceptionOnScriptError(false)
         HtmlPage htmlPage = webClient.goTo("job/$jobName/configure")
         return new JiraChangelogTriggerConfigurationPage(htmlPage)

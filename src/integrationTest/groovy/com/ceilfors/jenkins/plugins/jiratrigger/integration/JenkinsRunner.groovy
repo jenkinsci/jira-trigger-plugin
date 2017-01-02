@@ -6,6 +6,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerExecutor
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
+import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraTriggerGlobalConfigurationPage
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.FreeStyleProject
@@ -20,8 +21,6 @@ import org.jvnet.hudson.test.JenkinsRule
 
 import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.equalTo
-import static org.hamcrest.Matchers.hasItem
-import static org.hamcrest.Matchers.instanceOf
 import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.not
 import static org.hamcrest.Matchers.nullValue
@@ -75,33 +74,27 @@ class JenkinsRunner extends JenkinsRule {
         return "${getURL().toString()}${jiraWebhook.urlName}/"
     }
 
-    JiraChangelogTriggerConfigurer createJiraChangelogTriggeredProject(String name) {
+    JiraChangelogProject createJiraChangelogTriggeredProject(String name) {
         FreeStyleProject project = createFreeStyleProject(name)
-
-        JiraChangelogTriggerConfigurer jenkinsChangelogRunner = new JiraChangelogTriggerConfigurer(this, name)
-        JiraTriggerConfigurationPage configPage = jenkinsChangelogRunner.configure()
-        configPage.activate()
-        configPage.save()
-
-        assertThat(project.triggers.values(), hasItem(instanceOf(JiraChangelogTrigger)))
-        return jenkinsChangelogRunner
+        def trigger = new JiraChangelogTrigger()
+        project.addTrigger(trigger)
+        project.save()
+        trigger.start(project, true)
+        return new JiraChangelogProject(project)
     }
 
-    JiraCommentTriggerConfigurer createJiraCommentTriggeredProject(String name, String... parameters) {
+    JiraCommentTriggerProject createJiraCommentTriggeredProject(String name, String... parameters) {
         FreeStyleProject project = createFreeStyleProject(name)
         if (parameters) {
             project.addProperty(new ParametersDefinitionProperty(parameters.collect {
                 new StringParameterDefinition(it, "")
             }))
         }
-
-        JiraCommentTriggerConfigurer jenkinsCommentRunner = new JiraCommentTriggerConfigurer(this, name)
-        JiraTriggerConfigurationPage configPage = jenkinsCommentRunner.configure()
-        configPage.activate()
-        configPage.save()
-
-        assertThat(project.triggers.values(), hasItem(instanceOf(JiraCommentTrigger)))
-        return jenkinsCommentRunner
+        def trigger = new JiraCommentTrigger()
+        project.addTrigger(trigger)
+        project.save()
+        trigger.start(project, true)
+        return new JiraCommentTriggerProject(project)
     }
 
     JiraTriggerGlobalConfigurationPage globalConfigure() {

@@ -1,11 +1,15 @@
-package com.ceilfors.jenkins.plugins.jiratrigger.integration
+package com.ceilfors.jenkins.plugins.jiratrigger.ui
 
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraChangelogTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.changelog.CustomFieldChangelogMatcher
 import com.ceilfors.jenkins.plugins.jiratrigger.changelog.JiraFieldChangelogMatcher
-import com.gargoylesoftware.htmlunit.html.*
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor
+import com.gargoylesoftware.htmlunit.html.HtmlButton
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput
+import com.gargoylesoftware.htmlunit.html.HtmlDivision
+import com.gargoylesoftware.htmlunit.html.HtmlPage
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput
 import hudson.triggers.Trigger
-
 /**
  * @author ceilfors
  */

@@ -1,4 +1,4 @@
-package com.ceilfors.jenkins.plugins.jiratrigger.integration
+package com.ceilfors.jenkins.plugins.jiratrigger.ui
 
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger
 import com.gargoylesoftware.htmlunit.html.HtmlPage

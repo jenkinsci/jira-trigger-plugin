@@ -18,6 +18,10 @@ import org.junit.rules.RuleChain
 import org.jvnet.hudson.test.Issue
 import spock.lang.Specification
 
+import static org.hamcrest.Matchers.isEmptyOrNullString
+import static org.hamcrest.Matchers.not
+import static org.junit.Assert.assertThat
+
 /**
  * @author ceilfors
  */
@@ -70,7 +74,7 @@ class JiraTriggerIntegrationTest extends Specification {
         def project = jenkins.createJiraCommentTriggeredProject("job")
 
         then:
-        project.commentPatternShouldNotBeEmpty()
+        assertThat(project.trigger.commentPattern, not(isEmptyOrNullString()))
     }
 
     def 'Injects environment variable to scheduled build'() {

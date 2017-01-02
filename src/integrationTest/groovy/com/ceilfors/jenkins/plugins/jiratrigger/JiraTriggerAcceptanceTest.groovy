@@ -221,7 +221,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.addJiraFieldChangelogMatcher("status", "Done")
+        project.addJiraFieldChangelogMatcher("status", '', "Done")
 
         when:
         jira.updateStatus(issueKey, "Done")
@@ -247,7 +247,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.addJiraFieldChangelogMatcher("status", "Done")
+        project.addJiraFieldChangelogMatcher("status", '', "Done")
 
         when:
         jira.updateStatus(issueKey, "In Progress")
@@ -274,7 +274,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         given:
         def issueKey = jira.createIssue("original description")
         def project = jenkins.createJiraChangelogTriggeredProject("job")
-        project.addCustomFieldChangelogMatcher(CUSTOM_FIELD_NAME, "Barclays")
+        project.addCustomFieldChangelogMatcher(CUSTOM_FIELD_NAME, '', "Barclays")
 
         when:
         jira.updateCustomField(issueKey, CUSTOM_FIELD_NAME, "Barclays")

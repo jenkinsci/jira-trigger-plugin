@@ -1,24 +1,24 @@
-package com.ceilfors.jenkins.plugins.jiratrigger.integration
+package com.ceilfors.jenkins.plugins.jiratrigger.ui
 
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTrigger
 import jenkins.model.Jenkins
+import org.jvnet.hudson.test.JenkinsRule
 
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
-
 /**
  * @author ceilfors
  */
 abstract class JiraTriggerConfigurer {
 
-    protected JenkinsRunner jenkinsRunner
+    protected JenkinsRule jenkinsRule
     protected Jenkins jenkins
     protected String jobName
 
-    public JiraTriggerConfigurer(JenkinsRunner jenkinsRunner, String jobName) {
-        this.jenkinsRunner = jenkinsRunner
-        this.jenkins = jenkinsRunner.instance
+    public JiraTriggerConfigurer(JenkinsRule jenkinsRule, String jobName) {
+        this.jenkinsRule = jenkinsRule
+        this.jenkins = jenkinsRule.instance
         this.jobName = jobName
     }
 
@@ -43,6 +43,12 @@ abstract class JiraTriggerConfigurer {
         assertThat("Parameter mapping is not added", jiraTrigger.parameterMappings.size(), equalTo(originalParameterMappingSize + 1))
         assertThat(jiraTrigger.parameterMappings.last().jenkinsParameter, is(jenkinsParameter))
         assertThat(jiraTrigger.parameterMappings.last().issueAttributePath, is(issueAttributePath))
+    }
+
+    void activate() {
+        JiraTriggerConfigurationPage configPage = configure()
+        configPage.activate()
+        configPage.save()
     }
 
     String getAbsoluteUrl() {
