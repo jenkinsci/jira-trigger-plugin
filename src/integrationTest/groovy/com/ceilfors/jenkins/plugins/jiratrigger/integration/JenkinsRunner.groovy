@@ -6,9 +6,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerExecutor
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
-import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraTriggerGlobalConfigurationPage
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
-import com.gargoylesoftware.htmlunit.html.HtmlPage
 import hudson.model.FreeStyleProject
 import hudson.model.ParametersAction
 import hudson.model.ParametersDefinitionProperty
@@ -20,7 +18,6 @@ import jenkins.model.GlobalConfiguration
 import org.jvnet.hudson.test.JenkinsRule
 
 import static org.hamcrest.Matchers.containsInAnyOrder
-import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.not
 import static org.hamcrest.Matchers.nullValue
@@ -97,30 +94,10 @@ class JenkinsRunner extends JenkinsRule {
         return new JiraCommentTriggerProject(project)
     }
 
-    JiraTriggerGlobalConfigurationPage globalConfigure() {
-        HtmlPage htmlPage = createWebClient().goTo("configure")
-        return new JiraTriggerGlobalConfigurationPage(htmlPage)
-    }
-
-    void setJiraTriggerGlobalConfig(String rootUrl, String username, String password) {
-        JiraTriggerGlobalConfigurationPage configPage = globalConfigure()
-        configPage.setRootUrl(rootUrl)
-        configPage.setCredentials(username, password)
-        configPage.save()
-
-        def globalConfig = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
-        assertThat(globalConfig.jiraRootUrl, equalTo(rootUrl))
-        assertThat(globalConfig.jiraUsername, equalTo(username))
-        assertThat(globalConfig.jiraPassword.plainText, equalTo(password))
-    }
-
     def setJiraCommentReply(boolean active) {
-        JiraTriggerGlobalConfigurationPage configPage = globalConfigure()
-        configPage.setJiraCommentReply(active)
-        configPage.save()
-
         def globalConfig = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
-        assertThat(globalConfig.jiraCommentReply, equalTo(active))
+        globalConfig.jiraCommentReply = active
+        globalConfig.save()
     }
 
     void setJiraClient(JiraClient jiraClient) {

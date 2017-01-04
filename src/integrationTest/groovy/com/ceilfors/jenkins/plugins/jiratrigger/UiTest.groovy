@@ -3,7 +3,9 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraChangelogTriggerConfigurer
 import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraCommentTriggerConfigurer
 import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraTriggerConfigurer
+import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraTriggerGlobalConfigurationPage
 import hudson.model.FreeStyleProject
+import jenkins.model.GlobalConfiguration
 import org.junit.Rule
 import org.jvnet.hudson.test.JenkinsRule
 import spock.lang.Specification
@@ -29,6 +31,24 @@ class UiTest extends Specification {
         } else {
             throw new UnsupportedOperationException("Trigger $triggerType is unsupported")
         }
+    }
+
+    def 'Sets Global configuration'() {
+        given:
+        def configPage = new JiraTriggerGlobalConfigurationPage(jenkins.createWebClient().goTo("configure"))
+
+        when:
+        configPage.setRootUrl('test root')
+        configPage.setCredentials('test user', 'test password')
+        configPage.setJiraCommentReply(true)
+        configPage.save()
+
+        then:
+        def globalConfig = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
+        assertThat(globalConfig.jiraCommentReply, equalTo(true))
+        assertThat(globalConfig.jiraRootUrl, equalTo('test root'))
+        assertThat(globalConfig.jiraUsername, equalTo('test user'))
+        assertThat(globalConfig.jiraPassword.plainText, equalTo('test password'))
     }
 
     def 'Sets JQL filter'() {
