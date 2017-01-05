@@ -17,6 +17,12 @@ abstract class JiraTriggerProject {
     }
 
     void addParameterMapping(String jenkinsParameter, String issueAttributePath) {
+        def trigger = getJiraTrigger()
+        if (trigger == null) {
+            throw new IllegalStateException('Trigger was null in CI?')
+        } else {
+            System.err.println("Trigger was successfully retrieved")
+        }
         jiraTrigger.parameterMappings.add(new IssueAttributePathParameterMapping(jenkinsParameter, issueAttributePath))
         project.save()
     }
