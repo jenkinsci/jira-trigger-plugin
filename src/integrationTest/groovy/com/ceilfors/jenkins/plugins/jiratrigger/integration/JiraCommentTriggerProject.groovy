@@ -16,6 +16,8 @@ class JiraCommentTriggerProject extends JiraTriggerProject {
         def trigger = project.getTrigger(JiraCommentTrigger)
         if (trigger == null) {
             throw new IllegalStateException('Trigger was null in CI?')
+        } else {
+            System.err.println("Trigger was successfully retrieved")
         }
         return trigger
     }
