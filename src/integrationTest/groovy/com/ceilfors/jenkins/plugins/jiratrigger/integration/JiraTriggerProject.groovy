@@ -17,16 +17,16 @@ abstract class JiraTriggerProject {
     }
 
     void addParameterMapping(String jenkinsParameter, String issueAttributePath) {
-        trigger.parameterMappings.add(new IssueAttributePathParameterMapping(jenkinsParameter, issueAttributePath))
+        jiraTrigger.parameterMappings.add(new IssueAttributePathParameterMapping(jenkinsParameter, issueAttributePath))
         project.save()
     }
 
     void setJqlFilter(String jqlFilter) {
-        trigger.jqlFilter = jqlFilter
+        jiraTrigger.jqlFilter = jqlFilter
         project.save()
     }
 
-    abstract JiraTrigger getTrigger()
+    abstract JiraTrigger getJiraTrigger()
 
     // KLUDGE: Somehow Groovy Delegate is not delegating this method
     boolean scheduleBuild() {

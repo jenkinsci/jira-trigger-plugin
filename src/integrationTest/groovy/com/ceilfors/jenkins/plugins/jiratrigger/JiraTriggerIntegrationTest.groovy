@@ -74,7 +74,7 @@ class JiraTriggerIntegrationTest extends Specification {
         def project = jenkins.createJiraCommentTriggeredProject("job")
 
         then:
-        assertThat(project.trigger.commentPattern, not(isEmptyOrNullString()))
+        assertThat(project.jiraTrigger.commentPattern, not(isEmptyOrNullString()))
     }
 
     def 'Injects environment variable to scheduled build'() {

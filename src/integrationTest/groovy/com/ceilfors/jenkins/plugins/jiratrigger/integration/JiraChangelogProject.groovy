@@ -14,14 +14,14 @@ class JiraChangelogProject extends JiraTriggerProject {
     }
 
     @Override
-    JiraChangelogTrigger getTrigger() {
+    JiraChangelogTrigger getJiraTrigger() {
         return project.getTrigger(JiraChangelogTrigger)
     }
 
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {
         boolean comparingOldValue = oldValue != null && !oldValue.empty
         boolean comparingNewValue = newValue != null && !newValue.empty
-        trigger.changelogMatchers.add(
+        jiraTrigger.changelogMatchers.add(
                 new JiraFieldChangelogMatcher(fieldId, newValue, oldValue, comparingNewValue, comparingOldValue))
         project.save()
     }
@@ -29,7 +29,7 @@ class JiraChangelogProject extends JiraTriggerProject {
     void addCustomFieldChangelogMatcher(String fieldName, String oldValue, String newValue) {
         boolean comparingOldValue = oldValue != null && !oldValue.empty
         boolean comparingNewValue = newValue != null && !newValue.empty
-        trigger.changelogMatchers.add(
+        jiraTrigger.changelogMatchers.add(
                 new CustomFieldChangelogMatcher(fieldName, newValue, oldValue, comparingNewValue, comparingOldValue))
         project.save()
     }
