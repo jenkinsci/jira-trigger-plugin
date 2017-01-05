@@ -91,6 +91,12 @@ class JenkinsRunner extends JenkinsRule {
         project.addTrigger(trigger)
         project.save()
         trigger.start(project, true)
+        trigger = project.getTrigger(JiraCommentTrigger)
+        if (trigger == null) {
+            throw new IllegalStateException('Trigger was null after being set?')
+        } else {
+            System.err.println("Trigger is successfully set")
+        }
         return new JiraCommentTriggerProject(project)
     }
 
