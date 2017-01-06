@@ -9,8 +9,7 @@ import hudson.model.FreeStyleProject
  */
 abstract class JiraTriggerProject {
 
-    @Delegate
-    FreeStyleProject project
+    protected FreeStyleProject project
 
     JiraTriggerProject(FreeStyleProject project) {
         this.project = project
@@ -32,15 +31,9 @@ abstract class JiraTriggerProject {
         project.save()
     }
 
+    String getAbsoluteUrl() {
+        project.absoluteUrl
+    }
+
     abstract JiraTrigger getJiraTrigger()
-
-    // KLUDGE: Somehow Groovy Delegate is not delegating this method
-    boolean scheduleBuild() {
-        project.scheduleBuild()
-    }
-
-    // KLUDGE: Somehow Groovy Delegate is not delegating this method
-    boolean scheduleBuild(int quietPeriod) {
-        project.scheduleBuild(quietPeriod)
-    }
 }
