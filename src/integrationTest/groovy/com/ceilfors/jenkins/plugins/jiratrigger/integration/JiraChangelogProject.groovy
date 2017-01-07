@@ -15,7 +15,7 @@ class JiraChangelogProject extends JiraTriggerProject {
 
     @Override
     JiraChangelogTrigger getJiraTrigger() {
-        return project.getTrigger(JiraChangelogTrigger)
+        project.getTrigger(JiraChangelogTrigger)
     }
 
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {

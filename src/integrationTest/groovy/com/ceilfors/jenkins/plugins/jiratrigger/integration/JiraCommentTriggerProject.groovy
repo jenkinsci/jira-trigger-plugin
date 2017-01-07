@@ -13,22 +13,10 @@ class JiraCommentTriggerProject extends JiraTriggerProject {
 
     @Override
     JiraCommentTrigger getJiraTrigger() {
-        def trigger = project.getTrigger(JiraCommentTrigger)
-        if (trigger == null) {
-            throw new IllegalStateException('Trigger was null in CI?')
-        } else {
-            System.err.println("Trigger was successfully retrieved")
-        }
-        return trigger
+        project.getTrigger(JiraCommentTrigger)
     }
 
     void setCommentPattern(String commentPattern) {
-        def trigger = getJiraTrigger()
-        if (trigger == null) {
-            throw new IllegalStateException('Trigger was null in CI?')
-        } else {
-            System.err.println("Trigger was successfully retrieved")
-        }
         jiraTrigger.setCommentPattern(commentPattern)
         project.save()
     }
