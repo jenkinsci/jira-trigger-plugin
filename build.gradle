@@ -62,6 +62,10 @@ task integrationTest(type: Test) {
 }
 test.finalizedBy integrationTest
 
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
+}
+
 jenkinsPlugin {
     coreVersion = '1.642'
     shortName = 'jira-trigger'
