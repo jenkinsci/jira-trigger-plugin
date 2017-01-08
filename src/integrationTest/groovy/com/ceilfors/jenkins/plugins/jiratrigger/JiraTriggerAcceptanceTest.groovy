@@ -88,7 +88,7 @@ class JiraTriggerAcceptanceTest extends Specification {
     def 'Should map parameters to the triggered build when a comment is created'() {
         given:
         def issueKey = jira.createIssue("Dummy issue description")
-        def project = jenkins.createJiraCommentTriggeredProject("simpleJob", "jenkins_description", "jenkins_key")
+        def project = jenkins.createJiraCommentTriggeredProject("simpleJob")
         project.addParameterMapping("jenkins_description", "description")
         project.addParameterMapping("jenkins_key", "key")
 

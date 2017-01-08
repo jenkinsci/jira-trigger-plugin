@@ -9,10 +9,8 @@ import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import hudson.model.FreeStyleProject
 import hudson.model.ParametersAction
-import hudson.model.ParametersDefinitionProperty
 import hudson.model.Project
 import hudson.model.Queue
-import hudson.model.StringParameterDefinition
 import hudson.model.StringParameterValue
 import jenkins.model.GlobalConfiguration
 import org.jvnet.hudson.test.JenkinsRule
@@ -80,13 +78,8 @@ class JenkinsRunner extends JenkinsRule {
         return new JiraChangelogProject(project)
     }
 
-    JiraCommentTriggerProject createJiraCommentTriggeredProject(String name, String... parameters) {
+    JiraCommentTriggerProject createJiraCommentTriggeredProject(String name) {
         FreeStyleProject project = createFreeStyleProject(name)
-        if (parameters) {
-            project.addProperty(new ParametersDefinitionProperty(parameters.collect {
-                new StringParameterDefinition(it, "")
-            }))
-        }
         def trigger = new JiraCommentTrigger()
         project.addTrigger(trigger)
         project.save()
