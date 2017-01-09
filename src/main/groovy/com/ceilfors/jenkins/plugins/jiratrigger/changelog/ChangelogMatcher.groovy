@@ -2,6 +2,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger.changelog
 
 import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.FieldType
+import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import hudson.Util
 import hudson.model.AbstractDescribableImpl
@@ -11,6 +12,7 @@ import hudson.model.Descriptor
  * @author ceilfors
  */
 @ToString(includeNames = true)
+@EqualsAndHashCode
 abstract class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher> {
 
     final FieldType fieldType

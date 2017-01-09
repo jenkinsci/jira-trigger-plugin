@@ -1,10 +1,12 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
+import groovy.transform.EqualsAndHashCode
 import hudson.Extension
 import org.kohsuke.stapler.DataBoundConstructor
 /**
  * @author ceilfors
  */
+@EqualsAndHashCode(callSuper = true)
 class IssueAttributePathParameterMapping extends ParameterMapping {
 
     final String issueAttributePath

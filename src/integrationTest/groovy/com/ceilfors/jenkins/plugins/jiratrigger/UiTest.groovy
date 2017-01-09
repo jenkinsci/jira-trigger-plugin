@@ -1,5 +1,8 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.ceilfors.jenkins.plugins.jiratrigger.changelog.CustomFieldChangelogMatcher
+import com.ceilfors.jenkins.plugins.jiratrigger.changelog.JiraFieldChangelogMatcher
+import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraChangelogTriggerConfigurer
 import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraCommentTriggerConfigurer
 import com.ceilfors.jenkins.plugins.jiratrigger.ui.JiraTriggerConfigurer
@@ -10,10 +13,8 @@ import org.junit.Rule
 import org.jvnet.hudson.test.JenkinsRule
 import spock.lang.Specification
 
-import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.hasItem
 import static org.hamcrest.Matchers.instanceOf
-import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
@@ -45,10 +46,10 @@ class UiTest extends Specification {
 
         then:
         def globalConfig = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
-        assertThat(globalConfig.jiraCommentReply, equalTo(true))
-        assertThat(globalConfig.jiraRootUrl, equalTo('test root'))
-        assertThat(globalConfig.jiraUsername, equalTo('test user'))
-        assertThat(globalConfig.jiraPassword.plainText, equalTo('test password'))
+        globalConfig.jiraCommentReply
+        globalConfig.jiraRootUrl == 'test root'
+        globalConfig.jiraUsername == 'test user'
+        globalConfig.jiraPassword.plainText == 'test password'
     }
 
     def 'Sets JQL filter'() {
@@ -68,12 +69,11 @@ class UiTest extends Specification {
         def trigger = project.getTrigger(triggerType)
 
         then:
-        assertThat(trigger.jqlFilter, is(jqlFilter))
+        trigger.jqlFilter == jqlFilter
 
         where:
         triggerType << [JiraCommentTrigger, JiraChangelogTrigger]
     }
-
 
     def 'Adds parameter mappings'() {
         given:
@@ -82,24 +82,14 @@ class UiTest extends Specification {
 
         when:
         configurer.activate()
-        def originalParameterMappingSize = project.getTrigger(triggerType).parameterMappings.size()
         configurer.addParameterMapping('parameter1', 'path1')
+        configurer.addParameterMapping('parameter2', 'path2')
         def trigger = project.getTrigger(triggerType)
 
         then:
-        assertThat("Parameter mapping is not added", trigger.parameterMappings.size(), equalTo(originalParameterMappingSize + 1))
-        assertThat(trigger.parameterMappings.last().jenkinsParameter, is('parameter1'))
-        assertThat(trigger.parameterMappings.last().issueAttributePath, is('path1'))
-
-        when:
-        originalParameterMappingSize = project.getTrigger(triggerType).parameterMappings.size()
-        configurer.addParameterMapping('parameter2', 'path2')
-        trigger = project.getTrigger(triggerType)
-
-        then:
-        assertThat("Parameter mapping is not added", trigger.parameterMappings.size(), equalTo(originalParameterMappingSize + 1))
-        assertThat(trigger.parameterMappings.last().jenkinsParameter, is('parameter2'))
-        assertThat(trigger.parameterMappings.last().issueAttributePath, is('path2'))
+        trigger.parameterMappings.size() == 2
+        trigger.parameterMappings[0] == new IssueAttributePathParameterMapping('parameter1', 'path1')
+        trigger.parameterMappings[1] == new IssueAttributePathParameterMapping('parameter2', 'path2')
 
         where:
         triggerType << [JiraCommentTrigger, JiraChangelogTrigger]
@@ -117,7 +107,7 @@ class UiTest extends Specification {
         def trigger = project.getTrigger(JiraCommentTrigger)
 
         then:
-        assertThat(trigger.commentPattern, is(commentPattern))
+        trigger.commentPattern == commentPattern
     }
 
     def 'Adds field matchers'() {
@@ -131,22 +121,13 @@ class UiTest extends Specification {
         configurer.addJiraFieldChangelogMatcher('Jira Field 1', 'old 2', 'new 2')
         configurer.addCustomFieldChangelogMatcher('Custom Field 2', 'old 3', 'new 3')
         configurer.addJiraFieldChangelogMatcher('Jira Field 2', 'old 4', 'new 4')
-        def trigger = project.getTrigger(JiraChangelogTrigger)
-        def matchers = trigger.changelogMatchers
+        def matchers = project.getTrigger(JiraChangelogTrigger).changelogMatchers
 
         then:
-        assertThat("Changelog matchers were not added correctly", matchers.size(), equalTo(4))
-        assertThat(matchers[0].field, is('Custom Field 1'))
-        assertThat(matchers[0].oldValue, is('old 1'))
-        assertThat(matchers[0].newValue, is('new 1'))
-        assertThat(matchers[1].field, is('Jira Field 1'))
-        assertThat(matchers[1].oldValue, is('old 2'))
-        assertThat(matchers[1].newValue, is('new 2'))
-        assertThat(matchers[2].field, is('Custom Field 2'))
-        assertThat(matchers[2].oldValue, is('old 3'))
-        assertThat(matchers[2].newValue, is('new 3'))
-        assertThat(matchers[3].field, is('Jira Field 2'))
-        assertThat(matchers[3].oldValue, is('old 4'))
-        assertThat(matchers[3].newValue, is('new 4'))
+        matchers.size() == 4
+        matchers[0] == new CustomFieldChangelogMatcher('Custom Field 1', 'new 1', 'old 1', true, true)
+        matchers[1] == new JiraFieldChangelogMatcher('Jira Field 1', 'new 2', 'old 2', true, true)
+        matchers[2] == new CustomFieldChangelogMatcher('Custom Field 2', 'new 3', 'old 3', true, true)
+        matchers[3] == new JiraFieldChangelogMatcher('Jira Field 2', 'new 4', 'old 4', true, true)
     }
 }

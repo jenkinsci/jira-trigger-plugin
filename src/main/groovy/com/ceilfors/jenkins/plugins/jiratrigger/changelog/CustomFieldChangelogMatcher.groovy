@@ -1,6 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.changelog
 
 import com.atlassian.jira.rest.client.api.domain.FieldType
+import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import hudson.Extension
 import org.kohsuke.stapler.DataBoundConstructor
@@ -8,6 +9,7 @@ import org.kohsuke.stapler.DataBoundConstructor
  * @author ceilfors
  */
 @ToString(includeSuper = true)
+@EqualsAndHashCode(callSuper = true)
 class CustomFieldChangelogMatcher extends ChangelogMatcher {
 
     @DataBoundConstructor

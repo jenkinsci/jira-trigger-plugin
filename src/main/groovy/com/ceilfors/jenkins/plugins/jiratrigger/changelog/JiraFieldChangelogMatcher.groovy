@@ -2,6 +2,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger.changelog
 
 import com.atlassian.jira.rest.client.api.domain.FieldType
 import com.atlassian.jira.rest.client.api.domain.IssueFieldId
+import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import hudson.Extension
 import hudson.util.ComboBoxModel
@@ -10,6 +11,7 @@ import org.kohsuke.stapler.DataBoundConstructor
  * @author ceilfors
  */
 @ToString(includeSuper = true)
+@EqualsAndHashCode(callSuper = true)
 class JiraFieldChangelogMatcher extends ChangelogMatcher {
 
     @DataBoundConstructor
