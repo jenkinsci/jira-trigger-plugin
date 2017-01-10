@@ -36,11 +36,17 @@ sourceSets {
         compileClasspath += main.output + test.output
         runtimeClasspath += main.output + test.output
     }
+    jiraIntegrationTest {
+        compileClasspath += main.output + test.output + integrationTest.output
+        runtimeClasspath += main.output + test.output + integrationTest.output
+    }
 }
 
 configurations {
     integrationTestCompile.extendsFrom testCompile
     integrationTestRuntime.extendsFrom testRuntime
+    jiraIntegrationTestCompile.extendsFrom integrationTestCompile
+    jiraIntegrationTestRuntime.extendsFrom integrationTestRuntime
 }
 
 dependencies {
@@ -59,6 +65,11 @@ task integrationTest(type: Test) {
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
     mustRunAfter test
+}
+task jiraIntegrationTest(type: Test) {
+    testClassesDir = sourceSets.jiraIntegrationTest.output.classesDir
+    classpath = sourceSets.jiraIntegrationTest.runtimeClasspath
+    mustRunAfter integrationTest
 }
 test.finalizedBy integrationTest
 
