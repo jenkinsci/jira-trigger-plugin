@@ -17,10 +17,10 @@ import jenkins.model.GlobalConfiguration
 
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
+
 /**
  * @author ceilfors
  */
-@Deprecated
 @Log
 class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 

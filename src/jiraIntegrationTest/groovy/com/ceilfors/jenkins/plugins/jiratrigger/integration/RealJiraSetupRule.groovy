@@ -7,10 +7,10 @@ import groovyx.net.http.HTTPBuilder
 import hudson.util.Secret
 import jenkins.model.GlobalConfiguration
 import org.junit.rules.ExternalResource
+
 /**
  * @author ceilfors
  */
-@Deprecated
 class RealJiraSetupRule extends ExternalResource {
 
     public static final String CUSTOM_FIELD_NAME = "My Customer Custom Field"
