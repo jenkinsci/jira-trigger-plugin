@@ -4,7 +4,7 @@
 
 See Jenkins [Gradle JPI Plugin page](https://wiki.jenkins-ci.org/display/JENKINS/Gradle+JPI+Plugin) for more details.
 
-# Running Acceptance Test
+# Running End to End Acceptance Test
 
 You will need to run JIRA locally to be able to execute the acceptance test of this plugin which is available from
 vagrant. More details can be found
@@ -17,10 +17,10 @@ Quick start:
 3. Accept Oracle license term for Java
 4. `atlas-run-standalone --product jira --version 7.0.0 --plugins com.atlassian.jira.tests:jira-testkit-plugin:7.0.111`
 5. Setup JIRA project with name TEST
-6. `./gradlew test acceptanceTest`
+6. `./gradlew jiraIntegrationTest`
 7. Restart JIRA if it starts to complain about license (It is using [timebomb license](https://developer.atlassian.com/market/add-on-licensing-for-developers/timebomb-licenses-for-testing) by default). 
 
-Result of the acceptance test will be available at `$buildDir/reports/acceptanceTests/index.html`.
+Result of the acceptance test will be available at `$buildDir/reports/jiraIntegrationTest/index.html`.
 
 # Release
 
