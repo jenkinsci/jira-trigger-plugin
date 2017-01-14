@@ -17,6 +17,7 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'org.jenkins-ci.jpi'
+apply plugin: 'codenarc'
 
 repositories {
     jcenter()
@@ -109,3 +110,17 @@ scmVersion {
     }
 }
 project.version = scmVersion.version
+
+codenarc {
+    configFile = file('config/codenarc/rules.groovy')
+    toolVersion = '0.25.1'
+}
+codenarcTest {
+    configFile = file('config/codenarc/rulesTest.groovy')
+}
+codenarcIntegrationTest {
+    configFile = file('config/codenarc/rulesTest.groovy')
+}
+codenarcJiraIntegrationTest {
+    configFile = file('config/codenarc/rulesTest.groovy')
+}
