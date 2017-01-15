@@ -5,5 +5,7 @@ ruleset {
         exclude 'PublicInstanceField' // Fields annotated with @org.junit.Rule violate this rule
         exclude 'UnusedPrivateField' // Fields annotated with @org.junit.Rule violate this rule
         exclude 'MethodName' // More natural sentences in test cases
+        exclude 'SystemErrPrint' // Needed to segment the integration test
+        exclude 'JUnitPublicNonTestMethod' // Using Spock
     }
 }
