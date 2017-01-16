@@ -69,13 +69,13 @@ class JenkinsRunner extends JenkinsRule {
         return "${getURL().toString()}${jiraWebhook.urlName}/"
     }
 
-    JiraChangelogProject createJiraChangelogTriggeredProject(String name) {
+    JiraChangelogTriggerProject createJiraChangelogTriggeredProject(String name) {
         FreeStyleProject project = createFreeStyleProject(name)
         def trigger = new JiraChangelogTrigger()
         project.addTrigger(trigger)
         project.save()
         trigger.start(project, true)
-        return new JiraChangelogProject(project)
+        return new JiraChangelogTriggerProject(project)
     }
 
     JiraCommentTriggerProject createJiraCommentTriggeredProject(String name) {

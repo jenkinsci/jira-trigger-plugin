@@ -7,5 +7,6 @@ ruleset {
         exclude 'MethodName' // More natural sentences in test cases
         exclude 'SystemErrPrint' // Needed to segment the integration test
         exclude 'JUnitPublicNonTestMethod' // Using Spock
+        exclude 'NoDef' // Required for acceptance test DSL loose coupling
     }
 }
