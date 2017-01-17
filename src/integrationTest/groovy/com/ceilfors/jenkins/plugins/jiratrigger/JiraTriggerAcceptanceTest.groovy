@@ -98,7 +98,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         then:
         jenkins.buildShouldBeScheduledWithParameter('simpleJob', [
                 'jenkins_description': 'Dummy issue description',
-                'jenkins_key'        : issueKey
+                'jenkins_key'        : issueKey,
         ])
     }
 
@@ -115,7 +115,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         then:
         jenkins.buildShouldBeScheduledWithParameter('job', [
                 'jenkins_description': 'New description',
-                'jenkins_key'        : issueKey
+                'jenkins_key'        : issueKey,
         ])
     }
 
@@ -256,7 +256,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.noBuildShouldBeScheduled()
     }
 
-    def 'Should not trigger a build when issue status is updated from In Progress to Done whilst the original status should have been To Do'() {
+    def 'Should not trigger a build when old status value does not match the matcher'() {
         given:
         String issueKey = jira.createIssue('original description')
         jira.updateStatus(issueKey, 'In Progress')
@@ -283,12 +283,15 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled('job')
     }
 
-    // Acceptance Test - Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at Queue.Item.getActions()
+    // Acceptance Test - Check CauseAction in JenkinsRunner to differentiate trigger? Can be retrieved at
+    //   Queue.Item.getActions()
     // Improvement - void method in JrjcJiraClient should be async. Be careful on concurrency issues in this test case.
     // How to enable JenkinsRule as ClassRule to make the build faster?
     // Trigger - JiraTriggerCause should contain issue key and link
-    // Acceptance Test - Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when webhook is configured wrongly and Acceptance test don't see any error
+    // Acceptance Test - Override UncaughtExceptionHandler in Acceptance Test to catch Exception, especially when
+    //   webhook is configured wrongly and Acceptance test don't see any error
     // Improvement - Check SequentialExecutionQueue that is used by GitHubWebHook
-    // Improvement - Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out RequirePostWithGHHookPayload
+    // Improvement - Should JiraWebhook be RootAction rather than UnprotectedRootAction? Check out
+    //   RequirePostWithGHHookPayload
     // Improvement - Translate JiraTriggerException to error messages
 }

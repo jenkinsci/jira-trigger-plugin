@@ -8,5 +8,6 @@ ruleset {
         exclude 'SystemErrPrint' // Needed to segment the integration test
         exclude 'JUnitPublicNonTestMethod' // Using Spock
         exclude 'NoDef' // Required for acceptance test DSL loose coupling
+        exclude 'ClosureAsLastMethodParameter' // Required by Spock expectation to match method call by closure
     }
 }
