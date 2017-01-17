@@ -37,8 +37,8 @@ class JiraTriggerIntegrationTest extends Specification {
     def 'Global configuration round trip'() {
         given:
         JiraTriggerGlobalConfiguration before = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
-        before.jiraRootUrl = "localhost:2990/jira"
-        before.jiraUsername = "admin"
+        before.jiraRootUrl = 'localhost:2990/jira'
+        before.jiraUsername = 'admin'
         before.jiraPassword = Secret.fromString('admin')
         before.save()
 
@@ -47,7 +47,7 @@ class JiraTriggerIntegrationTest extends Specification {
 
         then:
         JiraTriggerGlobalConfiguration after = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
-        jenkins.assertEqualBeans(before, after, "jiraRootUrl,jiraUsername,jiraPassword")
+        jenkins.assertEqualBeans(before, after, 'jiraRootUrl,jiraUsername,jiraPassword')
     }
 
     def 'JiraChangelogTrigger configuration round trip'() {
@@ -55,8 +55,8 @@ class JiraTriggerIntegrationTest extends Specification {
         FreeStyleProject p = jenkins.createFreeStyleProject()
         JiraChangelogTrigger before = new JiraChangelogTrigger()
         before.changelogMatchers = [
-                new JiraFieldChangelogMatcher("status", "new value", "old value", true, true),
-                new CustomFieldChangelogMatcher("custom field", "new value", "old value", true, true)
+                new JiraFieldChangelogMatcher('status', 'new value', 'old value', true, true),
+                new CustomFieldChangelogMatcher('custom field', 'new value', 'old value', true, true),
         ]
         p.addTrigger(before)
         p.save()
@@ -66,12 +66,12 @@ class JiraTriggerIntegrationTest extends Specification {
 
         then:
         JiraChangelogTrigger after = p.getTrigger(JiraChangelogTrigger)
-        jenkins.assertEqualBeans(before, after, "changelogMatchers");
+        jenkins.assertEqualBeans(before, after, 'changelogMatchers')
     }
 
     def 'Comment pattern by default must not be empty'() {
         when:
-        def project = jenkins.createJiraCommentTriggeredProject("job")
+        def project = jenkins.createJiraCommentTriggeredProject('job')
 
         then:
         assertThat(project.jiraTrigger.commentPattern, not(isEmptyOrNullString()))
@@ -79,12 +79,12 @@ class JiraTriggerIntegrationTest extends Specification {
 
     def 'Injects environment variable to scheduled build'() {
         given:
-        jenkins.createJiraCommentTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject('job')
         jenkins.quietPeriod = 0
 
         when:
         def scheduledProjects = jenkins.jiraTriggerExecutor.scheduleBuilds(
-                TestUtils.createIssue("TEST-1234"),
+                TestUtils.createIssue('TEST-1234'),
                 TestUtils.createComment(JiraCommentTrigger.DEFAULT_COMMENT))
 
         then:
@@ -94,46 +94,46 @@ class JiraTriggerIntegrationTest extends Specification {
         if (item == null) {
             environment = scheduledProjects[0].getBuildByNumber(1).environment
         } else {
-            environment = (item.getFuture().startCondition.get() as AbstractBuild).environment
+            environment = (item.future.startCondition.get() as AbstractBuild).environment
         }
-        environment.get("JIRA_ISSUE_KEY") == "TEST-1234"
+        environment.get('JIRA_ISSUE_KEY') == 'TEST-1234'
     }
 
-    @Issue("JENKINS-34135")
+    @Issue('JENKINS-34135')
     def 'Should be able to schedule jobs with anonymous user does not have read permission'() {
         setup:
-        jenkins.createJiraCommentTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject('job')
 
-        when: "Security is enabled in Jenkins and anonymous access is taken off with empty GlobalMatrixAuthorizationStrategy settings"
+        when: 'Security is enabled in Jenkins and anonymous access is taken off by empty authorization strategy'
         jenkins.instance.securityRealm = new HudsonPrivateSecurityRealm(true)
         jenkins.instance.authorizationStrategy = new GlobalMatrixAuthorizationStrategy()
 
-        then: "Item should still visible before we make the thread anonymous"
+        then: 'Item should still visible before we make the thread anonymous'
         jenkins.instance.allItems.size() == 1
 
-        when: "Thread is made anonymous"
+        when: 'Thread is made anonymous'
         SecurityContextHolder.clearContext()
 
-        then: "Item should now disappear"
+        then: 'Item should now disappear'
         jenkins.instance.allItems.size() == 0
 
-        when: "Trigger item"
+        when: 'Trigger item'
         def scheduledProjects = jenkins.jiraTriggerExecutor.scheduleBuilds(
-                TestUtils.createIssue("TEST-1234"),
+                TestUtils.createIssue('TEST-1234'),
                 TestUtils.createComment(JiraCommentTrigger.DEFAULT_COMMENT))
 
-        then: "Item is scheduled"
+        then: 'Item is scheduled'
         scheduledProjects.size() != 0
-        scheduledProjects[0].queueItem.task.name == "job"
+        scheduledProjects[0].queueItem.task.name == 'job'
     }
 
     @Issue('JENKINS-34301')
     def 'Should not swallow Jenkins security exception'() {
         setup:
-        jenkins.createJiraCommentTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject('job')
         def webClient = jenkins.createWebClient()
 
-        when: 'Security is enabled in Jenkins and anonymous access is taken off with empty GlobalMatrixAuthorizationStrategy settings'
+        when: 'Security is enabled in Jenkins and anonymous access is taken off by empty authorization strategy'
         jenkins.instance.securityRealm = new HudsonPrivateSecurityRealm(true)
         jenkins.instance.authorizationStrategy = new GlobalMatrixAuthorizationStrategy()
         webClient.getPage(webClient.contextPath)
