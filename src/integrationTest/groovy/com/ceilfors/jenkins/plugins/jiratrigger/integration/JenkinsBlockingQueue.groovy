@@ -17,20 +17,21 @@ import java.util.concurrent.TimeUnit
  */
 class JenkinsBlockingQueue {
 
-    private BlockingQueue scheduledItemBlockingQueue = new ArrayBlockingQueue<>(1)
-    private CountDownLatch countDownLatch = new CountDownLatch(1)
+    private final BlockingQueue scheduledItemBlockingQueue = new ArrayBlockingQueue<>(1)
+    private final CountDownLatch countDownLatch = new CountDownLatch(1)
     private long timeout = 5
 
     /** Can't extend from Queue.Item due to package access methods. */
-    private class NullItem {}
+    private class NullItem {
+    }
 
-    public JenkinsBlockingQueue(Jenkins jenkins) {
-        def jiraTriggerExecutor = jenkins.getInjector().getInstance(JiraTriggerExecutor)
+    JenkinsBlockingQueue(Jenkins jenkins) {
+        def jiraTriggerExecutor = jenkins.injector.getInstance(JiraTriggerExecutor)
         jiraTriggerExecutor.addJiraTriggerListener(new JiraTriggerListener() {
 
             @Override
             void buildScheduled(Issue issue, Collection<? extends AbstractProject> projects) {
-                scheduledItemBlockingQueue.offer(jenkins.queue.getItems().last(), timeout, TimeUnit.SECONDS)
+                scheduledItemBlockingQueue.offer(jenkins.queue.items.last(), timeout, TimeUnit.SECONDS)
                 countDownLatch.countDown()
             }
 
@@ -39,7 +40,7 @@ class JenkinsBlockingQueue {
                 scheduledItemBlockingQueue.offer(new NullItem(), timeout, TimeUnit.SECONDS)
                 countDownLatch.countDown()
             }
-        });
+        })
     }
 
     void setTimeout(long timeout) {
@@ -48,12 +49,12 @@ class JenkinsBlockingQueue {
 
     Queue.Item getScheduledItem() {
         def scheduledItem = scheduledItemBlockingQueue.poll(timeout, TimeUnit.SECONDS)
-        return scheduledItem instanceof NullItem ? null : scheduledItem as Queue.Item
+        scheduledItem instanceof NullItem ? null : scheduledItem as Queue.Item
     }
 
     boolean isItemScheduled() {
         countDownLatch.await(timeout, TimeUnit.SECONDS)
         def scheduledItem = scheduledItemBlockingQueue.peek()
-        return scheduledItem instanceof NullItem ? null : scheduledItem as Queue.Item
+        scheduledItem instanceof NullItem ? false : scheduledItem != null
     }
 }

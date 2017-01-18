@@ -24,7 +24,7 @@ class UiTest extends Specification {
     @Rule
     JenkinsRule jenkins = new JenkinsRule()
 
-    def JiraTriggerConfigurer createConfigurer(Class triggerType, JenkinsRule jenkinsRule, String jobName) {
+    JiraTriggerConfigurer createUiConfigurer(Class triggerType) {
         if (triggerType == JiraCommentTrigger) {
             new JiraCommentTriggerConfigurer(jenkins, 'job')
         } else if (triggerType == JiraChangelogTrigger) {
@@ -36,7 +36,7 @@ class UiTest extends Specification {
 
     def 'Sets Global configuration'() {
         given:
-        def configPage = new JiraTriggerGlobalConfigurationPage(jenkins.createWebClient().goTo("configure"))
+        def configPage = new JiraTriggerGlobalConfigurationPage(jenkins.createWebClient().goTo('configure'))
 
         when:
         configPage.setRootUrl('test root')
@@ -56,7 +56,7 @@ class UiTest extends Specification {
         given:
         def jqlFilter = 'non default jql filter'
         FreeStyleProject project = jenkins.createFreeStyleProject('job')
-        JiraTriggerConfigurer configurer = createConfigurer(triggerType, jenkins, 'job')
+        JiraTriggerConfigurer configurer = createUiConfigurer(triggerType, jenkins, 'job')
 
         when:
         configurer.activate()
@@ -78,7 +78,7 @@ class UiTest extends Specification {
     def 'Adds parameter mappings'() {
         given:
         FreeStyleProject project = jenkins.createFreeStyleProject('job')
-        JiraTriggerConfigurer configurer = createConfigurer(triggerType, jenkins, 'job')
+        JiraTriggerConfigurer configurer = createUiConfigurer(triggerType, jenkins, 'job')
 
         when:
         configurer.activate()

@@ -8,11 +8,11 @@ import groovyx.net.http.RESTClient
  */
 class FakeJiraRunner implements JiraRunner {
 
-    public static final String CUSTOM_FIELD_NAME = "My Customer Custom Field"
+    public static final String CUSTOM_FIELD_NAME = 'My Customer Custom Field'
 
-    private RESTClient restClient
-    private int id = 1;
-    private Map<String, FakeIssue> issueMap = [:]
+    private final RESTClient restClient
+    private int id = 1
+    private final Map<String, FakeIssue> issueMap = [:]
 
     FakeJiraRunner(JenkinsRunner jenkinsRunner) {
         restClient = createRestClient(jenkinsRunner.webhookUrl)
@@ -20,7 +20,7 @@ class FakeJiraRunner implements JiraRunner {
 
     @Override
     String createIssue() {
-        return createIssue('')
+        createIssue('')
     }
 
     @Override
@@ -28,7 +28,7 @@ class FakeJiraRunner implements JiraRunner {
         String issueKey = "TEST-$id"
         id++
         issueMap[issueKey] = new FakeIssue(issueKey: issueKey, description: description)
-        return issueKey
+        issueKey
     }
 
     @Override
@@ -68,15 +68,16 @@ class FakeJiraRunner implements JiraRunner {
 
     @Override
     boolean validateIssueKey(String issueKey, String jqlFilter) {
-        return true
+        true
     }
 
     private RESTClient createRestClient(String jenkinsUrl) {
-        return new RESTClient(jenkinsUrl, ContentType.JSON)
+        new RESTClient(jenkinsUrl, ContentType.JSON)
     }
 
     private Map createPostBody(String method, String issueKey) {
-        Map body = new JsonSlurper().parse(new FileReader(new File(this.class.getResource("${method}.json").toURI()))) as Map
+        def slurper = new JsonSlurper()
+        Map body = slurper.parse(new FileReader(new File(this.class.getResource("${method}.json").toURI()))) as Map
         body.issue.key = issueKey
         body.issue.fields.description = issueMap[issueKey].description
         body
