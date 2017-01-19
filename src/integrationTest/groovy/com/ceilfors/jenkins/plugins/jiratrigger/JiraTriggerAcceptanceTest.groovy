@@ -96,7 +96,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
-        jenkins.buildShouldBeScheduledWithParameter('simpleJob', [
+        jenkins.buildShouldBeScheduled('simpleJob', [
                 'jenkins_description': 'Dummy issue description',
                 'jenkins_key'        : issueKey,
         ])
@@ -113,7 +113,7 @@ class JiraTriggerAcceptanceTest extends Specification {
         jira.updateDescription(issueKey, 'New description')
 
         then:
-        jenkins.buildShouldBeScheduledWithParameter('job', [
+        jenkins.buildShouldBeScheduled('job', [
                 'jenkins_description': 'New description',
                 'jenkins_key'        : issueKey,
         ])

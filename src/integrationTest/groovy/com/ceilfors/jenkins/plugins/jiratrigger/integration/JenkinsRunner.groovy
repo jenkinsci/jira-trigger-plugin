@@ -36,37 +36,36 @@ class JenkinsRunner extends JenkinsRule {
         JulLogLevelRule.configureLog() // Needed when @IgnoreRest is used in acceptance tests
     }
 
-    void buildShouldBeScheduled(String jobName) {
-        Queue.Item scheduledItem = jenkinsQueue.getScheduledItem()
-        assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))
-        assertThat("Last build scheduled doesn't match the job name asserted", (scheduledItem.task as Project).fullName, is(jobName))
+    void buildShouldBeScheduled(String jobName, Map<String, String> parameterMap = [:]) {
+        Queue.Item scheduledItem = jenkinsQueue.scheduledItem
+        assertThat('Build is not scheduled!', scheduledItem, is(not(nullValue())))
+        assertThat('Last build scheduled does not match the job name asserted',
+                (scheduledItem.task as Project).fullName, is(jobName))
+        if (parameterMap) {
+            def parametersAction = scheduledItem.getAction(ParametersAction)
+            assertThat(parametersAction.parameters,
+                    containsInAnyOrder(*parameterMap.collect { key, value -> new StringParameterValue(key, value) }))
+        }
     }
 
     void noBuildShouldBeScheduled() {
         if (jenkinsQueue.isItemScheduled()) {
             Queue.Item scheduledItem = jenkinsQueue.scheduledItem
-            assertThat("Build is scheduled: ${(scheduledItem.task as Project).fullName}", scheduledItem, is(nullValue()))
+            assertThat("Build is scheduled: ${(scheduledItem.task as Project).fullName}",
+                    scheduledItem, is(nullValue()))
         }
     }
 
-    void buildShouldBeScheduledWithParameter(String jobName, Map<String, String> parameterMap) {
-        Queue.Item scheduledItem = jenkinsQueue.scheduledItem
-        assertThat("Build is not scheduled, check logs!", scheduledItem, is(not(nullValue())))
-        assertThat("Last build scheduled doesn't match the job name asserted", (scheduledItem.task as Project).fullName, is(jobName))
-        def parametersAction = scheduledItem.getAction(ParametersAction)
-        assertThat(parametersAction.parameters, containsInAnyOrder(*parameterMap.collect { key, value -> new StringParameterValue(key, value) }))
+    JiraTriggerExecutor getJiraTriggerExecutor() {
+        instance.injector.getInstance(JiraTriggerExecutor)
     }
 
-    public JiraTriggerExecutor getJiraTriggerExecutor() {
-        instance.getInjector().getInstance(JiraTriggerExecutor)
-    }
-
-    public JiraWebhook getJiraWebhook() {
-        instance.getActions().find { it instanceof JiraWebhook } as JiraWebhook
+    JiraWebhook getJiraWebhook() {
+        instance.actions.find { it instanceof JiraWebhook } as JiraWebhook
     }
 
     String getWebhookUrl() {
-        return "${getURL().toString()}${jiraWebhook.urlName}/"
+        "${URL.toString()}${jiraWebhook.urlName}/"
     }
 
     JiraChangelogTriggerProject createJiraChangelogTriggeredProject(String name) {
@@ -75,7 +74,7 @@ class JenkinsRunner extends JenkinsRule {
         project.addTrigger(trigger)
         project.save()
         trigger.start(project, true)
-        return new JiraChangelogTriggerProject(project)
+        new JiraChangelogTriggerProject(project)
     }
 
     JiraCommentTriggerProject createJiraCommentTriggeredProject(String name) {
@@ -84,7 +83,7 @@ class JenkinsRunner extends JenkinsRule {
         project.addTrigger(trigger)
         project.save()
         trigger.start(project, true)
-        return new JiraCommentTriggerProject(project)
+        new JiraCommentTriggerProject(project)
     }
 
     def setJiraCommentReply(boolean active) {
@@ -97,6 +96,7 @@ class JenkinsRunner extends JenkinsRule {
         // KLUDGE: Could not find a better way to override Guice injection
         jenkins.getDescriptorByType(JiraChangelogTrigger.JiraChangelogTriggerDescriptor).jiraClient = jiraClient
         jenkins.getDescriptorByType(JiraCommentTrigger.JiraCommentTriggerDescriptor).jiraClient = jiraClient
-        jenkins.injector.getInstance(JiraTriggerExecutor).jiraTriggerListeners.grep(JiraCommentReplier)[0].jiraClient = jiraClient
+        jenkins.injector.getInstance(JiraTriggerExecutor).jiraTriggerListeners
+                .grep(JiraCommentReplier)[0].jiraClient = jiraClient
     }
 }
