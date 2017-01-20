@@ -18,24 +18,24 @@ class JrjcJiraClientIntegrationTest extends Specification {
     def 'Creates a new jira client cache when global configuration is updated'() {
         given:
         JiraTriggerGlobalConfiguration configuration = GlobalConfiguration.all().get(JiraTriggerGlobalConfiguration)
-        configuration.jiraRootUrl = "http://localhost:2990/jira"
-        configuration.jiraUsername = "admin"
-        configuration.jiraPassword = Secret.fromString("admin")
+        configuration.jiraRootUrl = 'http://localhost:2990/jira'
+        configuration.jiraUsername = 'admin'
+        configuration.jiraPassword = Secret.fromString('admin')
         configuration.save()
 
         JrjcJiraClient jiraClient = jenkins.jenkins.injector.getInstance(JrjcJiraClient)
 
         when:
-        def originalJiraRestClient = jiraClient.getJiraRestClient()
+        def originalJiraRestClient = jiraClient.jiraRestClient
 
         then:
-        jiraClient.getJiraRestClient().is(originalJiraRestClient)
+        jiraClient.jiraRestClient.is(originalJiraRestClient)
 
         when:
-        configuration.jiraUsername = "test"
+        configuration.jiraUsername = 'test'
         configuration.save()
 
         then:
-        !jiraClient.getJiraRestClient().is(originalJiraRestClient)
+        !jiraClient.jiraRestClient.is(originalJiraRestClient)
     }
 }

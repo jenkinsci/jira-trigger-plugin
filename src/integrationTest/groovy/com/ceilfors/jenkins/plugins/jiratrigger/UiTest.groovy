@@ -24,11 +24,11 @@ class UiTest extends Specification {
     @Rule
     JenkinsRule jenkins = new JenkinsRule()
 
-    JiraTriggerConfigurer createUiConfigurer(Class triggerType) {
+    JiraTriggerConfigurer createUiConfigurer(Class triggerType, String jobName) {
         if (triggerType == JiraCommentTrigger) {
-            new JiraCommentTriggerConfigurer(jenkins, 'job')
+            new JiraCommentTriggerConfigurer(jenkins, jobName)
         } else if (triggerType == JiraChangelogTrigger) {
-            new JiraChangelogTriggerConfigurer(jenkins, 'job')
+            new JiraChangelogTriggerConfigurer(jenkins, jobName)
         } else {
             throw new UnsupportedOperationException("Trigger $triggerType is unsupported")
         }
@@ -56,7 +56,7 @@ class UiTest extends Specification {
         given:
         def jqlFilter = 'non default jql filter'
         FreeStyleProject project = jenkins.createFreeStyleProject('job')
-        JiraTriggerConfigurer configurer = createUiConfigurer(triggerType, jenkins, 'job')
+        JiraTriggerConfigurer configurer = createUiConfigurer(triggerType, 'job')
 
         when:
         configurer.activate()
@@ -78,7 +78,7 @@ class UiTest extends Specification {
     def 'Adds parameter mappings'() {
         given:
         FreeStyleProject project = jenkins.createFreeStyleProject('job')
-        JiraTriggerConfigurer configurer = createUiConfigurer(triggerType, jenkins, 'job')
+        JiraTriggerConfigurer configurer = createUiConfigurer(triggerType, 'job')
 
         when:
         configurer.activate()

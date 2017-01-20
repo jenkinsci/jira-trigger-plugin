@@ -11,7 +11,7 @@ abstract class JiraTriggerProject {
 
     protected FreeStyleProject project
 
-    JiraTriggerProject(FreeStyleProject project) {
+    protected JiraTriggerProject(FreeStyleProject project) {
         this.project = project
     }
 
