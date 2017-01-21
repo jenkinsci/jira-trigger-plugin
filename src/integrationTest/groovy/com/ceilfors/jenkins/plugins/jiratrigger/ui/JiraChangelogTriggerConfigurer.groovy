@@ -7,7 +7,7 @@ import org.jvnet.hudson.test.JenkinsRule
  */
 class JiraChangelogTriggerConfigurer extends JiraTriggerConfigurer {
 
-    public JiraChangelogTriggerConfigurer(JenkinsRule jenkinsRule, String jobName) {
+    JiraChangelogTriggerConfigurer(JenkinsRule jenkinsRule, String jobName) {
         super(jenkinsRule, jobName)
     }
 
@@ -15,7 +15,7 @@ class JiraChangelogTriggerConfigurer extends JiraTriggerConfigurer {
         JenkinsRule.WebClient webClient = jenkinsRule.createWebClient()
         webClient.options.setThrowExceptionOnScriptError(false)
         HtmlPage htmlPage = webClient.goTo("job/$jobName/configure")
-        return new JiraChangelogTriggerConfigurationPage(htmlPage)
+        new JiraChangelogTriggerConfigurationPage(htmlPage)
     }
 
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {

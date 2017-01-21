@@ -7,13 +7,13 @@ import org.jvnet.hudson.test.JenkinsRule
  */
 class JiraCommentTriggerConfigurer extends JiraTriggerConfigurer {
 
-    public JiraCommentTriggerConfigurer(JenkinsRule jenkinsRule, String jobName) {
+    JiraCommentTriggerConfigurer(JenkinsRule jenkinsRule, String jobName) {
         super(jenkinsRule, jobName)
     }
 
     JiraCommentTriggerConfigurationPage configure() {
         HtmlPage htmlPage = jenkinsRule.createWebClient().goTo("job/$jobName/configure")
-        return new JiraCommentTriggerConfigurationPage(htmlPage)
+        new JiraCommentTriggerConfigurationPage(htmlPage)
     }
 
     def setCommentPattern(String commentPattern) {

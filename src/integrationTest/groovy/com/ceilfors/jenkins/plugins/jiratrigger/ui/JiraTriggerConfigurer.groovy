@@ -11,7 +11,7 @@ abstract class JiraTriggerConfigurer {
     protected Jenkins jenkins
     protected String jobName
 
-    public JiraTriggerConfigurer(JenkinsRule jenkinsRule, String jobName) {
+    protected JiraTriggerConfigurer(JenkinsRule jenkinsRule, String jobName) {
         this.jenkinsRule = jenkinsRule
         this.jenkins = jenkinsRule.instance
         this.jobName = jobName

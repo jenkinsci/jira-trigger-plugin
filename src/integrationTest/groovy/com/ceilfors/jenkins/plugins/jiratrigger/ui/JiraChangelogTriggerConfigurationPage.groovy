@@ -21,7 +21,7 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
 
     @Override
     protected Class<? extends Trigger> getTriggerType() {
-        return JiraChangelogTrigger
+        JiraChangelogTrigger
     }
 
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {
@@ -57,32 +57,34 @@ class JiraChangelogTriggerConfigurationPage extends JiraTriggerConfigurationPage
     }
 
     private void addChangelogMatcher(String displayName) {
-        HtmlButton addButton = getFirstByXPath(configPage, "add changelog matcher button", '//button[contains(@suffix, "changelogMatchers")]')
+        HtmlButton addButton = getFirstByXPath(configPage,
+                'add changelog matcher button', '//button[contains(@suffix, "changelogMatchers")]')
         addButton.click()
 
         HtmlDivision parameterMappingDiv = addButton.parentNode.parentNode.parentNode as HtmlDivision
-        HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv, "custom field changelog matcher button", "//a[contains(text(), '${displayName}')]")
+        HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv,
+                'custom field changelog matcher button', "//a[contains(text(), '${displayName}')]")
         attribute.click()
         configPage.webClient.waitForBackgroundJavaScriptStartingBefore(1000)
     }
 
     private HtmlTextInput getLastFieldText() {
-        getLastByXPath("field", '//input[contains(@name, "field")]')
+        getLastByXPath('field', '//input[contains(@name, "field")]')
     }
 
     private HtmlTextInput getLastNewValueText() {
-        getLastByXPath("newValue", '//input[contains(@name, "newValue")]')
+        getLastByXPath('newValue', '//input[contains(@name, "newValue")]')
     }
 
     private HtmlTextInput getLastOldValueText() {
-        getLastByXPath("oldValue", '//input[contains(@name, "oldValue")]')
+        getLastByXPath('oldValue', '//input[contains(@name, "oldValue")]')
     }
 
     private HtmlCheckBoxInput getLastComparingNewValueCheckBox() {
-        getLastByXPath("comparingNewValue", '//input[contains(@name, "comparingNewValue")]')
+        getLastByXPath('comparingNewValue', '//input[contains(@name, "comparingNewValue")]')
     }
 
     private HtmlCheckBoxInput getLastComparingOldValueCheckBox() {
-        getLastByXPath("comparingOldValue", '//input[contains(@name, "comparingOldValue")]')
+        getLastByXPath('comparingOldValue', '//input[contains(@name, "comparingOldValue")]')
     }
 }

@@ -15,18 +15,14 @@ class JiraCommentTriggerConfigurationPage extends JiraTriggerConfigurationPage {
 
     @Override
     protected Class<? extends Trigger> getTriggerType() {
-        return JiraCommentTrigger
+        JiraCommentTrigger
     }
 
     void setCommentPattern(String commentPattern) {
         commentPatternText.setValueAttribute(commentPattern)
     }
 
-    String getCommentPattern() {
-        commentPatternText.valueAttribute
-    }
-
     private HtmlTextInput getCommentPatternText() {
-        getField("commentPattern")
+        getField('commentPattern')
     }
 }
