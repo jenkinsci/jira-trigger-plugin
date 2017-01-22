@@ -1,8 +1,16 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.ui
 
-import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
-import com.gargoylesoftware.htmlunit.html.*
+import com.gargoylesoftware.htmlunit.html.DomNode
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor
+import com.gargoylesoftware.htmlunit.html.HtmlButton
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput
+import com.gargoylesoftware.htmlunit.html.HtmlDivision
+import com.gargoylesoftware.htmlunit.html.HtmlForm
+import com.gargoylesoftware.htmlunit.html.HtmlPage
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput
 import hudson.triggers.Trigger
+import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
+
 /**
  * @author ceilfors
  */
@@ -10,23 +18,25 @@ abstract class JiraTriggerConfigurationPage {
 
     protected HtmlPage configPage
 
-    JiraTriggerConfigurationPage(HtmlPage configPage) {
+    protected JiraTriggerConfigurationPage(HtmlPage configPage) {
         this.configPage = configPage
     }
 
     void save() {
-        HtmlForm form = configPage.getFormByName("config")
-        form.submit((HtmlButton) (form.getHtmlElementsByTagName("button")).last())
+        HtmlForm form = configPage.getFormByName('config')
+        form.submit((HtmlButton) (form.getHtmlElementsByTagName('button')).last())
         configPage.cleanUp()
     }
 
-
     void addParameterMapping(String jenkinsParameter, String attributePath) {
-        HtmlButton addButton = getFirstByXPath(configPage, "add parameter mapping button", '//button[contains(@suffix, "parameterMappings")]')
+        HtmlButton addButton = getFirstByXPath(configPage,
+                'add parameter mapping button', '//button[contains(@suffix, "parameterMappings")]')
         addButton.click()
 
         HtmlDivision parameterMappingDiv = addButton.parentNode.parentNode.parentNode as HtmlDivision
-        HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv, "issue attribute path parameter button", "//a[contains(text(), '${IssueAttributePathParameterMapping.IssueAttributePathParameterMappingDescriptor.DISPLAY_NAME}')]")
+        def displayName = IssueAttributePathParameterMapping.IssueAttributePathParameterMappingDescriptor.DISPLAY_NAME
+        HtmlAnchor attribute = getFirstByXPath(parameterMappingDiv,
+                'issue attribute path parameter button', "//a[contains(text(), '${displayName}')]")
         attribute.click()
         configPage.webClient.waitForBackgroundJavaScriptStartingBefore(1000)
 
@@ -39,18 +49,18 @@ abstract class JiraTriggerConfigurationPage {
     }
 
     protected HtmlTextInput getJqlFilterText() {
-        getField("jqlFilter")
+        getField('jqlFilter')
     }
 
     protected HtmlTextInput getLastJenkinsParameterText() {
-        getLastByXPath("jenkinsParameter", '//input[contains(@name, "jenkinsParameter")]')
+        getLastByXPath('jenkinsParameter', '//input[contains(@name, "jenkinsParameter")]')
     }
 
     protected HtmlTextInput getLastAttributePathText() {
-        getLastByXPath("attributePath", '//input[contains(@name, "issueAttributePath")]')
+        getLastByXPath('attributePath', '//input[contains(@name, "issueAttributePath")]')
     }
 
-    public void activate() {
+    void activate() {
         triggerCheckBox.setChecked(true)
     }
 
@@ -58,9 +68,8 @@ abstract class JiraTriggerConfigurationPage {
         T result = closure.call()
         if (result) {
             return result
-        } else {
-            throw new RuntimeException("Couldn't find $hint")
         }
+        throw new RuntimeException("Couldn't find $hint")
     }
 
     protected <T> T getField(String fieldName) {
@@ -77,13 +86,13 @@ abstract class JiraTriggerConfigurationPage {
 
     protected <T> T getFirstByXPath(DomNode node, String hint, xpathExpr) {
         throwIfNotFound(hint) {
-            node.getFirstByXPath("//tr[@nameref='${getNameref()}']${xpathExpr}")
+            node.getFirstByXPath("//tr[@nameref='${nameref}']${xpathExpr}")
         }
     }
 
     protected <T> T getLastByXPath(DomNode node, String hint, xpathExpr) {
         throwIfNotFound(hint) {
-            node.<T>getByXPath("//tr[@nameref='${getNameref()}']${xpathExpr}").last()
+            node.<T>getByXPath("//tr[@nameref='${nameref}']${xpathExpr}").last()
         }
     }
 
@@ -94,7 +103,7 @@ abstract class JiraTriggerConfigurationPage {
     }
 
     protected String getNameref() {
-        triggerCheckBox.getAttribute("id")
+        triggerCheckBox.getAttribute('id')
     }
 
     protected abstract Class<? extends Trigger> getTriggerType()
