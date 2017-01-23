@@ -51,7 +51,6 @@ class JiraCommentTrigger extends JiraTrigger<Comment> {
         @SuppressWarnings('GroovyUnusedDeclaration') // Jenkins jelly
         public static final String DEFAULT_COMMENT_PATTERN = "(?i)${DEFAULT_COMMENT}"
 
-        @SuppressWarnings('GetterMethodCouldBeProperty')
         @Override
         String getDisplayName() {
             'Build when a comment is added to JIRA'
@@ -60,7 +59,6 @@ class JiraCommentTrigger extends JiraTrigger<Comment> {
 
     static class JiraCommentTriggerCause extends Cause {
 
-        @SuppressWarnings('GetterMethodCouldBeProperty')
         @Override
         String getShortDescription() {
             'JIRA comment is added'

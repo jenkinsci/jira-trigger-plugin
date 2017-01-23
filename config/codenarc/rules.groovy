@@ -239,7 +239,9 @@ ruleset {
     ExplicitTreeSetInstantiation
     GStringAsMapKey
     GStringExpressionWithinString
-    GetterMethodCouldBeProperty
+    GetterMethodCouldBeProperty {
+        ignoreMethodsWithOverrideAnnotation = true
+    }
     GroovyLangImmutable
     UseCollectMany
     UseCollectNested

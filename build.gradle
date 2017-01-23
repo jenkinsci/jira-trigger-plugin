@@ -113,7 +113,7 @@ project.version = scmVersion.version
 
 codenarc {
     configFile = file('config/codenarc/rules.groovy')
-    toolVersion = '0.25.1'
+    toolVersion = '0.26.0'
 }
 codenarcTest {
     configFile = file('config/codenarc/rulesTest.groovy')

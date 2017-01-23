@@ -46,7 +46,6 @@ class JiraChangelogTrigger extends JiraTrigger<ChangelogGroup> {
     @Extension
     static class JiraChangelogTriggerDescriptor extends JiraTrigger.JiraTriggerDescriptor {
 
-        @SuppressWarnings('GetterMethodCouldBeProperty') // Clearer with @Override
         @Override
         String getDisplayName() {
             'Build when an issue is updated in JIRA'
@@ -60,7 +59,6 @@ class JiraChangelogTrigger extends JiraTrigger<ChangelogGroup> {
 
     static class JiraChangelogTriggerCause extends Cause {
 
-        @SuppressWarnings('GetterMethodCouldBeProperty') // Clearer with @Override
         @Override
         String getShortDescription() {
             'JIRA issue is updated'
