@@ -20,44 +20,50 @@ class JiraChangelogTrigger extends JiraTrigger<ChangelogGroup> {
     @DataBoundSetter
     List<ChangelogMatcher> changelogMatchers = []
 
+    @SuppressWarnings('UnnecessaryConstructor')
     @DataBoundConstructor
     JiraChangelogTrigger() {
     }
 
+    @Override
     boolean filter(Issue issue, ChangelogGroup changelogGroup) {
         for (changelogMatcher in changelogMatchers) {
             if (!changelogMatcher.matches(changelogGroup)) {
-                log.fine("[${job.fullName}] - Not scheduling build: The changelog [${changelogGroup}] doesn't match with the changelog matcher [${changelogMatcher}]")
+                log.fine("[${job.fullName}] - Not scheduling build: The changelog [${changelogGroup}] doesn't " +
+                        "match with the changelog matcher [${changelogMatcher}]")
                 return false
             }
         }
-        return true
+        true
     }
 
     @Override
     Cause getCause(Issue issue, ChangelogGroup changelogGroup) {
-        return new JiraChangelogTriggerCause()
+        new JiraChangelogTriggerCause()
     }
 
-    @SuppressWarnings("UnnecessaryQualifiedReference")
+    @SuppressWarnings('UnnecessaryQualifiedReference')
     @Extension
     static class JiraChangelogTriggerDescriptor extends JiraTrigger.JiraTriggerDescriptor {
 
-        public String getDisplayName() {
-            return "Build when an issue is updated in JIRA"
+        @SuppressWarnings('GetterMethodCouldBeProperty') // Clearer with @Override
+        @Override
+        String getDisplayName() {
+            'Build when an issue is updated in JIRA'
         }
 
-        @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly
-        public List<ChangelogMatcher.ChangelogMatcherDescriptor> getChangelogMatcherDescriptors() {
-            return jenkins.getDescriptorList(ChangelogMatcher)
+        @SuppressWarnings('GroovyUnusedDeclaration') // Jenkins jelly
+        List<ChangelogMatcher.ChangelogMatcherDescriptor> getChangelogMatcherDescriptors() {
+            jenkins.getDescriptorList(ChangelogMatcher)
         }
     }
 
     static class JiraChangelogTriggerCause extends Cause {
 
+        @SuppressWarnings('GetterMethodCouldBeProperty') // Clearer with @Override
         @Override
         String getShortDescription() {
-            return "JIRA issue is updated"
+            'JIRA issue is updated'
         }
     }
 }

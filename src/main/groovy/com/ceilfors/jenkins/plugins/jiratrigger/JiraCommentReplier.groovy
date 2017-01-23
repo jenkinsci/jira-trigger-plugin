@@ -16,13 +16,15 @@ class JiraCommentReplier implements JiraTriggerListener {
     @Inject
     JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration
 
+    @SuppressWarnings('BuilderMethodWithSideEffects')
     @Override
     void buildScheduled(Issue issue, Collection<? extends AbstractProject> projects) {
         if (jiraTriggerGlobalConfiguration.jiraCommentReply) {
-            jiraClient.addComment(issue.key, "Build is scheduled for: " + projects.collect { it.absoluteUrl })
+            jiraClient.addComment(issue.key, 'Build is scheduled for: ' + projects*.absoluteUrl)
         }
     }
 
+    @SuppressWarnings('BuilderMethodWithSideEffects')
     @Override
     void buildNotScheduled(Issue issue) {
     }

@@ -3,7 +3,12 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import groovy.util.logging.Log
 import org.apache.commons.lang.exception.ExceptionUtils
 
-import javax.servlet.*
+import javax.servlet.Filter
+import javax.servlet.FilterChain
+import javax.servlet.FilterConfig
+import javax.servlet.ServletException
+import javax.servlet.ServletRequest
+import javax.servlet.ServletResponse
 import java.util.logging.Level
 
 /**
@@ -16,12 +21,14 @@ class ExceptionLoggingFilter implements Filter {
     void init(FilterConfig filterConfig) throws ServletException {
     }
 
+    @SuppressWarnings('CatchThrowable')
     @Override
-    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         try {
             chain.doFilter(request, response)
         } catch (Throwable e) {
-            def rootCause = ExceptionUtils.getRootCause(e)
+            Throwable rootCause = ExceptionUtils.getRootCause(e)
             if (rootCause instanceof JiraTriggerException) {
                 logException(rootCause)
             }
@@ -33,7 +40,9 @@ class ExceptionLoggingFilter implements Filter {
         if (e.errorCode == JiraTriggerErrorCode.JIRA_NOT_CONFIGURED) {
             log.severe("JIRA is not configured in Jenkins Global Settings. Please set the ${e.attributes['config']}.")
         } else {
-            log.log(Level.SEVERE, "Hit JiraTriggerException! (jira-trigger-plugin has failed to translate this exception to a human friendly error message, please report a bug).", e)
+            log.log(Level.SEVERE, 'Hit JiraTriggerException! ' +
+                    '(jira-trigger-plugin has failed to translate this exception to a human friendly error message, ' +
+                    'please report a bug).', e)
         }
     }
 
