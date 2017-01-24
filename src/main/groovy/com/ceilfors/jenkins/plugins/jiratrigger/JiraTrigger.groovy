@@ -27,11 +27,12 @@ import java.util.logging.Level
 /**
  * @author ceilfors
  */
+@SuppressWarnings('Instanceof')
 @Log
 abstract class JiraTrigger<T> extends Trigger<Job> {
 
     @DataBoundSetter
-    String jqlFilter = ""
+    String jqlFilter = ''
 
     @DataBoundSetter
     List<ParameterMapping> parameterMappings = []
@@ -44,7 +45,8 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         }
         if (jqlFilter) {
             if (!jiraTriggerDescriptor.jiraClient.validateIssueKey(issue.key, jqlFilter)) {
-                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} doesn't match with the jqlFilter [$jqlFilter]")
+                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} doesn't " +
+                        "match with the jqlFilter [$jqlFilter]")
                 return false
             }
         }
@@ -57,7 +59,7 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         actions << new CauseAction(getCause(issue, t))
         log.fine("[${job.fullName}] - Scheduling build for ${issue.key} - ${getId(t)}")
 
-        return ParameterizedJobMixIn.scheduleBuild2(job, -1, *actions) != null
+        ParameterizedJobMixIn.scheduleBuild2(job, -1, *actions) != null
     }
 
     @Override
@@ -78,13 +80,15 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
 
     abstract boolean filter(Issue issue, T t)
 
+    @SuppressWarnings('ReturnNullFromCatchBlock')
     protected List<ParameterValue> collectParameterValues(Issue issue) {
-        return parameterMappings.collect {
+        parameterMappings.collect {
             if (it instanceof IssueAttributePathParameterMapping) {
                 try {
                     return jiraTriggerDescriptor.parameterResolver.resolve(issue, it)
                 } catch (JiraTriggerException e) {
-                    log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. Example: description, key, status.name. Read help for more information.", e)
+                    log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. " +
+                            'Example: description, key, status.name. Read help for more information.', e)
                     return null
                 }
             } else {
@@ -94,15 +98,11 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
     }
 
     private String getId(T t) {
-        if (t instanceof AddressableEntity) {
-            return (t as AddressableEntity).self
-        } else {
-            return t.toString()
-        }
+        t instanceof AddressableEntity ? (t as AddressableEntity).self : t.toString()
     }
 
     JiraTriggerDescriptor getJiraTriggerDescriptor() {
-        return super.getDescriptor() as JiraTriggerDescriptor
+        super.descriptor as JiraTriggerDescriptor
     }
 
     abstract Cause getCause(Issue issue, T t)
@@ -121,13 +121,14 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
 
         private transient final List<JiraTrigger> triggers = new CopyOnWriteArrayList<>()
 
-        public boolean isApplicable(Item item) {
-            return item instanceof Job && item instanceof ParameterizedJobMixIn.ParameterizedJob
+        @Override
+        boolean isApplicable(Item item) {
+            item instanceof Job && item instanceof ParameterizedJobMixIn.ParameterizedJob
         }
 
-        @SuppressWarnings("GroovyUnusedDeclaration") // Jenkins jelly
-        public List<ParameterMapping.ParameterMappingDescriptor> getParameterMappingDescriptors() {
-            return jenkins.getDescriptorList(ParameterMapping)
+        @SuppressWarnings('GroovyUnusedDeclaration') // Jenkins jelly
+        List<ParameterMapping.ParameterMappingDescriptor> getParameterMappingDescriptors() {
+            jenkins.getDescriptorList(ParameterMapping)
         }
 
         protected void addTrigger(JiraTrigger jiraTrigger) {
@@ -136,18 +137,19 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         }
 
         protected void removeTrigger(JiraTrigger jiraTrigger) {
-            def result = triggers.remove(jiraTrigger)
+            boolean result = triggers.remove(jiraTrigger)
             if (result) {
                 log.finest("Removed [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] from triggers list")
             } else {
                 log.warning(
-                        "Bug! Failed to remove [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] from triggers list. " +
-                        "The job might accidentally be triggered by JIRA. Restart Jenkins to recover.")
+                        "Bug! Failed to remove [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] " +
+                                'from triggers list. ' +
+                                'The job might accidentally be triggered by JIRA. Restart Jenkins to recover.')
             }
         }
 
         List<JiraTrigger> allTriggers() {
-            return Collections.unmodifiableList(triggers)
+            Collections.unmodifiableList(triggers)
         }
     }
 }

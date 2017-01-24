@@ -12,23 +12,24 @@ class JiraIssueEnvironmentContributingAction implements EnvironmentContributingA
 
     Issue issue
 
+    @SuppressWarnings('BuilderMethodWithSideEffects')
     @Override
     void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
-        env.put("JIRA_ISSUE_KEY", issue.key)
+        env.put('JIRA_ISSUE_KEY', issue.key)
     }
 
     @Override
     String getIconFileName() {
-        return null
+        null
     }
 
     @Override
     String getDisplayName() {
-        return null
+        null
     }
 
     @Override
     String getUrlName() {
-        return null
+        null
     }
 }
