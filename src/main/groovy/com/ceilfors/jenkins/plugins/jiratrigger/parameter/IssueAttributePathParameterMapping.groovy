@@ -17,11 +17,11 @@ class IssueAttributePathParameterMapping extends ParameterMapping {
         this.issueAttributePath = issueAttributePath.trim()
     }
 
-    @SuppressWarnings("UnnecessaryQualifiedReference") // Can't remove qualifier, IntelliJ bug?
+    @SuppressWarnings('UnnecessaryQualifiedReference') // Can't remove qualifier, IntelliJ bug?
     @Extension
     static class IssueAttributePathParameterMappingDescriptor extends ParameterMapping.ParameterMappingDescriptor {
 
-        public static final String DISPLAY_NAME = "Issue Attribute Path"
+        public static final String DISPLAY_NAME = 'Issue Attribute Path'
 
         @Override
         String getDisplayName() {

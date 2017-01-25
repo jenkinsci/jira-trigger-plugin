@@ -5,9 +5,9 @@ package com.ceilfors.jenkins.plugins.jiratrigger
  */
 enum JiraTriggerErrorCode implements ErrorCode {
 
-    JIRA_NOT_CONFIGURED("1")
+    JIRA_NOT_CONFIGURED('1')
 
-    private String code
+    private final String code
 
     JiraTriggerErrorCode(String code) {
         this.code = code
@@ -15,6 +15,6 @@ enum JiraTriggerErrorCode implements ErrorCode {
 
     @Override
     String getCode() {
-        return code
+        code
     }
 }

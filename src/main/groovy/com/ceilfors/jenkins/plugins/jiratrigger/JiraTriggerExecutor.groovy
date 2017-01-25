@@ -14,6 +14,8 @@ import jenkins.model.Jenkins
 import javax.inject.Inject
 import java.util.concurrent.CopyOnWriteArrayList
 
+import static com.ceilfors.jenkins.plugins.jiratrigger.JiraTrigger.*
+
 /**
  * @author ceilfors
  */
@@ -21,11 +23,11 @@ import java.util.concurrent.CopyOnWriteArrayList
 @Log
 class JiraTriggerExecutor implements JiraWebhookListener {
 
-    private Jenkins jenkins
-    private List<JiraTriggerListener> jiraTriggerListeners = new CopyOnWriteArrayList<>()
+    private final Jenkins jenkins
+    private final List<JiraTriggerListener> jiraTriggerListeners = new CopyOnWriteArrayList<>()
 
     @Inject
-    public JiraTriggerExecutor(Jenkins jenkins) {
+    JiraTriggerExecutor(Jenkins jenkins) {
         this.jenkins = jenkins
     }
 
@@ -59,11 +61,11 @@ class JiraTriggerExecutor implements JiraWebhookListener {
     }
 
     List<AbstractProject> scheduleBuilds(Issue issue, Comment comment) {
-        return scheduleBuildsInternal(JiraCommentTrigger, issue, comment)
+        scheduleBuildsInternal(JiraCommentTrigger, issue, comment)
     }
 
     List<AbstractProject> scheduleBuilds(Issue issue, ChangelogGroup changelogGroup) {
-        return scheduleBuildsInternal(JiraChangelogTrigger, issue, changelogGroup)
+        scheduleBuildsInternal(JiraChangelogTrigger, issue, changelogGroup)
     }
 
     /**
@@ -72,22 +74,22 @@ class JiraTriggerExecutor implements JiraWebhookListener {
     private List<AbstractProject> scheduleBuildsInternal(
             Class<? extends JiraTrigger> triggerClass, Issue issue, Object jiraObject) {
         List<AbstractProject> scheduledProjects = []
-        def triggers = getTriggers(triggerClass)
+        List<? extends JiraTrigger> triggers = getTriggers(triggerClass)
         for (trigger in triggers) {
             boolean scheduled = trigger.run(issue, jiraObject)
             if (scheduled) {
                 scheduledProjects << trigger.job
             }
         }
-        return scheduledProjects
+        scheduledProjects
     }
 
     private List<? extends JiraTrigger> getTriggers(Class<? extends JiraTrigger> triggerClass) {
-        def descriptor = jenkins.getDescriptor(triggerClass) as JiraTrigger.JiraTriggerDescriptor
+        JiraTriggerDescriptor descriptor = jenkins.getDescriptor(triggerClass) as JiraTriggerDescriptor
         List<? extends JiraTrigger> triggers = descriptor.allTriggers()
         if (!triggers) {
             log.fine("Couldn't find any projects that have ${triggerClass.simpleName} configured")
         }
-        return triggers
+        triggers
     }
 }

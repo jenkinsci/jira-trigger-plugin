@@ -21,19 +21,21 @@ class AsynchronousWebhookRestClient extends AbstractAsynchronousRestClient imple
     }
 
     @Override
-    public Promise<Void> registerWebhook(WebhookInput webhook) {
-        final UriBuilder uriBuilder = UriBuilder.fromUri(baseUri).path("webhook")
-        return post(uriBuilder.build(), webhook, new WebhookInputJsonGenerator())
+    Promise<Void> registerWebhook(WebhookInput webhook) {
+        post(uriBuilder.build(), webhook, new WebhookInputJsonGenerator())
     }
 
     @Override
-    public Promise<Void> unregisterWebhook(URI webhookUri) {
-        return delete(webhookUri)
+    Promise<Void> unregisterWebhook(URI webhookUri) {
+        delete(webhookUri)
     }
 
     @Override
-    public Promise<Iterable<Webhook>> getWebhooks() {
-        final UriBuilder uriBuilder = UriBuilder.fromUri(baseUri).path("webhook")
-        return getAndParse(uriBuilder.build(), webhooksJsonParser);
+    Promise<Iterable<Webhook>> getWebhooks() {
+        getAndParse(uriBuilder.build(), webhooksJsonParser)
+    }
+
+    private UriBuilder getUriBuilder() {
+        UriBuilder.fromUri(baseUri).path('webhook')
     }
 }

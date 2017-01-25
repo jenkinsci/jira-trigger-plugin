@@ -30,8 +30,8 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
     @Override
     boolean configure(StaplerRequest req, JSONObject formData) {
         req.bindJSON(this, formData)
-        save();
-        return true;
+        save()
+        true
     }
 
     /**
@@ -39,14 +39,16 @@ class JiraTriggerGlobalConfiguration extends GlobalConfiguration {
      * values are only mandatory when Jenkins is required to hit JIRA.
      */
     void validateConfiguration() {
+        JiraTriggerException exception = new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED)
+        String key = 'config'
         if (!jiraRootUrl) {
-            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraRootUrl")
+            throw exception.add(key, 'jiraRootUrl')
         }
         if (!jiraPassword) {
-            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraPassword")
+            throw exception.add(key, 'jiraPassword')
         }
         if (!jiraUsername) {
-            throw new JiraTriggerException(JiraTriggerErrorCode.JIRA_NOT_CONFIGURED).add("config", "jiraUsername")
+            throw exception.add(key, 'jiraUsername')
         }
     }
 }

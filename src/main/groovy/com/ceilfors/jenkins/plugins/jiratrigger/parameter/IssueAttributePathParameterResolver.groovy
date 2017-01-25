@@ -9,7 +9,8 @@ import hudson.model.StringParameterValue
  * @author ceilfors
  */
 @Singleton
-class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttributePathParameterMapping, StringParameterValue> {
+class IssueAttributePathParameterResolver
+        implements ParameterResolver<IssueAttributePathParameterMapping, StringParameterValue> {
 
     StringParameterValue resolve(Issue issue, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
         String attributeValue = resolveProperty(issue.properties, issueAttributePathParameterMapping.issueAttributePath)
@@ -25,7 +26,7 @@ class IssueAttributePathParameterResolver implements ParameterResolver<IssueAttr
      */
     static String resolveProperty(Map map, String property) {
         try {
-            if (!property.contains(".") && !map.containsKey(property)) {
+            if (!property.contains('.') && !map.containsKey(property)) {
                 // If property is not nested, Eval.x returns null instead of throwing NPE
                 throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE)
             }

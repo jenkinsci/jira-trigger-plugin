@@ -19,11 +19,12 @@ class JiraTriggerException extends RuntimeException {
 
     JiraTriggerException add(String key, String value) {
         attributes.put(key, value)
-        return this
+        this
     }
 
     @Override
     String getMessage() {
-        return "Class: ${errorCode.class.simpleName}, Name: ${errorCode.name()}, Code: ${errorCode.getCode()}, Attributes: ${attributes}"
+        "Class: ${errorCode.class.simpleName}, Name: ${errorCode.name()}, " +
+                "Code: ${errorCode.code}, Attributes: ${attributes}"
     }
 }

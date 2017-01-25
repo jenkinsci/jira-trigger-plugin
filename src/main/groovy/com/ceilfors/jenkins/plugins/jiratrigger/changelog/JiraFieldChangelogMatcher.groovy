@@ -19,20 +19,20 @@ class JiraFieldChangelogMatcher extends ChangelogMatcher {
         super(FieldType.JIRA, field.trim(), newValue.trim(), oldValue.trim(), comparingNewValue, comparingOldValue)
     }
 
-    @SuppressWarnings("UnnecessaryQualifiedReference") // Can't remove qualifier, IntelliJ bug?
+    @SuppressWarnings('UnnecessaryQualifiedReference') // Can't remove qualifier, IntelliJ bug?
     @Extension
     static class JiraFieldChangelogMatcherDescriptor extends ChangelogMatcher.ChangelogMatcherDescriptor {
 
-        public static final String DISPLAY_NAME = "JIRA Field Matcher"
+        public static final String DISPLAY_NAME = 'JIRA Field Matcher'
 
         @Override
         String getDisplayName() {
             DISPLAY_NAME
         }
 
-        @SuppressWarnings("GroovyUnusedDeclaration") // jelly
-        public ComboBoxModel doFillFieldItems() {
-            return new ComboBoxModel(IssueFieldId.ids().toList())
+        @SuppressWarnings('GroovyUnusedDeclaration') // jelly
+        ComboBoxModel doFillFieldItems() {
+            new ComboBoxModel(IssueFieldId.ids().toList())
         }
     }
 }

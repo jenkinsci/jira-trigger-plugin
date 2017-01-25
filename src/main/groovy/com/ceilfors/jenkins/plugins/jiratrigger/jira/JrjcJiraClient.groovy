@@ -1,6 +1,8 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.jira
 
 import com.atlassian.jira.rest.client.api.domain.Comment
+import com.atlassian.jira.rest.client.api.domain.Issue
+import com.atlassian.jira.rest.client.api.domain.SearchResult
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory
 import com.atlassian.jira.rest.client.internal.async.DisposableHttpClient
@@ -30,37 +32,40 @@ class JrjcJiraClient implements JiraClient {
     private ExtendedJiraRestClient extendedJiraRestClient
 
     @Inject
-    public JrjcJiraClient(JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
+    JrjcJiraClient(JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration) {
         this.jiraTriggerGlobalConfiguration = jiraTriggerGlobalConfiguration
     }
 
     protected URI getServerUri() {
         jiraTriggerGlobalConfiguration.validateConfiguration()
-        return jiraTriggerGlobalConfiguration.jiraRootUrl.toURI()
+        jiraTriggerGlobalConfiguration.jiraRootUrl.toURI()
     }
 
     protected DisposableHttpClient getHttpClient() {
-        return new AsynchronousHttpClientFactory()
+        String username = jiraTriggerGlobalConfiguration.jiraUsername
+        String password = jiraTriggerGlobalConfiguration.jiraPassword.plainText
+        new AsynchronousHttpClientFactory()
                 .createClient(serverUri,
-                new BasicHttpAuthenticationHandler(jiraTriggerGlobalConfiguration.jiraUsername, jiraTriggerGlobalConfiguration.jiraPassword.plainText));
+                new BasicHttpAuthenticationHandler(username, password))
     }
 
     ExtendedJiraRestClient getJiraRestClient() {
         if (extendedJiraRestClient == null) {
             this.extendedJiraRestClient = new ExtendedJiraRestClient(serverUri, httpClient)
         }
-        return extendedJiraRestClient
+        extendedJiraRestClient
     }
 
     @Override
     boolean validateIssueKey(String issueKey, String jqlFilter) {
-        def searchResult = jiraRestClient.searchClient.searchJql("key=$issueKey and ($jqlFilter)").get(timeout, timeoutUnit)
+        String jql = "key=$issueKey and ($jqlFilter)"
+        SearchResult searchResult = jiraRestClient.searchClient.searchJql(jql).get(timeout, timeoutUnit)
         searchResult.total != 0
     }
 
     @Override
     void addComment(String issueKey, String comment) {
-        def issue = jiraRestClient.issueClient.getIssue(issueKey).get(timeout, timeoutUnit)
+        Issue issue = jiraRestClient.issueClient.getIssue(issueKey).get(timeout, timeoutUnit)
         jiraRestClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).get(timeout, timeoutUnit)
     }
 

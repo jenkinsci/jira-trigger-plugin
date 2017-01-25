@@ -10,6 +10,6 @@ class WebhooksJsonParser implements JsonArrayParser<Collection<Webhook>> {
 
     @Override
     Collection<Webhook> parse(JSONArray json) throws JSONException {
-        return JsonParseUtil.parseJsonArray(json, new WebhookJsonParser())
+        JsonParseUtil.parseJsonArray(json, new WebhookJsonParser())
     }
 }

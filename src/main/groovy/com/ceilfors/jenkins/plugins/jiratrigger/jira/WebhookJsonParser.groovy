@@ -12,10 +12,10 @@ class WebhookJsonParser implements JsonObjectParser<Webhook> {
 
     @Override
     Webhook parse(JSONObject json) throws JSONException {
-        return new Webhook(
+        new Webhook(
                 selfUri: JsonParseUtil.getSelfUri(json),
-                name: json.getString("name"),
-                url: json.getString("url")
+                name: json.getString('name'),
+                url: json.getString('url'),
         )
     }
 }

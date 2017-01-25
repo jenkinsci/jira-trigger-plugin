@@ -11,10 +11,10 @@ class WebhookInputJsonGenerator implements JsonGenerator<WebhookInput> {
 
     @Override
     JSONObject generate(WebhookInput webhook) throws JSONException {
-        return new JSONObject()
-                .put("name", webhook.name)
-                .put("url", webhook.url)
-                .put("jqlFilter", webhook.jqlFilter)
-                .put("events", webhook.events)
+        new JSONObject()
+                .put('name', webhook.name)
+                .put('url', webhook.url)
+                .put('jqlFilter', webhook.jqlFilter)
+                .put('events', webhook.events)
     }
 }

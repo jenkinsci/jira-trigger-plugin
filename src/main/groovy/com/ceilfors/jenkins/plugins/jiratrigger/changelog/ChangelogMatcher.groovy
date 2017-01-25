@@ -22,7 +22,7 @@ abstract class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher
     final boolean comparingNewValue
     final boolean comparingOldValue
 
-    ChangelogMatcher(FieldType fieldType, String field, String newValue, String oldValue,
+    protected ChangelogMatcher(FieldType fieldType, String field, String newValue, String oldValue,
                      boolean comparingNewValue, boolean comparingOldValue) {
         this.fieldType = fieldType
         this.field = field

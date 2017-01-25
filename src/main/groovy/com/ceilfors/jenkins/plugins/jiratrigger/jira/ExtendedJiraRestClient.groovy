@@ -11,14 +11,15 @@ import javax.ws.rs.core.UriBuilder
  */
 class ExtendedJiraRestClient extends AsynchronousJiraRestClient {
 
-    private WebhookRestClient webhookRestClient
+    private final WebhookRestClient webhookRestClient
 
     ExtendedJiraRestClient(URI serverUri, DisposableHttpClient httpClient) {
         super(serverUri, httpClient)
-        this.webhookRestClient = new AsynchronousWebhookRestClient(UriBuilder.fromUri(serverUri).path("/rest/webhooks/latest").build(), httpClient)
+        this.webhookRestClient = new AsynchronousWebhookRestClient(UriBuilder.fromUri(serverUri)
+                .path('/rest/webhooks/latest').build(), httpClient)
     }
 
     WebhookRestClient getWebhookRestClient() {
-        return webhookRestClient
+        webhookRestClient
     }
 }

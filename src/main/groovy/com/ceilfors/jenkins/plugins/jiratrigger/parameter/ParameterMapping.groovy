@@ -11,7 +11,7 @@ abstract class ParameterMapping extends AbstractDescribableImpl<ParameterMapping
 
     final String jenkinsParameter
 
-    ParameterMapping(String jenkinsParameter) {
+    protected ParameterMapping(String jenkinsParameter) {
         this.jenkinsParameter = jenkinsParameter.trim()
     }
 
@@ -19,7 +19,7 @@ abstract class ParameterMapping extends AbstractDescribableImpl<ParameterMapping
 
         @Override
         String getDisplayName() {
-            "Parameter mapping"
+            'Parameter mapping'
         }
     }
 }

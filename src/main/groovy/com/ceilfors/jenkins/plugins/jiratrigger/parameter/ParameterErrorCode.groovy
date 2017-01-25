@@ -7,7 +7,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.ErrorCode
  */
 enum ParameterErrorCode implements ErrorCode {
 
-    FAILED_TO_RESOLVE("1")
+    FAILED_TO_RESOLVE('1')
 
     final String code
 
