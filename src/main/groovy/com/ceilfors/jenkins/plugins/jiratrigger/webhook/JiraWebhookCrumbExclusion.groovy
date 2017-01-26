@@ -15,16 +15,17 @@ import javax.servlet.http.HttpServletResponse
 class JiraWebhookCrumbExclusion extends CrumbExclusion {
 
     @Override
-    boolean process(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    boolean process(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         String pathInfo = request.getPathInfo()
-        if (pathInfo != null && (pathInfo.equals(exclusionPath) || pathInfo.equals(exclusionPath + "/"))) {
+        if (pathInfo != null && (pathInfo == exclusionPath || pathInfo == exclusionPath + '/')) {
             chain.doFilter(request, response)
             return true
         }
-        return false
+        false
     }
 
     String getExclusionPath() {
-        return "/" + JiraWebhook.URL_NAME
+        "/$JiraWebhook.URL_NAME"
     }
 }

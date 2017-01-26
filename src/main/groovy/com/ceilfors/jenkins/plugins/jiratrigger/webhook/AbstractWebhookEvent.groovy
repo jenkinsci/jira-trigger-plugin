@@ -9,7 +9,7 @@ abstract class AbstractWebhookEvent {
     String userId
     String userKey
 
-    public AbstractWebhookEvent(long timestamp, String webhookEventType) {
+    protected AbstractWebhookEvent(long timestamp, String webhookEventType) {
         this.timestamp = timestamp
         this.webhookEventType = webhookEventType
     }

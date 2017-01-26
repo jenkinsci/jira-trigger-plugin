@@ -20,12 +20,9 @@ import java.util.logging.Level
 @Extension
 class JiraWebhook implements UnprotectedRootAction {
 
-    public static final URL_NAME = "jira-trigger-webhook-receiver"
-    public static final WEBHOOK_EVENT = "jira:issue_updated"
+    public static final URL_NAME = 'jira-trigger-webhook-receiver'
+    public static final WEBHOOK_EVENT = 'jira:issue_updated'
     private JiraWebhookListener jiraWebhookListener
-
-    JiraWebhook() {
-    }
 
     @Inject
     void setJiraWebhookListener(JiraWebhookListener jiraWebhookListener) {
@@ -34,20 +31,20 @@ class JiraWebhook implements UnprotectedRootAction {
 
     @Override
     String getIconFileName() {
-        return null
+        null
     }
 
     @Override
     String getDisplayName() {
-        return "JIRA Trigger"
+        'JIRA Trigger'
     }
 
     @Override
     String getUrlName() {
-        return URL_NAME
+        URL_NAME
     }
 
-    @SuppressWarnings("GroovyUnusedDeclaration")
+    @SuppressWarnings('GroovyUnusedDeclaration')
     @RequirePOST
     public void doIndex(StaplerRequest request) {
         processEvent(request, getRequestBody(request))
@@ -62,8 +59,8 @@ class JiraWebhook implements UnprotectedRootAction {
         if (isChangelogEvent(webhookEventMap)) {
             log.fine("Received Webhook callback from changelog. Event type: ${eventType}")
             WebhookChangelogEvent changelogEvent = new WebhookChangelogEventJsonParser().parse(new JSONObject(webhookEvent))
-            changelogEvent.userId = request.getParameter("user_id")
-            changelogEvent.userKey = request.getParameter("user_key")
+            changelogEvent.userId = request.getParameter('user_id')
+            changelogEvent.userKey = request.getParameter('user_key')
             jiraWebhookListener.changelogCreated(changelogEvent)
             validEvent = true
         }
@@ -76,29 +73,29 @@ class JiraWebhook implements UnprotectedRootAction {
             validEvent = true
         }
         if (!validEvent) {
-            log.warning("Received Webhook callback with an invalid event type or a body without comment/changelog. " +
+            log.warning('Received Webhook callback with an invalid event type or a body without comment/changelog. ' +
                     "Event type: ${eventType}. Event body contains: ${webhookEventMap.keySet()}.")
         }
     }
 
     private void logJson(String webhookEvent) {
         if (log.isLoggable(Level.FINEST)) {
-            log.finest("Webhook event body:")
+            log.finest('Webhook event body:')
             log.finest(JsonOutput.prettyPrint(webhookEvent))
         }
     }
 
     private boolean isChangelogEvent(Map webhookEventMap) {
-        String eventType = webhookEventMap["webhookEvent"]
-        return eventType == WEBHOOK_EVENT && webhookEventMap["changelog"]
+        String eventType = webhookEventMap['webhookEvent']
+        eventType == WEBHOOK_EVENT && webhookEventMap['changelog']
     }
 
     private boolean isCommentEvent(Map webhookEventMap) {
-        String eventType = webhookEventMap["webhookEvent"]
-        return eventType == WEBHOOK_EVENT && webhookEventMap["comment"]
+        String eventType = webhookEventMap['webhookEvent']
+        eventType == WEBHOOK_EVENT && webhookEventMap['comment']
     }
 
     private String getRequestBody(StaplerRequest req) {
-        return req.inputStream.text
+        req.inputStream.text
     }
 }

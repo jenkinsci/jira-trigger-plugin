@@ -5,6 +5,7 @@ import com.atlassian.jira.rest.client.internal.json.IssueJsonParser
 import com.atlassian.jira.rest.client.internal.json.JsonObjectParser
 import org.codehaus.jettison.json.JSONException
 import org.codehaus.jettison.json.JSONObject
+
 /**
  * @author ceilfors
  */
@@ -14,13 +15,13 @@ class WebhookCommentEventJsonParser implements JsonObjectParser<WebhookCommentEv
 
     @Override
     WebhookCommentEvent parse(JSONObject json) throws JSONException {
-        def issue = json.getJSONObject("issue")
-        issue.put("expand", "") // Webhook event doesn't have expand
+        JSONObject issue = json.getJSONObject('issue')
+        issue.put('expand', '') // Webhook event doesn't have expand
         new WebhookCommentEvent(
-                json.getLong("timestamp"),
-                json.getString("webhookEvent"),
+                json.getLong('timestamp'),
+                json.getString('webhookEvent'),
                 issueJsonParser.parse(issue),
-                new CommentJsonParser().parse(json.getJSONObject("comment"))
+                new CommentJsonParser().parse(json.getJSONObject('comment'))
         )
     }
 }
