@@ -46,35 +46,36 @@ class JiraWebhook implements UnprotectedRootAction {
 
     @SuppressWarnings('GroovyUnusedDeclaration')
     @RequirePOST
-    public void doIndex(StaplerRequest request) {
+    void doIndex(StaplerRequest request) {
         processEvent(request, getRequestBody(request))
     }
 
-    public void processEvent(StaplerRequest request, String webhookEvent) {
+    void processEvent(StaplerRequest request, String webhookEvent) {
         logJson(webhookEvent)
         Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
-        String eventType = webhookEventMap['webhookEvent']
+        RawWebhookEvent rawWebhookEvent = new RawWebhookEvent(request, webhookEventMap)
+        JSONObject webhookJsonObject = new JSONObject(webhookEvent)
         boolean validEvent = false
 
-        if (isChangelogEvent(webhookEventMap)) {
-            log.fine("Received Webhook callback from changelog. Event type: ${eventType}")
-            WebhookChangelogEvent changelogEvent = new WebhookChangelogEventJsonParser().parse(new JSONObject(webhookEvent))
-            changelogEvent.userId = request.getParameter('user_id')
-            changelogEvent.userKey = request.getParameter('user_key')
+        if (rawWebhookEvent.isChangelogEvent()) {
+            log.fine("Received Webhook callback from changelog. Event type: ${rawWebhookEvent.eventType}")
+            WebhookChangelogEvent changelogEvent = new WebhookChangelogEventJsonParser().parse(webhookJsonObject)
+            changelogEvent.userId = rawWebhookEvent.userId
+            changelogEvent.userKey = rawWebhookEvent.userKey
             jiraWebhookListener.changelogCreated(changelogEvent)
             validEvent = true
         }
-        if (isCommentEvent(webhookEventMap)) {
-            log.fine("Received Webhook callback from comment. Event type: ${eventType}")
-            WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(new JSONObject(webhookEvent))
-            commentEvent.userId = request.getParameter("user_id")
-            commentEvent.userKey = request.getParameter("user_key")
+        if (rawWebhookEvent.isCommentEvent()) {
+            log.fine("Received Webhook callback from comment. Event type: ${rawWebhookEvent.eventType}")
+            WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(webhookJsonObject)
+            commentEvent.userId = rawWebhookEvent.userId
+            commentEvent.userKey = rawWebhookEvent.userKey
             jiraWebhookListener.commentCreated(commentEvent)
             validEvent = true
         }
         if (!validEvent) {
             log.warning('Received Webhook callback with an invalid event type or a body without comment/changelog. ' +
-                    "Event type: ${eventType}. Event body contains: ${webhookEventMap.keySet()}.")
+                    "Event type: ${rawWebhookEvent.eventType}. Event body contains: ${webhookEventMap.keySet()}.")
         }
     }
 
@@ -85,17 +86,38 @@ class JiraWebhook implements UnprotectedRootAction {
         }
     }
 
-    private boolean isChangelogEvent(Map webhookEventMap) {
-        String eventType = webhookEventMap['webhookEvent']
-        eventType == WEBHOOK_EVENT && webhookEventMap['changelog']
-    }
-
-    private boolean isCommentEvent(Map webhookEventMap) {
-        String eventType = webhookEventMap['webhookEvent']
-        eventType == WEBHOOK_EVENT && webhookEventMap['comment']
-    }
-
     private String getRequestBody(StaplerRequest req) {
         req.inputStream.text
+    }
+
+    private static class RawWebhookEvent {
+
+        final StaplerRequest request
+        final Map webhookEventMap
+
+        RawWebhookEvent(StaplerRequest request, Map webhookEventMap) {
+            this.request = request
+            this.webhookEventMap = webhookEventMap
+        }
+
+        boolean isChangelogEvent() {
+            eventType == WEBHOOK_EVENT && webhookEventMap['changelog']
+        }
+
+        boolean isCommentEvent() {
+            eventType == WEBHOOK_EVENT && webhookEventMap['comment']
+        }
+
+        String getUserId() {
+            request.getParameter('user_id')
+        }
+
+        String getUserKey() {
+            request.getParameter('user_key')
+        }
+
+        String getEventType() {
+            webhookEventMap['webhookEvent']
+        }
     }
 }
