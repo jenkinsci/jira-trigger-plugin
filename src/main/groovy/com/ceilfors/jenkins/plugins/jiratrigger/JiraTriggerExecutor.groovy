@@ -14,7 +14,7 @@ import jenkins.model.Jenkins
 import javax.inject.Inject
 import java.util.concurrent.CopyOnWriteArrayList
 
-import static com.ceilfors.jenkins.plugins.jiratrigger.JiraTrigger.*
+import static com.ceilfors.jenkins.plugins.jiratrigger.JiraTrigger.JiraTriggerDescriptor
 
 /**
  * @author ceilfors

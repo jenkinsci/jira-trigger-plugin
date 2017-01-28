@@ -75,6 +75,7 @@ class JrjcJiraClient implements JiraClient {
         @Inject
         JrjcJiraClient jiraClient
 
+        @SuppressWarnings('Instanceof')
         @Override
         void onChange(Saveable o, XmlFile file) {
             if (o instanceof JiraTriggerGlobalConfiguration) {
