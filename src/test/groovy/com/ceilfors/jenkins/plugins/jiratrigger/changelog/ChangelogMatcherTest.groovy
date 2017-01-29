@@ -12,9 +12,8 @@ class ChangelogMatcherTest extends Specification {
 
     private class BasicChangelogMatcher extends ChangelogMatcher {
 
-        BasicChangelogMatcher(FieldType fieldType, String field, String newValue, String oldValue,
-                              boolean comparingNewValue, boolean comparingOldValue) {
-            super(fieldType, field, newValue, oldValue, comparingNewValue, comparingOldValue)
+        BasicChangelogMatcher(FieldType fieldType, String field, String newValue, String oldValue) {
+            super(fieldType, field, newValue, oldValue)
         }
     }
 
@@ -25,7 +24,9 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new BasicChangelogMatcher(FieldType.JIRA, matcherField, "", "", false, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, matcherField, "", "")
+        matcher.comparingOldValue = false
+        matcher.comparingNewValue = false
 
         then:
         matcher.matches(changelogGroup) == result
@@ -45,7 +46,9 @@ class ChangelogMatcherTest extends Specification {
         })
 
         when:
-        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", "", false, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", "")
+        matcher.comparingOldValue = false
+        matcher.comparingNewValue = false
 
         then:
         matcher.matches(changelogGroup) == result
@@ -66,7 +69,9 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", matcherNewValue, "", true, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", matcherNewValue, "")
+        matcher.comparingNewValue = true
+        matcher.comparingOldValue = false
 
         then:
         matcher.matches(changelogGroup) == result
@@ -89,7 +94,9 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", matcherNewValue, "", false, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", matcherNewValue, "")
+        matcher.comparingNewValue = false
+        matcher.comparingOldValue = false
 
         then:
         matcher.matches(changelogGroup)
@@ -108,7 +115,9 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", matcherOldValue, false, true)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", matcherOldValue)
+        matcher.comparingNewValue = false
+        matcher.comparingOldValue = true
 
         then:
         matcher.matches(changelogGroup) == result
@@ -131,7 +140,9 @@ class ChangelogMatcherTest extends Specification {
         ])
 
         when:
-        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", matcherOldValue, false, false)
+        def matcher = new BasicChangelogMatcher(FieldType.JIRA, "status", "", matcherOldValue)
+        matcher.comparingNewValue = false
+        matcher.comparingOldValue = false
 
         then:
         matcher.matches(changelogGroup) == result

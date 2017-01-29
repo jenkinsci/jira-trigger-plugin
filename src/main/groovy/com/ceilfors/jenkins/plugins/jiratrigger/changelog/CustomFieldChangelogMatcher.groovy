@@ -13,8 +13,8 @@ import org.kohsuke.stapler.DataBoundConstructor
 class CustomFieldChangelogMatcher extends ChangelogMatcher {
 
     @DataBoundConstructor
-    CustomFieldChangelogMatcher(String field, String newValue, String oldValue, boolean comparingNewValue, boolean comparingOldValue) {
-        super(FieldType.CUSTOM, field.trim(), newValue.trim(), oldValue.trim(), comparingNewValue, comparingOldValue)
+    CustomFieldChangelogMatcher(String field, String newValue, String oldValue) {
+        super(FieldType.CUSTOM, field.trim(), newValue.trim(), oldValue.trim())
     }
 
     @SuppressWarnings('UnnecessaryQualifiedReference') // Can't remove qualifier, IntelliJ bug?

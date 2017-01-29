@@ -117,17 +117,26 @@ class UiTest extends Specification {
 
         when:
         configurer.activate()
-        configurer.addCustomFieldChangelogMatcher('Custom Field 1', 'old 1', 'new 1')
-        configurer.addJiraFieldChangelogMatcher('Jira Field 1', 'old 2', 'new 2')
-        configurer.addCustomFieldChangelogMatcher('Custom Field 2', 'old 3', 'new 3')
-        configurer.addJiraFieldChangelogMatcher('Jira Field 2', 'old 4', 'new 4')
+        configurer.addCustomFieldChangelogMatcher('Custom Field 1', 'old 1', '')
+        configurer.addJiraFieldChangelogMatcher('Jira Field 1', '', 'new 2')
+        configurer.addCustomFieldChangelogMatcher('Custom Field 2', '', 'new 3')
+        configurer.addJiraFieldChangelogMatcher('Jira Field 2', 'old 4', '')
         def matchers = project.getTrigger(JiraChangelogTrigger).changelogMatchers
+
+        def matcher0 = new CustomFieldChangelogMatcher('Custom Field 1', '', 'old 1')
+        matcher0.comparingNewValue = false
+        def matcher1 = new JiraFieldChangelogMatcher('Jira Field 1', 'new 2', '')
+        matcher1.comparingOldValue = false
+        def matcher2 = new CustomFieldChangelogMatcher('Custom Field 2', 'new 3', '')
+        matcher2.comparingOldValue = false
+        def matcher3 = new JiraFieldChangelogMatcher('Jira Field 2', '', 'old 4')
+        matcher3.comparingNewValue = false
 
         then:
         matchers.size() == 4
-        matchers[0] == new CustomFieldChangelogMatcher('Custom Field 1', 'new 1', 'old 1', true, true)
-        matchers[1] == new JiraFieldChangelogMatcher('Jira Field 1', 'new 2', 'old 2', true, true)
-        matchers[2] == new CustomFieldChangelogMatcher('Custom Field 2', 'new 3', 'old 3', true, true)
-        matchers[3] == new JiraFieldChangelogMatcher('Jira Field 2', 'new 4', 'old 4', true, true)
+        matchers[0] == matcher0
+        matchers[1] == matcher1
+        matchers[2] == matcher2
+        matchers[3] == matcher3
     }
 }

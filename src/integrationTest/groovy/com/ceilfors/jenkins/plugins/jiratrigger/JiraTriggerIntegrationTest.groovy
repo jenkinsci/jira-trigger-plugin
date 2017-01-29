@@ -55,8 +55,8 @@ class JiraTriggerIntegrationTest extends Specification {
         FreeStyleProject p = jenkins.createFreeStyleProject()
         JiraChangelogTrigger before = new JiraChangelogTrigger()
         before.changelogMatchers = [
-                new JiraFieldChangelogMatcher('status', 'new value', 'old value', true, true),
-                new CustomFieldChangelogMatcher('custom field', 'new value', 'old value', true, true),
+                new JiraFieldChangelogMatcher('status', 'new value', 'old value'),
+                new CustomFieldChangelogMatcher('custom field', 'new value', 'old value'),
         ]
         p.addTrigger(before)
         p.save()

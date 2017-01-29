@@ -7,6 +7,7 @@ import groovy.transform.ToString
 import hudson.Util
 import hudson.model.AbstractDescribableImpl
 import hudson.model.Descriptor
+import org.kohsuke.stapler.DataBoundSetter
 
 /**
  * @author ceilfors
@@ -19,16 +20,23 @@ abstract class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher
     final String field
     final String newValue
     final String oldValue
-    final boolean comparingNewValue
-    final boolean comparingOldValue
+    boolean comparingNewValue = true
+    boolean comparingOldValue = true
 
-    protected ChangelogMatcher(FieldType fieldType, String field, String newValue, String oldValue,
-                     boolean comparingNewValue, boolean comparingOldValue) {
+    protected ChangelogMatcher(FieldType fieldType, String field, String newValue, String oldValue) {
         this.fieldType = fieldType
         this.field = field
         this.newValue = newValue
         this.oldValue = oldValue
+    }
+
+    @DataBoundSetter
+    void setComparingNewValue(boolean comparingNewValue) {
         this.comparingNewValue = comparingNewValue
+    }
+
+    @DataBoundSetter
+    void setComparingOldValue(boolean comparingOldValue) {
         this.comparingOldValue = comparingOldValue
     }
 

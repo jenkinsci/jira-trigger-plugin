@@ -15,8 +15,8 @@ import org.kohsuke.stapler.DataBoundConstructor
 class JiraFieldChangelogMatcher extends ChangelogMatcher {
 
     @DataBoundConstructor
-    JiraFieldChangelogMatcher(String field, String newValue, String oldValue, boolean comparingNewValue, boolean comparingOldValue) {
-        super(FieldType.JIRA, field.trim(), newValue.trim(), oldValue.trim(), comparingNewValue, comparingOldValue)
+    JiraFieldChangelogMatcher(String field, String newValue, String oldValue) {
+        super(FieldType.JIRA, field.trim(), newValue.trim(), oldValue.trim())
     }
 
     @SuppressWarnings('UnnecessaryQualifiedReference') // Can't remove qualifier, IntelliJ bug?

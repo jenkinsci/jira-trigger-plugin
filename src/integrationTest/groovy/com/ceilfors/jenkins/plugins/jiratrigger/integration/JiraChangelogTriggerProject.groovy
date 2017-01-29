@@ -20,18 +20,18 @@ class JiraChangelogTriggerProject extends JiraTriggerProject {
     }
 
     void addJiraFieldChangelogMatcher(String fieldId, String oldValue, String newValue) {
-        boolean comparingOldValue = oldValue != null && !oldValue.empty
-        boolean comparingNewValue = newValue != null && !newValue.empty
-        jiraTrigger.changelogMatchers.add(
-                new JiraFieldChangelogMatcher(fieldId, newValue, oldValue, comparingNewValue, comparingOldValue))
+        def matcher = new JiraFieldChangelogMatcher(fieldId, newValue, oldValue)
+        matcher.comparingNewValue = newValue != null && !newValue.empty
+        matcher.comparingOldValue = oldValue != null && !oldValue.empty
+        jiraTrigger.changelogMatchers.add(matcher)
         project.save()
     }
 
     void addCustomFieldChangelogMatcher(String fieldName, String oldValue, String newValue) {
-        boolean comparingOldValue = oldValue != null && !oldValue.empty
-        boolean comparingNewValue = newValue != null && !newValue.empty
-        jiraTrigger.changelogMatchers.add(
-                new CustomFieldChangelogMatcher(fieldName, newValue, oldValue, comparingNewValue, comparingOldValue))
+        def matcher = new CustomFieldChangelogMatcher(fieldName, newValue, oldValue)
+        matcher.comparingNewValue = newValue != null && !newValue.empty
+        matcher.comparingOldValue = oldValue != null && !oldValue.empty
+        jiraTrigger.changelogMatchers.add(matcher)
         project.save()
     }
 }
