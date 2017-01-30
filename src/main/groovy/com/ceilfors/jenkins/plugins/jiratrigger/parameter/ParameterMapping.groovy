@@ -18,8 +18,6 @@ abstract class ParameterMapping extends AbstractDescribableImpl<ParameterMapping
     static abstract class ParameterMappingDescriptor extends Descriptor<ParameterMapping> {
 
         @Override
-        String getDisplayName() {
-            'Parameter mapping'
-        }
+        abstract String getDisplayName()
     }
 }

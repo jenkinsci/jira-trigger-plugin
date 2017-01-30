@@ -16,7 +16,6 @@ class JiraCommentReplier implements JiraTriggerListener {
     @Inject
     JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration
 
-    @SuppressWarnings('BuilderMethodWithSideEffects')
     @Override
     void buildScheduled(Issue issue, Collection<? extends AbstractProject> projects) {
         if (jiraTriggerGlobalConfiguration.jiraCommentReply) {
@@ -24,7 +23,6 @@ class JiraCommentReplier implements JiraTriggerListener {
         }
     }
 
-    @SuppressWarnings('BuilderMethodWithSideEffects')
     @Override
     void buildNotScheduled(Issue issue) {
     }

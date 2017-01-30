@@ -50,5 +50,8 @@ abstract class ChangelogMatcher extends AbstractDescribableImpl<ChangelogMatcher
     }
 
     static abstract class ChangelogMatcherDescriptor extends Descriptor<ChangelogMatcher> {
+
+        @Override
+        abstract String getDisplayName()
     }
 }

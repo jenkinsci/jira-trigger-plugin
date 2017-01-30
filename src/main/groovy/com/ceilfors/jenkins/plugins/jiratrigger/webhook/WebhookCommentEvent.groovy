@@ -6,7 +6,7 @@ import com.atlassian.jira.rest.client.api.domain.Issue
 /**
  * @author ceilfors
  */
-class WebhookCommentEvent extends AbstractWebhookEvent {
+class WebhookCommentEvent extends BaseWebhookEvent {
 
     final Comment comment
     final Issue issue

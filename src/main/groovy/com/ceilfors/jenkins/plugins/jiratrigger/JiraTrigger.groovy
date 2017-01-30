@@ -151,5 +151,8 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         List<JiraTrigger> allTriggers() {
             Collections.unmodifiableList(triggers)
         }
+
+        @Override
+        abstract String getDisplayName()
     }
 }

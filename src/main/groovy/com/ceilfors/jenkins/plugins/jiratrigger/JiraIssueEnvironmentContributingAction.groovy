@@ -12,7 +12,6 @@ class JiraIssueEnvironmentContributingAction implements EnvironmentContributingA
 
     Issue issue
 
-    @SuppressWarnings('BuilderMethodWithSideEffects')
     @Override
     void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
         env.put('JIRA_ISSUE_KEY', issue.key)

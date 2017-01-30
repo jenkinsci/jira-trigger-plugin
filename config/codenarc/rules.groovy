@@ -104,7 +104,9 @@ ruleset {
     AbstractClassWithoutAbstractMethod
     AssignmentToStaticFieldFromInstanceMethod
     BooleanMethodReturnsNull
-    BuilderMethodWithSideEffects
+    BuilderMethodWithSideEffects { // Remove build.* regex as we have a lot of build methods that aren't builders
+        methodNameRegex = '(make.*|create.*)'
+    }
     CloneableWithoutClone
     CloseWithoutCloseable
     CompareToWithoutComparable
@@ -303,7 +305,9 @@ ruleset {
     ClassNameSameAsFilename
     ClassNameSameAsSuperclass
     ConfusingMethodName
-    FactoryMethodName
+    FactoryMethodName { // Remove build.* regex as we have a lot of build methods that aren't builders
+        regex = /(create.*)/
+    }
     FieldName
     InterfaceName
     InterfaceNameSameAsSuperInterface

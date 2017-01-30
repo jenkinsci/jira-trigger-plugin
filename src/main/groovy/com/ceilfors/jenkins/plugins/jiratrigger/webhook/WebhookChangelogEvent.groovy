@@ -5,7 +5,7 @@ import com.atlassian.jira.rest.client.api.domain.Issue
 /**
  * @author ceilfors
  */
-class WebhookChangelogEvent extends AbstractWebhookEvent {
+class WebhookChangelogEvent extends BaseWebhookEvent {
 
     final ChangelogGroup changelog
     final Issue issue
