@@ -107,17 +107,18 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
 
     abstract Cause getCause(Issue issue, T t)
 
+    @SuppressWarnings('UnnecessaryTransientModifier')
     @Log
     static abstract class JiraTriggerDescriptor extends TriggerDescriptor {
 
         @Inject
-        protected Jenkins jenkins
+        protected transient Jenkins jenkins
 
         @Inject
-        JiraClient jiraClient
+        transient JiraClient jiraClient
 
         @Inject
-        protected ParameterResolver parameterResolver
+        protected transient ParameterResolver parameterResolver
 
         private transient final List<JiraTrigger> triggers = new CopyOnWriteArrayList<>()
 
