@@ -8,7 +8,7 @@ import spock.lang.Specification
  */
 class JiraUtilsTest extends Specification {
 
-    def "Should be able to get issue id from Comment object"(String selfString, Long issueId) {
+    def 'Should be able to get issue id from Comment object'(String selfString, Long issueId) {
         given:
         Comment comment = new Comment(selfString.toURI(), null, null, null, null, null, null, null)
 
@@ -20,8 +20,8 @@ class JiraUtilsTest extends Specification {
 
         where:
         selfString                                                              | issueId
-        "http://localhost:2990/jira/rest/api/2/issue/10003/comment/10000"       | 10003L
-        "http://localhost:2990/jira/rest/api/2/issue/1/comment/10000"           | 1L
-        "http://localhost:2990/jira/rest/api/2/issue/12341234567/comment/10000" | 12341234567L
+        'http://localhost:2990/jira/rest/api/2/issue/10003/comment/10000'       | 10003L
+        'http://localhost:2990/jira/rest/api/2/issue/1/comment/10000'           | 1L
+        'http://localhost:2990/jira/rest/api/2/issue/12341234567/comment/10000' | 12341234567L
     }
 }

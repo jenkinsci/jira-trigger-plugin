@@ -10,27 +10,27 @@ import static spock.util.matcher.HamcrestSupport.expect
 /**
  * @author ceilfors
  */
-@SuppressWarnings("GroovyAssignabilityCheck")
+@SuppressWarnings('GroovyAssignabilityCheck')
 class JiraWebhookTest extends Specification {
 
     String createIssueCreatedEvent() {
-        this.class.getResourceAsStream("issue_created.json").text
+        this.class.getResourceAsStream('issue_created.json').text
     }
 
     String createIssueUpdatedEvent() {
-        this.class.getResourceAsStream("issue_updated_without_comment.json").text
+        this.class.getResourceAsStream('issue_updated_without_comment.json').text
     }
 
     String createIssueUpdatedWithCommentEvent() {
-        this.class.getResourceAsStream("issue_updated_with_comment.json").text
+        this.class.getResourceAsStream('issue_updated_with_comment.json').text
     }
 
     String createIssueStatusUpdatedEvent() {
-        this.class.getResourceAsStream("issue_updated_status_updated.json").text
+        this.class.getResourceAsStream('issue_updated_status_updated.json').text
     }
 
-    @SuppressWarnings("GrReassignedInClosureLocalVar")
-    def "Should fire changelog created event when status field is updated"() {
+    @SuppressWarnings('GrReassignedInClosureLocalVar')
+    def 'Should fire changelog created event when status field is updated'() {
         WebhookChangelogEvent changelogEvent = null
 
         given:
@@ -45,20 +45,20 @@ class JiraWebhookTest extends Specification {
         then:
         1 * listener.changelogCreated(_) >> { args -> changelogEvent = args[0] }
         expect changelogEvent.changelog.items.toList(), equalTo([
-                new ChangelogItem(FieldType.JIRA, "resolution", "1", "Fixed", "10000", "Done"),
-                new ChangelogItem(FieldType.JIRA, "status", "10000", "To Do", "10001", "Done")
+                new ChangelogItem(FieldType.JIRA, 'resolution', '1', 'Fixed', '10000', 'Done'),
+                new ChangelogItem(FieldType.JIRA, 'status', '10000', 'To Do', '10001', 'Done')
         ])
     }
 
-    @SuppressWarnings("GrReassignedInClosureLocalVar")
-    def "Should store request parameter in context"() {
+    @SuppressWarnings('GrReassignedInClosureLocalVar')
+    def 'Should store request parameter in context'() {
         WebhookCommentEvent commentEvent = null
 
         given:
         def listener = Mock(JiraWebhookListener)
         def staplerRequest = Mock(StaplerRequest)
-        staplerRequest.getParameter("user_id") >> "adminId"
-        staplerRequest.getParameter("user_key") >> "adminKey"
+        staplerRequest.getParameter('user_id') >> 'adminId'
+        staplerRequest.getParameter('user_key') >> 'adminKey'
         JiraWebhook jiraWebhook = new JiraWebhook()
         jiraWebhook.setJiraWebhookListener(listener)
 
@@ -67,11 +67,11 @@ class JiraWebhookTest extends Specification {
 
         then:
         1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
-        expect commentEvent.userId, equalTo("adminId")
-        expect commentEvent.userKey, equalTo("adminKey")
+        expect commentEvent.userId, equalTo('adminId')
+        expect commentEvent.userKey, equalTo('adminKey')
     }
 
-    def "Should not notify listener when the event type is issue created"() {
+    def 'Should not notify listener when the event type is issue created'() {
         given:
         JiraWebhook jiraWebhook = new JiraWebhook()
 
@@ -85,8 +85,8 @@ class JiraWebhookTest extends Specification {
         0 * listener.commentCreated(_)
     }
 
-    @SuppressWarnings("GrReassignedInClosureLocalVar")
-    def "Should not notify listener when issue is updated with comment"() {
+    @SuppressWarnings('GrReassignedInClosureLocalVar')
+    def 'Should not notify listener when issue is updated with comment'() {
         WebhookCommentEvent commentEvent = null
 
         given:
@@ -100,12 +100,12 @@ class JiraWebhookTest extends Specification {
 
         then:
         1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
-        expect commentEvent.comment.body, is("comment body")
-        expect commentEvent.comment.author.name, is("admin")
+        expect commentEvent.comment.body, is('comment body')
+        expect commentEvent.comment.author.name, is('admin')
         expect commentEvent.webhookEventType, is(JiraWebhook.WEBHOOK_EVENT)
     }
 
-    def "Should not fire comment created event when a comment is added to an issue"() {
+    def 'Should not fire comment created event when a comment is added to an issue'() {
         given:
         JiraWebhook jiraWebhook = new JiraWebhook()
 

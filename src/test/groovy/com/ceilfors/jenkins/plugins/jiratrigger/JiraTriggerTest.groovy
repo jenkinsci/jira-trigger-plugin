@@ -15,12 +15,12 @@ class JiraTriggerTest extends Specification {
     @Rule
     public JenkinsRule jenkinsRule = new JenkinsRule()
 
-    def "Should add/remove trigger when a trigger is created/deleted"() {
+    def 'Should add/remove trigger when a trigger is created/deleted'() {
         setup:
         JiraCommentTrigger.JiraCommentTriggerDescriptor descriptor = jenkinsRule.instance.getDescriptor(JiraCommentTrigger)
 
         when:
-        FreeStyleProject job = jenkinsRule.createFreeStyleProject("job")
+        FreeStyleProject job = jenkinsRule.createFreeStyleProject('job')
         def trigger = new JiraCommentTrigger()
         trigger.start(job, true)
 
@@ -34,15 +34,15 @@ class JiraTriggerTest extends Specification {
         descriptor.allTriggers().size() == 0
     }
 
-    def "Should be able to delete trigger after a job is renamed"() {
+    def 'Should be able to delete trigger after a job is renamed'() {
         setup:
         JiraCommentTrigger.JiraCommentTriggerDescriptor descriptor = jenkinsRule.instance.getDescriptor(JiraCommentTrigger)
 
         when:
-        FreeStyleProject job = jenkinsRule.createFreeStyleProject("job")
+        FreeStyleProject job = jenkinsRule.createFreeStyleProject('job')
         def trigger = new JiraCommentTrigger()
         trigger.start(job, true)
-        job.renameTo("newjob")
+        job.renameTo('newjob')
         trigger.stop()
 
         then:

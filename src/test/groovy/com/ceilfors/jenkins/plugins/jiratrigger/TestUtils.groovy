@@ -13,9 +13,8 @@ class TestUtils {
     }
 
     static Issue createIssue(String issueKey) {
-        return new Issue(null, null, issueKey, null, null, null, null, null, null, null, null, null, null,
+        new Issue(null, null, issueKey, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null);
-
+                null, null, null, null, null, null)
     }
 }

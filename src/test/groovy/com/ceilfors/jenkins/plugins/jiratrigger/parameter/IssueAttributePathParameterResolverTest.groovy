@@ -19,37 +19,37 @@ class IssueAttributePathParameterResolverTest extends Specification {
     }
 
     @Unroll
-    def "Should be able to resolve parameter by hitting JIRA"(String attributePath, String attributeValue) {
+    def 'Should be able to resolve parameter by hitting JIRA'(String attributePath, String attributeValue) {
         given:
         IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver()
 
         when:
-        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping("parameter", attributePath)
-        StringParameterValue result = resolver.resolve(createIssueFromFile("TEST-136"), mapping)
+        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping('parameter', attributePath)
+        StringParameterValue result = resolver.resolve(createIssueFromFile('TEST-136'), mapping)
 
         then:
         result != null
         result.value == attributeValue
-        result.name == "parameter"
+        result.name == 'parameter'
 
         where:
         attributePath                          | attributeValue
-        "key"                                  | "TEST-136"
-        "project.key"                          | "TEST"
-        "id"                                   | 11120
-        "timeTracking.originalEstimateMinutes" | 5
-        "status.name"                          | "To Do"
-        "summary"                              | "summary content"
+        'key'                                  | 'TEST-136'
+        'project.key'                          | 'TEST'
+        'id'                                   | 11120
+        'timeTracking.originalEstimateMinutes' | 5
+        'status.name'                          | 'To Do'
+        'summary'                              | 'summary content'
     }
 
     @Unroll
-    def "Should throw exception when parameter is not resolvable"(String attributePath) {
+    def 'Should throw exception when parameter is not resolvable'(String attributePath) {
         given:
         IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver()
 
         when:
-        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping("unused", attributePath)
-        resolver.resolve(createIssueFromFile("TEST-136"), mapping)
+        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping('unused', attributePath)
+        resolver.resolve(createIssueFromFile('TEST-136'), mapping)
 
         then:
         thrown JiraTriggerException
@@ -57,8 +57,8 @@ class IssueAttributePathParameterResolverTest extends Specification {
         where:
         //noinspection SpellCheckingInspection
         attributePath << [
-                "timeTracking.originalEstimateSeconds",
-                "typo"
+                'timeTracking.originalEstimateSeconds',
+                'typo'
         ]
     }
 }
