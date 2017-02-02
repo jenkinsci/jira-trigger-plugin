@@ -46,7 +46,7 @@ class JiraWebhookTest extends Specification {
         1 * listener.changelogCreated(_) >> { args -> changelogEvent = args[0] }
         expect changelogEvent.changelog.items.toList(), equalTo([
                 new ChangelogItem(FieldType.JIRA, 'resolution', '1', 'Fixed', '10000', 'Done'),
-                new ChangelogItem(FieldType.JIRA, 'status', '10000', 'To Do', '10001', 'Done')
+                new ChangelogItem(FieldType.JIRA, 'status', '10000', 'To Do', '10001', 'Done'),
         ])
     }
 

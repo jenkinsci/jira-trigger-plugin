@@ -13,7 +13,7 @@ import static com.ceilfors.jenkins.plugins.jiratrigger.TestUtils.createIssue
 /**
  * @author ceilfors
  */
-@SuppressWarnings("GroovyAssignabilityCheck")
+@SuppressWarnings('GroovyAssignabilityCheck')
 class JiraCommentTriggerTest extends Specification {
 
     def project
@@ -52,7 +52,8 @@ class JiraCommentTriggerTest extends Specification {
     }
 
     @Unroll
-    def 'Does not trigger build when comment body matches the comment pattern'(String commentBody, String commentPattern) {
+    def 'Does not trigger build when comment body matches the comment pattern'(String commentBody,
+                                                                               String commentPattern) {
         given:
         def comment = new Comment(null, commentBody, null, null, null, null, null, null)
         JiraCommentTrigger trigger = new JiraCommentTrigger(commentPattern: commentPattern)

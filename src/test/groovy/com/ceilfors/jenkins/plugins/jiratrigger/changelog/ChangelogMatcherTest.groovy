@@ -20,7 +20,7 @@ class ChangelogMatcherTest extends Specification {
     def 'Should compare field value'(String fieldId, String matcherField, boolean result) {
         given:
         ChangelogGroup changelogGroup = new ChangelogGroup(null, null, [
-                new ChangelogItem(FieldType.JIRA, fieldId, '', '', '', '')
+                new ChangelogItem(FieldType.JIRA, fieldId, '', '', '', ''),
         ])
 
         when:
@@ -65,7 +65,7 @@ class ChangelogMatcherTest extends Specification {
             String newValue, String matcherNewValue, boolean result) {
         given:
         ChangelogGroup changelogGroup = new ChangelogGroup(null, null, [
-                new ChangelogItem(FieldType.JIRA, 'status', '', '', '', newValue)
+                new ChangelogItem(FieldType.JIRA, 'status', '', '', '', newValue),
         ])
 
         when:
@@ -90,7 +90,7 @@ class ChangelogMatcherTest extends Specification {
             String newValue, String matcherNewValue, boolean result) {
         given:
         ChangelogGroup changelogGroup = new ChangelogGroup(null, null, [
-                new ChangelogItem(FieldType.JIRA, 'status', '', '', '', newValue)
+                new ChangelogItem(FieldType.JIRA, 'status', '', '', '', newValue),
         ])
 
         when:
@@ -111,7 +111,7 @@ class ChangelogMatcherTest extends Specification {
             String oldValue, String matcherOldValue, boolean result) {
         given:
         ChangelogGroup changelogGroup = new ChangelogGroup(null, null, [
-                new ChangelogItem(FieldType.JIRA, 'status', '', oldValue, '', '')
+                new ChangelogItem(FieldType.JIRA, 'status', '', oldValue, '', ''),
         ])
 
         when:
@@ -136,7 +136,7 @@ class ChangelogMatcherTest extends Specification {
             String oldValue, String matcherOldValue, boolean result) {
         given:
         ChangelogGroup changelogGroup = new ChangelogGroup(null, null, [
-                new ChangelogItem(FieldType.JIRA, 'status', '', oldValue, '', '')
+                new ChangelogItem(FieldType.JIRA, 'status', '', oldValue, '', ''),
         ])
 
         when:

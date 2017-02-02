@@ -15,7 +15,7 @@ class IssueAttributePathParameterResolverTest extends Specification {
 
     private Issue createIssueFromFile(issueKey) {
         def issueJsonObject = new JSONObject(this.class.getResource("${issueKey}.json").text)
-        return new IssueJsonParser(new JSONObject([:]), new JSONObject([:])).parse(issueJsonObject)
+        new IssueJsonParser(new JSONObject([:]), new JSONObject([:])).parse(issueJsonObject)
     }
 
     @Unroll
@@ -58,7 +58,7 @@ class IssueAttributePathParameterResolverTest extends Specification {
         //noinspection SpellCheckingInspection
         attributePath << [
                 'timeTracking.originalEstimateSeconds',
-                'typo'
+                'typo',
         ]
     }
 }

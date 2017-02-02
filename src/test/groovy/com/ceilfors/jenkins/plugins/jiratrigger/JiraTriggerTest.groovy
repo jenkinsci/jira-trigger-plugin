@@ -5,6 +5,8 @@ import org.junit.Rule
 import org.jvnet.hudson.test.JenkinsRule
 import spock.lang.Specification
 
+import static com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger.JiraCommentTriggerDescriptor
+
 /**
  * @author ceilfors
  */
@@ -17,7 +19,7 @@ class JiraTriggerTest extends Specification {
 
     def 'Should add/remove trigger when a trigger is created/deleted'() {
         setup:
-        JiraCommentTrigger.JiraCommentTriggerDescriptor descriptor = jenkinsRule.instance.getDescriptor(JiraCommentTrigger)
+        JiraCommentTriggerDescriptor descriptor = jenkinsRule.instance.getDescriptor(JiraCommentTrigger)
 
         when:
         FreeStyleProject job = jenkinsRule.createFreeStyleProject('job')
@@ -36,7 +38,7 @@ class JiraTriggerTest extends Specification {
 
     def 'Should be able to delete trigger after a job is renamed'() {
         setup:
-        JiraCommentTrigger.JiraCommentTriggerDescriptor descriptor = jenkinsRule.instance.getDescriptor(JiraCommentTrigger)
+        JiraCommentTriggerDescriptor descriptor = jenkinsRule.instance.getDescriptor(JiraCommentTrigger)
 
         when:
         FreeStyleProject job = jenkinsRule.createFreeStyleProject('job')
