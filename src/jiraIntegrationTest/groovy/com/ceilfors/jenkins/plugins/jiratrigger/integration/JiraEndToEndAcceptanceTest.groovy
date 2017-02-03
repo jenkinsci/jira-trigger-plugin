@@ -32,24 +32,24 @@ class JiraEndToEndAcceptanceTest extends Specification {
     def 'Should trigger a build when a comment is added'() {
         given:
         def issueKey = jira.createIssue()
-        jenkins.createJiraCommentTriggeredProject("job")
+        jenkins.createJiraCommentTriggeredProject('job')
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
-        jenkins.buildShouldBeScheduled("job")
+        jenkins.buildShouldBeScheduled('job')
     }
 
     def 'Should trigger a build when an issue is updated'() {
         given:
-        def issueKey = jira.createIssue("Original description")
-        jenkins.createJiraChangelogTriggeredProject("job")
+        def issueKey = jira.createIssue('Original description')
+        jenkins.createJiraChangelogTriggeredProject('job')
 
         when:
-        jira.updateDescription(issueKey, "New description")
+        jira.updateDescription(issueKey, 'New description')
 
         then:
-        jenkins.buildShouldBeScheduled("job")
+        jenkins.buildShouldBeScheduled('job')
     }
 }

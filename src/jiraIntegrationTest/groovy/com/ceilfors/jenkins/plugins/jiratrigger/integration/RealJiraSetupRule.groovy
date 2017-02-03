@@ -1,7 +1,11 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.integration
 
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
-import com.ceilfors.jenkins.plugins.jiratrigger.jira.*
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.ExtendedJiraRestClient
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.JrjcJiraClient
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.Webhook
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.WebhookInput
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.WebhookRestClient
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import groovyx.net.http.HTTPBuilder
 import hudson.util.Secret
@@ -13,12 +17,12 @@ import org.junit.rules.ExternalResource
  */
 class RealJiraSetupRule extends ExternalResource {
 
-    public static final String CUSTOM_FIELD_NAME = "My Customer Custom Field"
+    public static final String CUSTOM_FIELD_NAME = 'My Customer Custom Field'
     public static String CUSTOM_FIELD_ID
 
-    String jiraRootUrl = "http://localhost:2990/jira"
-    String jiraUsername = "admin"
-    String jiraPassword = "admin"
+    String jiraRootUrl = 'http://localhost:2990/jira'
+    String jiraUsername = 'admin'
+    String jiraPassword = 'admin'
     JenkinsRunner jenkinsRunner
 
     RealJiraSetupRule(JenkinsRunner jenkinsRunner) {
@@ -28,7 +32,8 @@ class RealJiraSetupRule extends ExternalResource {
     protected void before() throws Throwable {
         configureJenkinsWithNormalUser()
 
-        ExtendedJiraRestClient jiraRestClient = new JrjcJiraClient(new JiraTriggerGlobalConfiguration(jiraRootUrl, "admin", "admin")).jiraRestClient
+        JiraTriggerGlobalConfiguration configuration = new JiraTriggerGlobalConfiguration(jiraRootUrl, 'admin', 'admin')
+        ExtendedJiraRestClient jiraRestClient = new JrjcJiraClient(configuration).jiraRestClient
         configureWebhook(jiraRestClient.webhookRestClient)
         configureCustomField()
     }
@@ -42,7 +47,7 @@ class RealJiraSetupRule extends ExternalResource {
      * used instead.
      */
     private configureCustomField() {
-        def http = new HTTPBuilder(jiraRootUrl + "/rest/testkit-test/1.0/")
+        def http = new HTTPBuilder(jiraRootUrl + '/rest/testkit-test/1.0/')
         http.auth.basic 'admin', 'admin'
 
         def customFieldAlreadyAdded = false
@@ -58,8 +63,8 @@ class RealJiraSetupRule extends ExternalResource {
         if (!customFieldAlreadyAdded) {
             http.post(path: 'customFields/create', requestContentType: 'application/json', body: [
                     name       : CUSTOM_FIELD_NAME,
-                    description: "A custom field that contains customer name",
-                    type       : "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+                    description: 'A custom field that contains customer name',
+                    type       : 'com.atlassian.jira.plugin.system.customfieldtypes:textarea'
             ]) { resp, json ->
                 CUSTOM_FIELD_ID = json.id
             }
@@ -83,19 +88,25 @@ class RealJiraSetupRule extends ExternalResource {
 
     def configureWebhook(WebhookRestClient webhookRestClient) {
         Iterable<Webhook> webhooks = webhookRestClient.getWebhooks().claim()
-        webhooks = webhooks.findAll { it.name.contains("Acceptance Test") || it.name.contains("Local Jenkins") }
+        webhooks = webhooks.findAll { it.name.contains('gradlew') }
         webhooks.each { webhook ->
             webhookRestClient.unregisterWebhook(webhook.selfUri).claim()
         }
 
-        webhookRestClient.registerWebhook(new WebhookInput(name: "Acceptance Test", events: [JiraWebhook.WEBHOOK_EVENT],
-                url: jenkinsRunner.webhookUrl)).claim()
-        webhookRestClient.registerWebhook(new WebhookInput(name: "Acceptance Test (Vagrant)", events: [JiraWebhook.WEBHOOK_EVENT],
-                url: jenkinsRunner.webhookUrl.replace("localhost", "10.0.2.2"))).claim()
-        webhookRestClient.registerWebhook(new WebhookInput(name: "Local Jenkins (gradlew server)", events: [JiraWebhook.WEBHOOK_EVENT],
-                url: "http://localhost:8080/${jenkinsRunner.jiraWebhook.urlName}/")).claim()
-        webhookRestClient.registerWebhook(new WebhookInput(name: "Local Jenkins (gradlew server) (Vagrant)", events: [JiraWebhook.WEBHOOK_EVENT],
-                url: "http://localhost:8080/${jenkinsRunner.jiraWebhook.urlName}/".replace("localhost", "10.0.2.2"))).claim()
+        String vagrantHostDefaultIp = '10.0.2.2'
+        [
+                [name: 'Acceptance Test (gradlew test)',
+                 url : jenkinsRunner.webhookUrl],
+                [name: 'Acceptance Test (gradlew test) (Vagrant)',
+                 url : jenkinsRunner.webhookUrl.replace('localhost', vagrantHostDefaultIp)],
+                [name: 'Local Jenkins (gradlew server)',
+                 url : "http://localhost:8080/${jenkinsRunner.jiraWebhook.urlName}/"],
+                [name: 'Local Jenkins (gradlew server) (Vagrant)',
+                 url : "http://${vagrantHostDefaultIp}:8080/${jenkinsRunner.jiraWebhook.urlName}/"],
+        ].each {
+            webhookRestClient.registerWebhook(
+                    new WebhookInput(name: it.name, events: [JiraWebhook.WEBHOOK_EVENT], url: it.url)).claim()
+        }
     }
 
     def configureJenkinsWithNormalUser() {

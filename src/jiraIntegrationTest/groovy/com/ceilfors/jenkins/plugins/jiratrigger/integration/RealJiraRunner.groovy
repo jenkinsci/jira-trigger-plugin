@@ -34,12 +34,12 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
     }
 
     String createIssue() {
-        createIssue("")
+        createIssue('')
     }
 
     String createIssue(String description) {
-        Long issueTypeId = getIssueTypeId("TEST", "Task")
-        IssueInputBuilder issueInputBuilder = new IssueInputBuilder("TEST", issueTypeId, "task summary")
+        Long issueTypeId = getIssueTypeId('TEST', 'Task')
+        IssueInputBuilder issueInputBuilder = new IssueInputBuilder('TEST', issueTypeId, 'task summary')
         if (description) {
             issueInputBuilder.description = description
         }
@@ -73,7 +73,7 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
     @Override
     void shouldBeNotifiedWithComment(String issueKey, String jobName) {
         Queue.Item scheduledItem = jenkinsQueue.scheduledItem
-        assertThat("Build is not scheduled!", scheduledItem, is(not(nullValue())))
+        assertThat('Build is not scheduled!', scheduledItem, is(not(nullValue())))
 
         def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
         Comment lastComment = issue.getComments().last()
