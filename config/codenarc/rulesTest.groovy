@@ -15,5 +15,6 @@ ruleset {
         exclude 'BuilderMethodWithSideEffects' // Not important in test classes, Jenkins use a lot of build keyword
         exclude 'ThrowRuntimeException' // Not important in test classes
         exclude 'UnnecessaryGetter' // Not important in test classes
+        exclude 'DuplicateStringLiteral' // Not important in test classes
     }
 }
