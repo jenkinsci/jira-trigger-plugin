@@ -15,10 +15,11 @@ import org.junit.rules.ExternalResource
 /**
  * @author ceilfors
  */
+@SuppressWarnings('AssignmentToStaticFieldFromInstanceMethod')
 class RealJiraSetupRule extends ExternalResource {
 
     public static final String CUSTOM_FIELD_NAME = 'My Customer Custom Field'
-    public static String CUSTOM_FIELD_ID
+    public static String customFieldId
 
     String jiraRootUrl = 'http://localhost:2990/jira'
     String jiraUsername = 'admin'
@@ -54,7 +55,7 @@ class RealJiraSetupRule extends ExternalResource {
         http.get(path: 'customFields/get') { resp, json ->
             def customField = json.find { it.name == CUSTOM_FIELD_NAME }
             if (customField) {
-                CUSTOM_FIELD_ID = customField.id
+                customFieldId = customField.id
                 customFieldAlreadyAdded = true
             } else {
                 customFieldAlreadyAdded = false
@@ -66,14 +67,14 @@ class RealJiraSetupRule extends ExternalResource {
                     description: 'A custom field that contains customer name',
                     type       : 'com.atlassian.jira.plugin.system.customfieldtypes:textarea'
             ]) { resp, json ->
-                CUSTOM_FIELD_ID = json.id
+                customFieldId = json.id
             }
         }
 
         List<String> screensWithoutCustomField = []
         http.get(path: 'screens') { resp, screens ->
             screens.each { screen ->
-                boolean fieldAlreadyAdded = screen.tabs.find { tab -> tab.fields.find {it.name == CUSTOM_FIELD_NAME } }
+                boolean fieldAlreadyAdded = screen.tabs.find { tab -> tab.fields.find { it.name == CUSTOM_FIELD_NAME } }
                 if (!fieldAlreadyAdded) {
                     screensWithoutCustomField.add(screen.name)
                 }

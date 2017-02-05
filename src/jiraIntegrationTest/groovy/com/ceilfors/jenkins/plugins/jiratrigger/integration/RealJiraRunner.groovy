@@ -15,9 +15,11 @@ import hudson.model.Job
 import hudson.model.Queue
 import jenkins.model.GlobalConfiguration
 
-import static org.hamcrest.Matchers.*
+import static org.hamcrest.Matchers.containsString
+import static org.hamcrest.Matchers.is
+import static org.hamcrest.Matchers.not
+import static org.hamcrest.Matchers.nullValue
 import static org.junit.Assert.assertThat
-
 /**
  * @author ceilfors
  */
@@ -48,13 +50,16 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     @Override
     void updateDescription(String issueKey, String description) {
-        jiraRestClient.issueClient.updateIssue(issueKey, new IssueInputBuilder().setDescription(description).build()).get(timeout, timeoutUnit)
+        def issue = new IssueInputBuilder().setDescription(description).build()
+        jiraRestClient.issueClient.updateIssue(issueKey, issue).get(timeout, timeoutUnit)
     }
 
     @Override
     void updateStatus(String issueKey, String status) {
-        def issue = jiraRestClient.issueClient.getIssue(issueKey, [IssueRestClient.Expandos.TRANSITIONS]).get(timeout, timeoutUnit)
-        jiraRestClient.issueClient.transition(issue, new TransitionInput(getTransition(issue, status).id)).get(timeout, timeoutUnit)
+        def issue = jiraRestClient.issueClient.getIssue(issueKey, [IssueRestClient.Expandos.TRANSITIONS])
+                .get(timeout, timeoutUnit)
+        jiraRestClient.issueClient.transition(issue, new TransitionInput(getTransition(issue, status).id))
+                .get(timeout, timeoutUnit)
     }
 
     private Transition getTransition(Issue issue, String status) {
@@ -65,9 +70,10 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
         } else if (status == 'In Progress') {
             transitionName = 'Start Progress'
         } else {
-            throw new UnsupportedOperationException("Configure this method to support more transition name. Available transitions: ${transitions*.name}")
+            throw new UnsupportedOperationException('Configure this method to support more transition name. ' +
+                    "Available transitions: ${transitions*.name}")
         }
-        return transitions.find { it.name == transitionName } as Transition
+        transitions.find { it.name == transitionName } as Transition
     }
 
     @Override
@@ -85,15 +91,20 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
     void updateCustomField(String issueKey, String fieldName, String value) {
         String fieldId
         if (fieldName == RealJiraSetupRule.CUSTOM_FIELD_NAME) {
-            fieldId = RealJiraSetupRule.CUSTOM_FIELD_ID
+            fieldId = RealJiraSetupRule.customFieldId
         } else {
             throw new UnsupportedOperationException("$fieldName not supported")
         }
-        jiraRestClient.issueClient.updateIssue(issueKey, new IssueInputBuilder().setFieldValue(fieldId, value).build()).get(timeout, timeoutUnit)
+        def issue = new IssueInputBuilder().setFieldValue(fieldId, value).build()
+        jiraRestClient.issueClient.updateIssue(issueKey, issue).get(timeout, timeoutUnit)
     }
 
     private Long getIssueTypeId(String project, String issueTypeName) {
-        Iterable<CimProject> metadata = jiraRestClient.issueClient.getCreateIssueMetadata(new GetCreateIssueMetadataOptionsBuilder().withProjectKeys(project).withIssueTypeNames(issueTypeName).build()).claim()
-        return metadata[0].issueTypes[0].id
+        def options = new GetCreateIssueMetadataOptionsBuilder()
+                .withProjectKeys(project)
+                .withIssueTypeNames(issueTypeName)
+                .build()
+        Iterable<CimProject> metadata = jiraRestClient.issueClient.getCreateIssueMetadata(options).claim()
+        metadata[0].issueTypes[0].id
     }
 }
