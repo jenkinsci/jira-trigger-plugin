@@ -16,7 +16,7 @@ Quick start:
 2. `vagrant ssh`
 3. Accept Oracle license term for Java
 4. `atlas-run-standalone --product jira --version 7.0.0 --plugins com.atlassian.jira.tests:jira-testkit-plugin:7.0.111`
-5. Setup JIRA project with name TEST
+5. Go to http://localhost:2990/jira in your browser and setup a JIRA project with name TEST (port is forwarded)
 6. `./gradlew jiraIntegrationTest`
 7. Restart JIRA if it starts to complain about license (It is using [timebomb license](https://developer.atlassian.com/market/add-on-licensing-for-developers/timebomb-licenses-for-testing) by default). 
 
