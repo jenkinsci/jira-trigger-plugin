@@ -90,13 +90,43 @@ class JiraTriggerIntegrationTest extends Specification {
         then:
         scheduledProjects.size() != 0
         Queue.Item item = scheduledProjects[0].queueItem
-        Map environment
+        AbstractBuild build
         if (item == null) {
-            environment = scheduledProjects[0].getBuildByNumber(1).environment
+            build = scheduledProjects[0].getBuildByNumber(1)
         } else {
-            environment = (item.future.startCondition.get() as AbstractBuild).environment
+            item.future.get()
+            build = (item.future.startCondition.get() as AbstractBuild)
         }
-        environment.get('JIRA_ISSUE_KEY') == 'TEST-1234'
+        build.environment.get('JIRA_ISSUE_KEY') == 'TEST-1234'
+    }
+
+    @Issue('JENKINS-41878')
+    def 'Should not serialize any Atlassian issue object into build.xml'() {
+        given:
+        jenkins.createJiraCommentTriggeredProject('job')
+        jenkins.quietPeriod = 0
+
+        when:
+        def scheduledProjects = jenkins.jiraTriggerExecutor.scheduleBuilds(
+                TestUtils.createIssue('TEST-1234'),
+                TestUtils.createComment(JiraCommentTrigger.DEFAULT_COMMENT))
+
+        then:
+        scheduledProjects.size() != 0
+        Queue.Item item = scheduledProjects[0].queueItem
+        AbstractBuild build
+        if (item == null) {
+            build = scheduledProjects[0].getBuildByNumber(1)
+        } else {
+            item.future.get()
+            build = (item.future.startCondition.get() as AbstractBuild)
+        }
+
+        // This bug is testable this way because the serialization doesn't fail in our test and we cannot
+        // reproduce the bug in the integration test easily.
+        def buildXml = new File(build.rootDir, 'build.xml')
+        buildXml.exists()
+        !buildXml.text.contains('<issue>')
     }
 
     @Issue('JENKINS-34135')
