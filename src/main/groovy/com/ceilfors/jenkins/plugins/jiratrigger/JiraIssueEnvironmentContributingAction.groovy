@@ -10,11 +10,15 @@ import hudson.model.EnvironmentContributingAction
  */
 class JiraIssueEnvironmentContributingAction implements EnvironmentContributingAction {
 
-    Issue issue
+    String issueKey
+
+    JiraIssueEnvironmentContributingAction(Issue issue) {
+        this.issueKey = issue.key
+    }
 
     @Override
     void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
-        env.put('JIRA_ISSUE_KEY', issue.key)
+        env.put('JIRA_ISSUE_KEY', issueKey)
     }
 
     @Override

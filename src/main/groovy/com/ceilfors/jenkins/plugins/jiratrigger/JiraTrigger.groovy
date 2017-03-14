@@ -55,7 +55,7 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         if (parameterMappings) {
             actions << new ParametersAction(collectParameterValues(issue))
         }
-        actions << new JiraIssueEnvironmentContributingAction(issue: issue)
+        actions << new JiraIssueEnvironmentContributingAction(issue)
         actions << new CauseAction(getCause(issue, t))
         log.fine("[${job.fullName}] - Scheduling build for ${issue.key} - ${getId(t)}")
 
