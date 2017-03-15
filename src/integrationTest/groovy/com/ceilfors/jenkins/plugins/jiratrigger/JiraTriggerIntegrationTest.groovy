@@ -38,10 +38,10 @@ class JiraTriggerIntegrationTest extends Specification {
     private AbstractBuild getScheduledBuild(AbstractProject project) {
         Queue.Item item = project.queueItem
         if (item == null) {
-            return project.getBuildByNumber(1)
+            project.getBuildByNumber(1)
         } else {
             item.future.get()
-            return (item.future.startCondition.get() as AbstractBuild)
+            (item.future.startCondition.get() as AbstractBuild)
         }
     }
 
