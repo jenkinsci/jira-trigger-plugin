@@ -6,6 +6,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException
 import hudson.model.AbstractBuild
+import hudson.model.AbstractProject
 import hudson.model.FreeStyleProject
 import hudson.model.Queue
 import hudson.security.GlobalMatrixAuthorizationStrategy
@@ -33,6 +34,16 @@ class JiraTriggerIntegrationTest extends Specification {
     RuleChain ruleChain = RuleChain
             .outerRule(new JulLogLevelRule())
             .around(jenkins)
+
+    private AbstractBuild getScheduledBuild(AbstractProject project) {
+        Queue.Item item = project.queueItem
+        if (item == null) {
+            return project.getBuildByNumber(1)
+        } else {
+            item.future.get()
+            return (item.future.startCondition.get() as AbstractBuild)
+        }
+    }
 
     def 'Global configuration round trip'() {
         given:
@@ -89,14 +100,7 @@ class JiraTriggerIntegrationTest extends Specification {
 
         then:
         scheduledProjects.size() != 0
-        Queue.Item item = scheduledProjects[0].queueItem
-        AbstractBuild build
-        if (item == null) {
-            build = scheduledProjects[0].getBuildByNumber(1)
-        } else {
-            item.future.get()
-            build = (item.future.startCondition.get() as AbstractBuild)
-        }
+        AbstractBuild build = getScheduledBuild(scheduledProjects[0])
         build.environment.get('JIRA_ISSUE_KEY') == 'TEST-1234'
     }
 
@@ -113,14 +117,7 @@ class JiraTriggerIntegrationTest extends Specification {
 
         then:
         scheduledProjects.size() != 0
-        Queue.Item item = scheduledProjects[0].queueItem
-        AbstractBuild build
-        if (item == null) {
-            build = scheduledProjects[0].getBuildByNumber(1)
-        } else {
-            item.future.get()
-            build = (item.future.startCondition.get() as AbstractBuild)
-        }
+        AbstractBuild build = getScheduledBuild(scheduledProjects[0])
 
         // This bug is testable this way because the serialization doesn't fail in our test and we cannot
         // reproduce the bug in the integration test easily.
