@@ -143,7 +143,7 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
                 log.finest("Removed [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] from triggers list")
             } else {
                 log.warning(
-                        "Bug! Failed to remove [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] " +
+                        "Bug! Failed to remove [${jiraTrigger.dump()}]:[${jiraTrigger.class.simpleName}] " +
                                 'from triggers list. ' +
                                 'The job might accidentally be triggered by JIRA. Restart Jenkins to recover.')
             }
