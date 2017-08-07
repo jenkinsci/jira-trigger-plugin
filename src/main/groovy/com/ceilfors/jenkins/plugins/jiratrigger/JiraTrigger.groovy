@@ -71,7 +71,12 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
     @Override
     void stop() {
         super.stop()
-        jiraTriggerDescriptor.removeTrigger(this)
+        // Avoid null as this method might be called more than once as per Trigger#stop documentation:
+        // "Under some circumstances, this may be invoked more than once for a given Trigger,
+        // so be prepared for that."
+        if (job) {
+            jiraTriggerDescriptor.removeTrigger(this)
+        }
     }
 
     Job getJob() {
