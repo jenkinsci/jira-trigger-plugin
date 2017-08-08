@@ -14,6 +14,7 @@ import hudson.security.HudsonPrivateSecurityRealm
 import hudson.util.Secret
 import jenkins.model.GlobalConfiguration
 import org.acegisecurity.context.SecurityContextHolder
+import org.jenkinsci.plugins.workflow.job.WorkflowJob
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import org.jvnet.hudson.test.Issue
@@ -77,6 +78,25 @@ class JiraTriggerIntegrationTest extends Specification {
 
         then:
         JiraChangelogTrigger after = p.getTrigger(JiraChangelogTrigger)
+        jenkins.assertEqualBeans(before, after, 'changelogMatchers')
+    }
+
+    def 'WorkflowJob configuration round trip'() {
+        given:
+        WorkflowJob p = jenkins.jenkins.createProject(WorkflowJob, 'pipeline')
+        JiraChangelogTrigger before = new JiraChangelogTrigger()
+        before.changelogMatchers = [
+                new JiraFieldChangelogMatcher('status', 'new value', 'old value'),
+                new CustomFieldChangelogMatcher('custom field', 'new value', 'old value'),
+        ]
+        p.addTrigger(before)
+        p.save()
+
+        when:
+        jenkins.configRoundtrip()
+
+        then:
+        JiraChangelogTrigger after = ++p.getTriggers().values().iterator() as JiraChangelogTrigger
         jenkins.assertEqualBeans(before, after, 'changelogMatchers')
     }
 
