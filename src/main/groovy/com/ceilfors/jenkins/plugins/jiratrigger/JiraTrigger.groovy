@@ -71,12 +71,7 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
     @Override
     void stop() {
         super.stop()
-        // Avoid null as this method might be called more than once as per Trigger#stop documentation:
-        // "Under some circumstances, this may be invoked more than once for a given Trigger,
-        // so be prepared for that."
-        if (job) {
-            jiraTriggerDescriptor.removeTrigger(this)
-        }
+        jiraTriggerDescriptor.removeTrigger(this)
     }
 
     Job getJob() {
@@ -147,10 +142,15 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
             if (result) {
                 log.finest("Removed [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] from triggers list")
             } else {
-                log.warning(
-                        "Bug! Failed to remove [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] " +
-                                'from triggers list. ' +
-                                'The job might accidentally be triggered by JIRA. Restart Jenkins to recover.')
+                if (jiraTrigger.job) {
+                    log.warning(
+                            "Bug! Failed to remove [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] " +
+                                    'from triggers list. ' +
+                                    'The job might accidentally be triggered by JIRA. Restart Jenkins to recover.')
+                } else {
+                    log.finest("Failed to remove trigger as it might not be started yet." +
+                            "This is normal for pipeline job.")
+                }
             }
         }
 

@@ -4,7 +4,6 @@ import hudson.model.FreeStyleProject
 import org.junit.Rule
 import org.jvnet.hudson.test.Issue
 import org.jvnet.hudson.test.JenkinsRule
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger.JiraCommentTriggerDescriptor
@@ -54,16 +53,17 @@ class JiraTriggerTest extends Specification {
     }
 
     @Issue('JENKINS-43642')
-    @Ignore
     def 'Should be able to stop JiraTrigger when the trigger is not started yet'() {
         setup:
         JiraCommentTriggerDescriptor descriptor = jenkinsRule.instance.getDescriptor(JiraCommentTrigger)
 
         when:
+        FreeStyleProject job = jenkinsRule.createFreeStyleProject('job')
         def trigger = new JiraCommentTrigger()
         trigger.stop()
+        trigger.start(job, true)
 
         then:
-        descriptor.allTriggers().size() == 0
+        descriptor.allTriggers().size() == 1
     }
 }

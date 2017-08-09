@@ -85,10 +85,7 @@ class JiraTriggerIntegrationTest extends Specification {
         given:
         WorkflowJob p = jenkins.jenkins.createProject(WorkflowJob, 'pipeline')
         JiraChangelogTrigger before = new JiraChangelogTrigger()
-        before.changelogMatchers = [
-                new JiraFieldChangelogMatcher('status', 'new value', 'old value'),
-                new CustomFieldChangelogMatcher('custom field', 'new value', 'old value'),
-        ]
+        before.changelogMatchers = [ new JiraFieldChangelogMatcher('status', 'new value', 'old value') ]
         p.addTrigger(before)
         p.save()
 
