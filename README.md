@@ -1,6 +1,6 @@
 # JIRA Trigger Plugin
 
-[![Build Status](https://jenkins.ci.cloudbees.com/buildStatus/icon?job=plugins/jira-trigger-plugin)](https://jenkins.ci.cloudbees.com/job/plugins/job/jira-trigger-plugin/)
+[![Build Status](https://ci.jenkins.io/job/Plugins/job/jira-trigger-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/jira-trigger-plugin/job/master/)
 [![Java 1.7.0_79](https://img.shields.io/badge/java-1.7.0__79-red.svg)](https://java.com)
 
 This plugin is published through the [Jenkins official plugin center](https://plugins.jenkins.io/jira-trigger).
