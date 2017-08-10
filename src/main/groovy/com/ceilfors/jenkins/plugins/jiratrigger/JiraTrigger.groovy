@@ -148,8 +148,8 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
                                     'from triggers list. ' +
                                     'The job might accidentally be triggered by JIRA. Restart Jenkins to recover.')
                 } else {
-                    log.finest("Failed to remove trigger as it might not be started yet." +
-                            "This is normal for pipeline job.")
+                    log.finest('Failed to remove trigger as it might not be started yet.' +
+                            'This is normal for pipeline job.')
                 }
             }
         }
