@@ -2,7 +2,12 @@
 
 ## [Unreleased]
 
-## [0.4.1] - 2017-15-03
+## [0.4.2] - 2017-08-11
+### Fixed
+- [JENKINS-43642](https://issues.jenkins-ci.org/browse/JENKINS-43642) jira-trigger-plugin used in a pipeline job is giving NullPointerException upon restart
+- Restore Jenkins build to point to 
+
+## [0.4.1] - 2017-03-15
 ### Fixed
 - [JENKINS-41878](https://issues.jenkins-ci.org/browse/JENKINS-41878) Runtime Exception while using jira trigger plugin in maven job
 
@@ -56,7 +61,8 @@
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.2.4...v0.3.0
