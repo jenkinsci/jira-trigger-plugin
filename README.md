@@ -51,6 +51,14 @@ New triggers will be made available after you have successfully install this plu
 More in depth documentation about how you can configure the job are documented in the help files. Be sure to hit
 those question mark buttons in Jenkins configuration page!
 
+### Pipeline Job
+
+The configuration of jira-trigger-plugin in Pipeline jobs are located in the job configuration page and 
+not the Jenkinsfile, just like when you are configuring a Pipeline job to use "Build periodically" trigger.
+
+If you are creating a new Pipeline job, you'll have to reconfigure the job and save it again before
+the job can be triggered properly. This is currently a [known issue](https://issues.jenkins-ci.org/browse/JENKINS-42446).
+
 #### Comment trigger
 ![Comment Trigger Configuration](docs/jira-comment-trigger-configuration_50.png?raw=true "Comment Trigger Configuration")
 
