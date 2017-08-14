@@ -4,9 +4,9 @@
 
 See Jenkins [Gradle JPI Plugin page](https://wiki.jenkins-ci.org/display/JENKINS/Gradle+JPI+Plugin) for more details.
 
-# Running End to End Acceptance Test
+# Running Integration Test with JIRA
 
-You will need to run JIRA locally to be able to execute the acceptance test of this plugin which is available from
+You will need to run JIRA locally to be able to execute the JIRA Integration Test of this plugin which is available from
 vagrant. More details can be found
 at [atlassian site](https://developer.atlassian.com/static/connect/docs/latest/developing/developing-locally.html).
 
@@ -24,11 +24,11 @@ Result of the acceptance test will be available at `$buildDir/reports/jiraIntegr
 
 # Release
 
-1. Run acceptance test! It's not integrated in CI yet.
+1. Run `./gradlew clean build`
 2. `git tag -m vx.x.x vx.x.x`
 3. `./gradlew clean publish`
 
    Make sure your credentials are set correctly in ~/.jenkins-ci.org. Also check out [the official documentation](https://wiki.jenkins-ci.org/display/JENKINS/Gradle+JPI+Plugin) if there's problem.
 
 4. `git push --tags`
-5. Update github release page.
+5. Update CHANGELOG.md
