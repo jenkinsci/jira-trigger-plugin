@@ -20,6 +20,10 @@ abstract class JiraTriggerProject {
         project.save()
     }
 
+    void addCustomFieldParameterMapping(String jenkinsParameter, String customFieldId) {
+
+    }
+
     void setJqlFilter(String jqlFilter) {
         jiraTrigger.jqlFilter = jqlFilter
         project.save()
