@@ -1,6 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.integration
 
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTrigger
+import com.ceilfors.jenkins.plugins.jiratrigger.parameter.CustomFieldParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
 import hudson.model.FreeStyleProject
 
@@ -21,7 +22,8 @@ abstract class JiraTriggerProject {
     }
 
     void addCustomFieldParameterMapping(String jenkinsParameter, String customFieldId) {
-
+        jiraTrigger.parameterMappings.add(new CustomFieldParameterMapping(jenkinsParameter, customFieldId))
+        project.save()
     }
 
     void setJqlFilter(String jqlFilter) {

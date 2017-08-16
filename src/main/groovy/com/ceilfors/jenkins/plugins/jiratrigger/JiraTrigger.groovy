@@ -3,7 +3,10 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.AddressableEntity
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
+import com.ceilfors.jenkins.plugins.jiratrigger.parameter.CustomFieldParameterMapping
+import com.ceilfors.jenkins.plugins.jiratrigger.parameter.CustomFieldParameterResolver
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
+import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterResolver
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterResolver
 import groovy.util.logging.Log
@@ -22,7 +25,6 @@ import org.kohsuke.stapler.DataBoundSetter
 
 import javax.inject.Inject
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.logging.Level
 
 /**
  * @author ceilfors
@@ -80,21 +82,18 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
 
     abstract boolean filter(Issue issue, T t)
 
-    @SuppressWarnings('ReturnNullFromCatchBlock')
     protected List<ParameterValue> collectParameterValues(Issue issue) {
-        parameterMappings.collect {
-            if (it instanceof IssueAttributePathParameterMapping) {
-                try {
-                    return jiraTriggerDescriptor.parameterResolver.resolve(issue, it)
-                } catch (JiraTriggerException e) {
-                    log.log(Level.WARNING, "Can't resolve attribute ${it.issueAttributePath} from JIRA issue. " +
-                            'Example: description, key, status.name. Read help for more information.', e)
-                    return null
-                }
-            } else {
-                throw new UnsupportedOperationException("Unsupported parameter mapping ${it.class}")
-            }
-        } - null
+        parameterMappings.collect { getResolver(it).resolve(issue, it) }
+    }
+
+    protected ParameterResolver getResolver(ParameterMapping parameterMapping) {
+        if (parameterMapping instanceof IssueAttributePathParameterMapping) {
+            return new IssueAttributePathParameterResolver()
+        } else if (parameterMapping instanceof CustomFieldParameterMapping) {
+            return new CustomFieldParameterResolver()
+        }
+
+        throw new UnsupportedOperationException("Unsupported parameter mapping ${parameterMapping.class}")
     }
 
     private String getId(T t) {

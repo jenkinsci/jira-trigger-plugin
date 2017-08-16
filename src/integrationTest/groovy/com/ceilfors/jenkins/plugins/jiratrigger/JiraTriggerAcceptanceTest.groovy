@@ -11,7 +11,6 @@ import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
@@ -120,7 +119,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         ])
     }
 
-    @Ignore
     def 'Should be able to map custom field when custom field parameter mapping is used'() {
         given:
         String issueKey = jira.createIssue('Dummy issue description')
@@ -132,7 +130,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
         then:
         jenkins.buildShouldBeScheduled('job', [
-                'JIRA_CUSTOMER': 'Barclays'
+                'JIRA_CUSTOMER': 'Barclays',
         ])
     }
 
