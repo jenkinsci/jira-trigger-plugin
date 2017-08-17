@@ -116,9 +116,6 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         @Inject
         transient JiraClient jiraClient
 
-        @Inject
-        protected transient ParameterResolver parameterResolver
-
         private transient final List<JiraTrigger> triggers = new CopyOnWriteArrayList<>()
 
         @Override
