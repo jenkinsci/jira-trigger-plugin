@@ -26,10 +26,10 @@ class CustomFieldParameterResolverTest extends Specification {
 
     @Unroll
     def 'Should be able to resolve #customFieldType custom field when the value is not empty'(
-            String customFieldType, String customFieldId, String fileName, String attributeValue) {
+            String customFieldType, String customFieldId, String attributeValue) {
         when:
         CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('parameter', customFieldId)
-        StringParameterValue result = subject.resolve(createIssueFromFile(fileName), mapping)
+        StringParameterValue result = subject.resolve(createIssueFromFile('single_value_custom_field'), mapping)
 
         then:
         result != null
@@ -37,8 +37,28 @@ class CustomFieldParameterResolverTest extends Specification {
         result.name == 'parameter'
 
         where:
-        customFieldType   | customFieldId | fileName                    | attributeValue
-        'Free Text Field' | '10000'       | 'single_value_custom_field' | 'barclays'
+        customFieldType   | customFieldId | attributeValue
+        'Free Text Field' | '10000'       | 'barclays'
+        'Date Picker'     | '10101'       | '2017-08-17'
+        'Date Time'       | '10102'       | '2017-08-17T01:00:00.000+0000'
+        'Labels'          | '10103'       | 'label'
+    }
+
+    @Unroll
+    def 'Should be able to resolve #customFieldType custom field when it contains multiple values'(
+            String customFieldType, String customFieldId, String attributeValue) {
+        when:
+        CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('parameter', customFieldId)
+        StringParameterValue result = subject.resolve(createIssueFromFile('multi_value_custom_field'), mapping)
+
+        then:
+        result != null
+        result.value == attributeValue
+        result.name == 'parameter'
+
+        where:
+        customFieldType   | customFieldId | attributeValue
+        'Labels'          | '10103'       | 'label, labela, labelb'
     }
 
     @Unroll
@@ -56,6 +76,9 @@ class CustomFieldParameterResolverTest extends Specification {
         where:
         customFieldType   | customFieldId | attributeValue
         'Free Text Field' | '10000'       | null
+        'Date Picker'     | '10101'       | null
+        'Date Time'       | '10102'       | null
+        'Labels'          | '10103'       | null
     }
 
     @Unroll
