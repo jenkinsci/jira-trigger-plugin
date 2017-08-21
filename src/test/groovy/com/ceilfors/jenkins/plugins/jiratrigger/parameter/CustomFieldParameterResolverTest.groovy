@@ -37,11 +37,12 @@ class CustomFieldParameterResolverTest extends Specification {
         result.name == 'parameter'
 
         where:
-        customFieldType   | customFieldId | attributeValue
-        'Free Text Field' | '10000'       | 'barclays'
-        'Date Picker'     | '10101'       | '2017-08-17'
-        'Date Time'       | '10102'       | '2017-08-17T01:00:00.000+0000'
-        'Labels'          | '10103'       | 'label'
+        customFieldType           | customFieldId | attributeValue
+        'Select List (cascading)' | '10106'       | 'cascade option 1'
+        'Date Picker'             | '10101'       | '2017-08-17'
+        'Date Time Picker'        | '10102'       | '2017-08-17T01:00:00.000+0000'
+        'Text Field (multi-line)' | '10000'       | 'barclays'
+        'Labels'                  | '10103'       | 'label'
     }
 
     @Unroll
@@ -57,8 +58,9 @@ class CustomFieldParameterResolverTest extends Specification {
         result.name == 'parameter'
 
         where:
-        customFieldType   | customFieldId | attributeValue
-        'Labels'          | '10103'       | 'label, labela, labelb'
+        customFieldType           | customFieldId | attributeValue
+        'Select List (cascading)' | '10106'       | 'cascade option 1 - child 1 1'
+        'Labels'                  | '10103'       | 'label, labela, labelb'
     }
 
     @Unroll
@@ -74,11 +76,12 @@ class CustomFieldParameterResolverTest extends Specification {
         result.name == 'parameter'
 
         where:
-        customFieldType   | customFieldId | attributeValue
-        'Free Text Field' | '10000'       | null
-        'Date Picker'     | '10101'       | null
-        'Date Time'       | '10102'       | null
-        'Labels'          | '10103'       | null
+        customFieldType           | customFieldId | attributeValue
+        'Select List (cascading)' | '10106'       | null
+        'Date Picker'             | '10101'       | null
+        'Date Time Picker'        | '10102'       | null
+        'Text Field (multi-line)' | '10000'       | null
+        'Labels'                  | '10103'       | null
     }
 
     @Unroll

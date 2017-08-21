@@ -6,6 +6,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
 import com.google.inject.Singleton
 import hudson.model.StringParameterValue
 import org.codehaus.jettison.json.JSONArray
+import org.codehaus.jettison.json.JSONObject
 
 /**
  * @author ceilfors
@@ -25,11 +26,19 @@ class CustomFieldParameterResolver
     }
 
     private static String extractValue(IssueField field) {
-        if (field.value instanceof JSONArray) {
-            JSONArray jsonArray = field.value
-            return (0..jsonArray.length() - 1).collect { jsonArray.getString(it) }.join(', ')
+        Object fieldValue = field.value
+        if (fieldValue instanceof JSONArray) {
+            JSONArray array = fieldValue
+            return (0..array.length() - 1).collect { array.getString(it) }.join(', ')
+        } else if (fieldValue instanceof JSONObject) {
+            JSONObject object = fieldValue
+            String value = object.get('value')
+            if (object.has('child')) {
+                value += " - ${object.getJSONObject('child').get('value')}"
+            }
+            return value
         }
 
-        field.value as String
+        fieldValue as String
     }
 }

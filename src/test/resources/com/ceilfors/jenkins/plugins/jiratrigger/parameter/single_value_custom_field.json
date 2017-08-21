@@ -72,12 +72,7 @@
       "customfield_10106": {
         "self": "http://localhost:2990/jira/rest/api/2/customFieldOption/10006",
         "value": "cascade option 1",
-        "id": "10006",
-        "child": {
-          "self": "http://localhost:2990/jira/rest/api/2/customFieldOption/10008",
-          "value": "child 1 1",
-          "id": "10008"
-        }
+        "id": "10006"
       },
       "customfield_10107": [
         {
