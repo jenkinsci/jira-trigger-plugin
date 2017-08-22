@@ -28,17 +28,31 @@ class CustomFieldParameterResolver
     private static String extractValue(IssueField field) {
         Object fieldValue = field.value
         if (fieldValue instanceof JSONArray) {
-            JSONArray array = fieldValue
-            return (0..array.length() - 1).collect { array.getString(it) }.join(', ')
-        } else if (fieldValue instanceof JSONObject) {
-            JSONObject object = fieldValue
-            String value = object.get('value')
+            return toList(fieldValue).collect { extractSingleValue(it) }.join(', ')
+        }
+        extractSingleValue(fieldValue)
+    }
+
+    private static toList(JSONArray jsonArray) {
+        (0..jsonArray.length() - 1).collect { i -> jsonArray.get(i) }
+    }
+
+    private static String extractSingleValue(singleValue) {
+        if (singleValue == null) {
+            return null
+        } else if (singleValue instanceof String) {
+            return singleValue
+        } else if (singleValue instanceof Number) {
+            return String.valueOf(singleValue)
+        } else if (singleValue instanceof JSONObject) {
+            JSONObject object = singleValue
+            String value = object.getString('value')
             if (object.has('child')) {
-                value += " - ${object.getJSONObject('child').get('value')}"
+                value += " - ${object.getJSONObject('child').getString('value')}"
             }
             return value
         }
 
-        fieldValue as String
+        throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE)
     }
 }

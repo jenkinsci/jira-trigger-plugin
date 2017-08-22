@@ -37,12 +37,16 @@ class CustomFieldParameterResolverTest extends Specification {
         result.name == 'parameter'
 
         where:
-        customFieldType           | customFieldId | attributeValue
-        'Select List (cascading)' | '10106'       | 'cascade option 1'
-        'Date Picker'             | '10101'       | '2017-08-17'
-        'Date Time Picker'        | '10102'       | '2017-08-17T01:00:00.000+0000'
-        'Text Field (multi-line)' | '10000'       | 'barclays'
-        'Labels'                  | '10103'       | 'label'
+        customFieldType                  | customFieldId | attributeValue
+        'Checkboxes'                     | '10100'       | 'checkbox option 1'
+        'Date Picker'                    | '10101'       | '2017-08-17'
+        'Date Time Picker'               | '10102'       | '2017-08-17T01:00:00.000+0000'
+        'Labels'                         | '10103'       | 'label'
+        'Number Field'                   | '10104'       | '1.0'
+        'Radio Buttons'                  | '10105'       | 'radio option 1'
+        'Select List (multiple choices)' | '10107'       | 'singlelist option 1'
+        'Select List (cascading)'        | '10106'       | 'cascade option 1'
+        'Text Field (multi-line)'        | '10000'       | 'barclays'
     }
 
     @Unroll
@@ -58,9 +62,11 @@ class CustomFieldParameterResolverTest extends Specification {
         result.name == 'parameter'
 
         where:
-        customFieldType           | customFieldId | attributeValue
-        'Select List (cascading)' | '10106'       | 'cascade option 1 - child 1 1'
-        'Labels'                  | '10103'       | 'label, labela, labelb'
+        customFieldType                  | customFieldId | attributeValue
+        'Checkboxes'                     | '10100'       | 'checkbox option 1, checkbox option 2'
+        'Labels'                         | '10103'       | 'label, labela, labelb'
+        'Select List (multiple choices)' | '10107'       | 'singlelist option 1, singlelist option 2'
+        'Select List (cascading)'        | '10106'       | 'cascade option 1 - child 1 1'
     }
 
     @Unroll
@@ -76,12 +82,16 @@ class CustomFieldParameterResolverTest extends Specification {
         result.name == 'parameter'
 
         where:
-        customFieldType           | customFieldId | attributeValue
-        'Select List (cascading)' | '10106'       | null
-        'Date Picker'             | '10101'       | null
-        'Date Time Picker'        | '10102'       | null
-        'Text Field (multi-line)' | '10000'       | null
-        'Labels'                  | '10103'       | null
+        customFieldType                  | customFieldId | attributeValue
+        'Checkboxes'                     | '10100'       | null
+        'Date Picker'                    | '10101'       | null
+        'Date Time Picker'               | '10102'       | null
+        'Labels'                         | '10103'       | null
+        'Number Field'                   | '10104'       | null
+        'Radio Buttons'                  | '10105'       | null
+        'Select List (multiple choices)' | '10107'       | null
+        'Select List (cascading)'        | '10106'       | null
+        'Text Field (multi-line)'        | '10000'       | null
     }
 
     @Unroll
