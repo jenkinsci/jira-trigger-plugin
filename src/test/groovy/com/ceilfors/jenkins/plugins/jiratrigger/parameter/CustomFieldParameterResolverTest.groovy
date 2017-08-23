@@ -46,7 +46,11 @@ class CustomFieldParameterResolverTest extends Specification {
         'Radio Buttons'                  | '10105'       | 'radio option 1'
         'Select List (multiple choices)' | '10107'       | 'singlelist option 1'
         'Select List (cascading)'        | '10106'       | 'cascade option 1'
-        'Text Field (multi-line)'        | '10000'       | 'barclays'
+        'Select List (single choice)'    | '10200'       | 'single choice option 1'
+        'Text Field (multi-line)'        | '10000'       | 'barclays\r\nhalifax\r\nsantander'
+        'Text Field (single line)'       | '10108'       | 'text'
+        'User Picker (single user)'      | '10110'       | 'testusernameedited'
+        'URL Field'                      | '10109'       | 'https://url.com'
     }
 
     @Unroll
@@ -91,7 +95,11 @@ class CustomFieldParameterResolverTest extends Specification {
         'Radio Buttons'                  | '10105'       | null
         'Select List (multiple choices)' | '10107'       | null
         'Select List (cascading)'        | '10106'       | null
+        'Select List (single choice)'    | '10200'       | null
         'Text Field (multi-line)'        | '10000'       | null
+        'Text Field (single line)'       | '10108'       | null
+        'User Picker (single user)'      | '10110'       | null
+        'URL Field'                      | '10109'       | null
     }
 
     @Unroll

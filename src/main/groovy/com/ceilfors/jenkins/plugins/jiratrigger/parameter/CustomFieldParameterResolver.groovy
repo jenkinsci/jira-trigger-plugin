@@ -11,6 +11,7 @@ import org.codehaus.jettison.json.JSONObject
 /**
  * @author ceilfors
  */
+@SuppressWarnings('Instanceof')
 @Singleton
 class CustomFieldParameterResolver
         implements ParameterResolver<CustomFieldParameterMapping, StringParameterValue> {
@@ -37,6 +38,7 @@ class CustomFieldParameterResolver
         (0..jsonArray.length() - 1).collect { i -> jsonArray.get(i) }
     }
 
+    @SuppressWarnings('DuplicateStringLiteral') // Clearer with String literals
     private static String extractSingleValue(singleValue) {
         if (singleValue == null) {
             return null
@@ -46,11 +48,15 @@ class CustomFieldParameterResolver
             return String.valueOf(singleValue)
         } else if (singleValue instanceof JSONObject) {
             JSONObject object = singleValue
-            String value = object.getString('value')
-            if (object.has('child')) {
-                value += " - ${object.getJSONObject('child').getString('value')}"
+            if (object.has('value')) {
+                String value = object.getString('value')
+                if (object.has('child')) {
+                    value += " - ${object.getJSONObject('child').getString('value')}"
+                }
+                return value
+            } else if (object.has('name')) {
+                return object.getString('name')
             }
-            return value
         }
 
         throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE)
