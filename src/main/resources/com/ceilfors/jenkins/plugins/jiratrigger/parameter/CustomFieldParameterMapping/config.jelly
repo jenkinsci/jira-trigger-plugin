@@ -1,0 +1,9 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+    <f:entry field="jenkinsParameter" title="Jenkins parameter">
+        <f:textbox/>
+    </f:entry>
+    <f:entry field="customFieldId" title="Custom Field ID">
+        <f:textbox/>
+    </f:entry>
+</j:jelly>
