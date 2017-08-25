@@ -3,7 +3,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.atlassian.jira.rest.client.api.domain.IssueField
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
-import com.google.inject.Singleton
 import hudson.model.StringParameterValue
 import org.codehaus.jettison.json.JSONArray
 import org.codehaus.jettison.json.JSONObject
@@ -12,7 +11,6 @@ import org.codehaus.jettison.json.JSONObject
  * @author ceilfors
  */
 @SuppressWarnings('Instanceof')
-@Singleton
 class CustomFieldParameterResolver
         implements ParameterResolver<CustomFieldParameterMapping, StringParameterValue> {
 

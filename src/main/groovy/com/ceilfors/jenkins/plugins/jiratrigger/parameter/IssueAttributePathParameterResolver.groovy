@@ -2,13 +2,11 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
-import com.google.inject.Singleton
 import hudson.model.StringParameterValue
 
 /**
  * @author ceilfors
  */
-@Singleton
 class IssueAttributePathParameterResolver
         implements ParameterResolver<IssueAttributePathParameterMapping, StringParameterValue> {
 
