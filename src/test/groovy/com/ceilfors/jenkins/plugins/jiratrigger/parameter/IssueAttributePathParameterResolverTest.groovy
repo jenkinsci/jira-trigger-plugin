@@ -21,11 +21,11 @@ class IssueAttributePathParameterResolverTest extends Specification {
     @Unroll
     def 'Should be able to resolve parameter by hitting JIRA'(String attributePath, String attributeValue) {
         given:
-        IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver()
+        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping('parameter', attributePath)
+        IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver(mapping)
 
         when:
-        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping('parameter', attributePath)
-        StringParameterValue result = resolver.resolve(createIssueFromFile('TEST-136'), mapping)
+        StringParameterValue result = resolver.resolve(createIssueFromFile('TEST-136'))
 
         then:
         result != null
@@ -45,11 +45,12 @@ class IssueAttributePathParameterResolverTest extends Specification {
     @Unroll
     def 'Should throw exception when parameter is not resolvable'(String attributePath) {
         given:
-        IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver()
+        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping('unused', attributePath)
+        IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver(mapping)
 
         when:
-        IssueAttributePathParameterMapping mapping = new IssueAttributePathParameterMapping('unused', attributePath)
-        resolver.resolve(createIssueFromFile('TEST-136'), mapping)
+
+        resolver.resolve(createIssueFromFile('TEST-136'))
 
         then:
         thrown JiraTriggerException

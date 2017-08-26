@@ -2,6 +2,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import groovy.transform.EqualsAndHashCode
 import hudson.Extension
+import hudson.model.StringParameterValue
 import org.kohsuke.stapler.DataBoundConstructor
 /**
  * @author ceilfors
@@ -15,6 +16,11 @@ class IssueAttributePathParameterMapping extends ParameterMapping {
     IssueAttributePathParameterMapping(String jenkinsParameter, String issueAttributePath) {
         super(jenkinsParameter)
         this.issueAttributePath = issueAttributePath.trim()
+    }
+
+    @Override
+    ParameterResolver<StringParameterValue> getParameterResolver() {
+        new IssueAttributePathParameterResolver(this)
     }
 
     @SuppressWarnings('UnnecessaryQualifiedReference') // Can't remove qualifier, IntelliJ bug?

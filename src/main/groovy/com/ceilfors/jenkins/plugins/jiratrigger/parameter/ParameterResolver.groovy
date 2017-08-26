@@ -8,7 +8,7 @@ import hudson.model.ParameterValue
  *
  * @author ceilfors
  */
-interface ParameterResolver<M extends ParameterMapping, V extends ParameterValue > {
+interface ParameterResolver<V extends ParameterValue > {
 
-    V resolve(Issue issue, M parameterMapping)
+    V resolve(Issue issue)
 }

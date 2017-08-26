@@ -3,12 +3,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.AddressableEntity
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
-import com.ceilfors.jenkins.plugins.jiratrigger.parameter.CustomFieldParameterMapping
-import com.ceilfors.jenkins.plugins.jiratrigger.parameter.CustomFieldParameterResolver
-import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
-import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterResolver
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping
-import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterResolver
 import groovy.util.logging.Log
 import hudson.model.Action
 import hudson.model.Cause
@@ -83,17 +78,7 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
     abstract boolean filter(Issue issue, T t)
 
     protected List<ParameterValue> collectParameterValues(Issue issue) {
-        parameterMappings.collect { getResolver(it).resolve(issue, it) }
-    }
-
-    protected ParameterResolver getResolver(ParameterMapping parameterMapping) {
-        if (parameterMapping instanceof IssueAttributePathParameterMapping) {
-            return new IssueAttributePathParameterResolver()
-        } else if (parameterMapping instanceof CustomFieldParameterMapping) {
-            return new CustomFieldParameterResolver()
-        }
-
-        throw new UnsupportedOperationException("Unsupported parameter mapping ${parameterMapping.class}")
+        parameterMappings.collect { it.parameterResolver.resolve(issue) }
     }
 
     private String getId(T t) {

@@ -12,9 +12,15 @@ import org.codehaus.jettison.json.JSONObject
  */
 @SuppressWarnings('Instanceof')
 class CustomFieldParameterResolver
-        implements ParameterResolver<CustomFieldParameterMapping, StringParameterValue> {
+        implements ParameterResolver<StringParameterValue> {
 
-    StringParameterValue resolve(Issue issue, CustomFieldParameterMapping customFieldParameterMapping) {
+    CustomFieldParameterMapping customFieldParameterMapping
+
+    CustomFieldParameterResolver(CustomFieldParameterMapping customFieldParameterMapping) {
+        this.customFieldParameterMapping = customFieldParameterMapping
+    }
+
+    StringParameterValue resolve(Issue issue) {
         String customFieldId = "customfield_${customFieldParameterMapping.customFieldId}"
         IssueField field = issue.fields.toList().find { f -> f.id == customFieldId }
         if (field) {

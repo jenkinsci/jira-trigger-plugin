@@ -8,9 +8,15 @@ import hudson.model.StringParameterValue
  * @author ceilfors
  */
 class IssueAttributePathParameterResolver
-        implements ParameterResolver<IssueAttributePathParameterMapping, StringParameterValue> {
+        implements ParameterResolver<StringParameterValue> {
 
-    StringParameterValue resolve(Issue issue, IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
+    IssueAttributePathParameterMapping issueAttributePathParameterMapping
+
+    IssueAttributePathParameterResolver(IssueAttributePathParameterMapping issueAttributePathParameterMapping) {
+        this.issueAttributePathParameterMapping = issueAttributePathParameterMapping
+    }
+
+    StringParameterValue resolve(Issue issue) {
         String attributeValue = resolveProperty(issue.properties, issueAttributePathParameterMapping.issueAttributePath)
         new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
     }

@@ -18,18 +18,13 @@ class CustomFieldParameterResolverTest extends Specification {
         new WebhookChangelogEventJsonParser().parse(jsonObject).issue
     }
 
-    CustomFieldParameterResolver subject
-
-    def setup() {
-        subject = new CustomFieldParameterResolver()
-    }
-
     @Unroll
     def 'Should be able to resolve #customFieldType custom field when the value is not empty'(
             String customFieldType, String customFieldId, String attributeValue) {
         when:
         CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('parameter', customFieldId)
-        StringParameterValue result = subject.resolve(createIssueFromFile('single_value_custom_field'), mapping)
+        CustomFieldParameterResolver subject = new CustomFieldParameterResolver(mapping)
+        StringParameterValue result = subject.resolve(createIssueFromFile('single_value_custom_field'))
 
         then:
         result != null
@@ -58,7 +53,8 @@ class CustomFieldParameterResolverTest extends Specification {
             String customFieldType, String customFieldId, String attributeValue) {
         when:
         CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('parameter', customFieldId)
-        StringParameterValue result = subject.resolve(createIssueFromFile('multi_value_custom_field'), mapping)
+        CustomFieldParameterResolver subject = new CustomFieldParameterResolver(mapping)
+        StringParameterValue result = subject.resolve(createIssueFromFile('multi_value_custom_field'))
 
         then:
         result != null
@@ -78,7 +74,8 @@ class CustomFieldParameterResolverTest extends Specification {
             String customFieldType, String customFieldId, String attributeValue) {
         when:
         CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('parameter', customFieldId)
-        StringParameterValue result = subject.resolve(createIssueFromFile('empty_custom_field'), mapping)
+        CustomFieldParameterResolver subject = new CustomFieldParameterResolver(mapping)
+        StringParameterValue result = subject.resolve(createIssueFromFile('empty_custom_field'))
 
         then:
         result != null
@@ -105,8 +102,9 @@ class CustomFieldParameterResolverTest extends Specification {
     @Unroll
     def 'Should throw exception when parameter custom field id is not available'(String customFieldId) {
         when:
-        CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('unused', customFieldId)
-        subject.resolve(createIssueFromFile('single_value_custom_field'), mapping)
+        CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('uhused', customFieldId)
+        CustomFieldParameterResolver subject = new CustomFieldParameterResolver(mapping)
+        subject.resolve(createIssueFromFile('single_value_custom_field'))
 
         then:
         thrown JiraTriggerException
