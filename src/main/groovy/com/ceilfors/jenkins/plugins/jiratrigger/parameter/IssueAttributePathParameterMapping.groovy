@@ -2,7 +2,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import groovy.transform.EqualsAndHashCode
 import hudson.Extension
-import hudson.model.StringParameterValue
 import org.kohsuke.stapler.DataBoundConstructor
 /**
  * @author ceilfors
@@ -19,7 +18,7 @@ class IssueAttributePathParameterMapping extends ParameterMapping {
     }
 
     @Override
-    ParameterResolver<StringParameterValue> getParameterResolver() {
+    ParameterResolver getParameterResolver() {
         new IssueAttributePathParameterResolver(this)
     }
 

@@ -3,8 +3,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 import groovy.transform.EqualsAndHashCode
 import hudson.model.AbstractDescribableImpl
 import hudson.model.Descriptor
-import hudson.model.StringParameterValue
-
 /**
  * @author ceilfors
  */
@@ -17,7 +15,7 @@ abstract class ParameterMapping extends AbstractDescribableImpl<ParameterMapping
         this.jenkinsParameter = jenkinsParameter.trim()
     }
 
-    abstract ParameterResolver<StringParameterValue> getParameterResolver()
+    abstract ParameterResolver getParameterResolver()
 
     static abstract class ParameterMappingDescriptor extends Descriptor<ParameterMapping> {
 

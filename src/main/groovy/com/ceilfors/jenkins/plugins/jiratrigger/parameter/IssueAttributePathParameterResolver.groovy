@@ -7,8 +7,7 @@ import hudson.model.StringParameterValue
 /**
  * @author ceilfors
  */
-class IssueAttributePathParameterResolver
-        implements ParameterResolver<StringParameterValue> {
+class IssueAttributePathParameterResolver implements ParameterResolver {
 
     IssueAttributePathParameterMapping issueAttributePathParameterMapping
 

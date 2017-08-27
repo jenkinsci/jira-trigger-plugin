@@ -11,8 +11,7 @@ import org.codehaus.jettison.json.JSONObject
  * @author ceilfors
  */
 @SuppressWarnings('Instanceof')
-class CustomFieldParameterResolver
-        implements ParameterResolver<StringParameterValue> {
+class CustomFieldParameterResolver implements ParameterResolver {
 
     CustomFieldParameterMapping customFieldParameterMapping
 
@@ -27,6 +26,7 @@ class CustomFieldParameterResolver
             new StringParameterValue(customFieldParameterMapping.jenkinsParameter, extractValue(field))
         } else {
             throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE)
+                .add('customFieldId', customFieldId)
         }
     }
 
@@ -64,5 +64,6 @@ class CustomFieldParameterResolver
         }
 
         throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE)
+                .add('customFieldValue', singleValue.dump())
     }
 }

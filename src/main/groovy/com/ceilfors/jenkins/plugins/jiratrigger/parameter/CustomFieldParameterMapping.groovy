@@ -2,7 +2,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import groovy.transform.EqualsAndHashCode
 import hudson.Extension
-import hudson.model.StringParameterValue
 import org.kohsuke.stapler.DataBoundConstructor
 
 /**
@@ -20,7 +19,7 @@ class CustomFieldParameterMapping extends ParameterMapping {
     }
 
     @Override
-    ParameterResolver<StringParameterValue> getParameterResolver() {
+    ParameterResolver getParameterResolver() {
         new CustomFieldParameterResolver(this)
     }
 
