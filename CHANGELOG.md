@@ -1,11 +1,13 @@
 # Change Log
 
 ## [Unreleased]
+### Fixed
+- [JENKINS-38797](https://issues.jenkins-ci.org/browse/JENKINS-38797) Support custom field parameter mapping
 
 ## [0.4.2] - 2017-08-11
 ### Fixed
 - [JENKINS-43642](https://issues.jenkins-ci.org/browse/JENKINS-43642) jira-trigger-plugin used in a pipeline job is giving NullPointerException upon restart
-- Restore Jenkins build to point to 
+- Restore Jenkins build by pointing to the new ci.jenkins.io
 
 ## [0.4.1] - 2017-03-15
 ### Fixed
