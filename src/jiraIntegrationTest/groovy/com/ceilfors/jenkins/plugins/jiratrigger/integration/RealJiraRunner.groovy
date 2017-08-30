@@ -78,7 +78,7 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
 
     @Override
     void shouldBeNotifiedWithComment(String issueKey, String jobName) {
-        Queue.Item scheduledItem = jenkinsQueue.scheduledItem
+        Queue.Item scheduledItem = jenkinsQueue.scheduledJobs
         assertThat('Build is not scheduled!', scheduledItem, is(not(nullValue())))
 
         def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()

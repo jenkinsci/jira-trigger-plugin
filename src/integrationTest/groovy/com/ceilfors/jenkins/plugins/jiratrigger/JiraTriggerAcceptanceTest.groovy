@@ -71,6 +71,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     def "Should reply back to JIRA when a build is scheduled"() {
         given:
+        jenkins.quietPeriod = 100
         String issueKey = jira.createIssue()
         def project = jenkins.createJiraCommentTriggeredProject('job')
 

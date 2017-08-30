@@ -7,19 +7,20 @@ import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerExecutor
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
+import hudson.model.AbstractBuild
+import hudson.model.AbstractProject
 import hudson.model.FreeStyleProject
-import hudson.model.ParametersAction
-import hudson.model.Project
 import hudson.model.Queue
-import hudson.model.StringParameterValue
 import jenkins.model.GlobalConfiguration
 import org.jvnet.hudson.test.JenkinsRule
 
-import static org.hamcrest.Matchers.containsInAnyOrder
+import static org.hamcrest.Matchers.empty
+import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.hasEntry
 import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.not
-import static org.hamcrest.Matchers.nullValue
 import static org.junit.Assert.assertThat
+
 /**
  * @author ceilfors
  */
@@ -30,29 +31,41 @@ class JenkinsRunner extends JenkinsRule {
     @Override
     void before() throws Throwable {
         super.before()
-        jenkins.quietPeriod = 100
+        jenkins.quietPeriod = 0
         jenkinsQueue = new JenkinsBlockingQueue(instance)
 
         JulLogLevelRule.configureLog() // Needed when @IgnoreRest is used in acceptance tests
     }
 
+    private static AbstractBuild getScheduledBuild(AbstractProject project) {
+        Queue.Item item = project.queueItem
+        if (item == null) {
+            project.getBuildByNumber(1)
+        } else {
+            item.future.get()
+            (item.future.startCondition.get() as AbstractBuild)
+        }
+    }
+
     void buildShouldBeScheduled(String jobName, Map<String, String> parameterMap = [:]) {
-        Queue.Item scheduledItem = jenkinsQueue.scheduledItem
-        assertThat('Build is not scheduled!', scheduledItem, is(not(nullValue())))
-        assertThat('Last build scheduled does not match the job name asserted',
-                (scheduledItem.task as Project).fullName, is(jobName))
+        Collection<AbstractProject> jobs  = jenkinsQueue.scheduledJobs
+        assertThat('Build is not scheduled!', jobs, is(not(empty())))
+        assertThat('Only one project is scheduled', jobs.size(), is(equalTo(1)))
+
+        AbstractProject job = jobs.first()
+        assertThat('Last build scheduled does not match the job name asserted', job.fullName, is(jobName))
         if (parameterMap) {
-            def parametersAction = scheduledItem.getAction(ParametersAction)
-            assertThat(parametersAction.parameters,
-                    containsInAnyOrder(*parameterMap.collect { key, value -> new StringParameterValue(key, value) }))
+            AbstractBuild build = getScheduledBuild(job)
+            parameterMap.each { key, value ->
+                assertThat(build.environment, hasEntry(key, value))
+            }
         }
     }
 
     void noBuildShouldBeScheduled() {
-        if (jenkinsQueue.isItemScheduled()) {
-            Queue.Item scheduledItem = jenkinsQueue.scheduledItem
-            assertThat("Build is scheduled: ${(scheduledItem.task as Project).fullName}",
-                    scheduledItem, is(nullValue()))
+        if (jenkinsQueue.isAnyJobScheduled()) {
+            Collection<AbstractProject> jobs  = jenkinsQueue.scheduledJobs
+            assertThat("Build is scheduled: ${jobs*.fullName}", jobs, is(empty()))
         }
     }
 
@@ -98,5 +111,9 @@ class JenkinsRunner extends JenkinsRule {
         jenkins.getDescriptorByType(JiraCommentTrigger.JiraCommentTriggerDescriptor).jiraClient = jiraClient
         jenkins.injector.getInstance(JiraTriggerExecutor).jiraTriggerListeners
                 .grep(JiraCommentReplier)[0].jiraClient = jiraClient
+    }
+
+    void setQuietPeriod(int quietPeriod) {
+        this.jenkins.quietPeriod = quietPeriod
     }
 }

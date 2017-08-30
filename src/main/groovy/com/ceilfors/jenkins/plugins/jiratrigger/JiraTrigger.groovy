@@ -10,8 +10,6 @@ import hudson.model.Cause
 import hudson.model.CauseAction
 import hudson.model.Item
 import hudson.model.Job
-import hudson.model.ParameterValue
-import hudson.model.ParametersAction
 import hudson.triggers.Trigger
 import hudson.triggers.TriggerDescriptor
 import jenkins.model.Jenkins
@@ -50,7 +48,7 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
 
         List<Action> actions = []
         if (parameterMappings) {
-            actions << new ParametersAction(collectParameterValues(issue))
+            actions << new ParameterMappingAction(issue, parameterMappings)
         }
         actions << new JiraIssueEnvironmentContributingAction(issue)
         actions << new CauseAction(getCause(issue, t))
@@ -76,10 +74,6 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
     }
 
     abstract boolean filter(Issue issue, T t)
-
-    protected List<ParameterValue> collectParameterValues(Issue issue) {
-        parameterMappings.collect { it.parameterResolver.resolve(issue) }
-    }
 
     private String getId(T t) {
         t instanceof AddressableEntity ? (t as AddressableEntity).self : t.toString()
