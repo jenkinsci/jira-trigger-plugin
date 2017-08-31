@@ -20,7 +20,6 @@ import static org.hamcrest.Matchers.hasEntry
 import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.not
 import static org.junit.Assert.assertThat
-
 /**
  * @author ceilfors
  */
@@ -37,7 +36,7 @@ class JenkinsRunner extends JenkinsRule {
         JulLogLevelRule.configureLog() // Needed when @IgnoreRest is used in acceptance tests
     }
 
-    private static AbstractBuild getScheduledBuild(AbstractProject project) {
+    AbstractBuild getScheduledBuild(AbstractProject project) {
         Queue.Item item = project.queueItem
         if (item == null) {
             project.getBuildByNumber(1)

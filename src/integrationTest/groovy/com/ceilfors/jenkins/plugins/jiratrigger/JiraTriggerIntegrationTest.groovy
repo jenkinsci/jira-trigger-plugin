@@ -6,9 +6,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException
 import hudson.model.AbstractBuild
-import hudson.model.AbstractProject
 import hudson.model.FreeStyleProject
-import hudson.model.Queue
 import hudson.security.GlobalMatrixAuthorizationStrategy
 import hudson.security.HudsonPrivateSecurityRealm
 import hudson.util.Secret
@@ -23,7 +21,6 @@ import spock.lang.Specification
 import static org.hamcrest.Matchers.isEmptyOrNullString
 import static org.hamcrest.Matchers.not
 import static org.junit.Assert.assertThat
-
 /**
  * @author ceilfors
  */
@@ -35,16 +32,6 @@ class JiraTriggerIntegrationTest extends Specification {
     RuleChain ruleChain = RuleChain
             .outerRule(new JulLogLevelRule())
             .around(jenkins)
-
-    private AbstractBuild getScheduledBuild(AbstractProject project) {
-        Queue.Item item = project.queueItem
-        if (item == null) {
-            project.getBuildByNumber(1)
-        } else {
-            item.future.get()
-            (item.future.startCondition.get() as AbstractBuild)
-        }
-    }
 
     def 'Global configuration round trip'() {
         given:
@@ -117,8 +104,9 @@ class JiraTriggerIntegrationTest extends Specification {
 
         then:
         scheduledProjects.size() != 0
-        AbstractBuild build = getScheduledBuild(scheduledProjects[0])
+        AbstractBuild build = jenkins.getScheduledBuild(scheduledProjects[0])
         build.environment.get('JIRA_ISSUE_KEY') == 'TEST-1234'
+
     }
 
     @Issue('JENKINS-41878')
@@ -134,7 +122,7 @@ class JiraTriggerIntegrationTest extends Specification {
 
         then:
         scheduledProjects.size() != 0
-        AbstractBuild build = getScheduledBuild(scheduledProjects[0])
+        AbstractBuild build = jenkins.getScheduledBuild(scheduledProjects[0])
 
         // This bug is testable this way because the serialization doesn't fail in our test and we cannot
         // reproduce the bug in the integration test easily.
