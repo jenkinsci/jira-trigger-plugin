@@ -7,6 +7,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException
 import hudson.model.AbstractBuild
 import hudson.model.FreeStyleProject
+import hudson.model.TaskListener
 import hudson.security.GlobalMatrixAuthorizationStrategy
 import hudson.security.HudsonPrivateSecurityRealm
 import hudson.util.Secret
@@ -105,8 +106,7 @@ class JiraTriggerIntegrationTest extends Specification {
         then:
         scheduledProjects.size() != 0
         AbstractBuild build = jenkins.getScheduledBuild(scheduledProjects[0])
-        build.environment.get('JIRA_ISSUE_KEY') == 'TEST-1234'
-
+        build.getEnvironment(TaskListener.NULL).get('JIRA_ISSUE_KEY') == 'TEST-1234'
     }
 
     @Issue('JENKINS-41878')

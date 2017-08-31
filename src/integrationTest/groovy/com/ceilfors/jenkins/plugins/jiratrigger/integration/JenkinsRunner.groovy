@@ -11,6 +11,7 @@ import hudson.model.AbstractBuild
 import hudson.model.AbstractProject
 import hudson.model.FreeStyleProject
 import hudson.model.Queue
+import hudson.model.TaskListener
 import jenkins.model.GlobalConfiguration
 import org.jvnet.hudson.test.JenkinsRule
 
@@ -20,6 +21,7 @@ import static org.hamcrest.Matchers.hasEntry
 import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.not
 import static org.junit.Assert.assertThat
+
 /**
  * @author ceilfors
  */
@@ -56,7 +58,7 @@ class JenkinsRunner extends JenkinsRule {
         if (parameterMap) {
             AbstractBuild build = getScheduledBuild(job)
             parameterMap.each { key, value ->
-                assertThat(build.environment, hasEntry(key, value))
+                assertThat(build.getEnvironment(TaskListener.NULL), hasEntry(key, value))
             }
         }
     }
