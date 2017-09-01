@@ -1,8 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import com.atlassian.jira.rest.client.api.domain.Issue
-import hudson.model.StringParameterValue
-
 /**
  * Responsible for providing a parameter value for Jenkins by digesting JIRA information.
  *
@@ -10,5 +8,5 @@ import hudson.model.StringParameterValue
  */
 interface ParameterResolver {
 
-    StringParameterValue resolve(Issue issue)
+    String resolve(Issue issue)
 }

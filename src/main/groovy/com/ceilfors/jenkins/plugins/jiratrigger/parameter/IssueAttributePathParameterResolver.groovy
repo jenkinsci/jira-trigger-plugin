@@ -2,7 +2,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
-import hudson.model.StringParameterValue
 
 /**
  * @author ceilfors
@@ -15,9 +14,8 @@ class IssueAttributePathParameterResolver implements ParameterResolver {
         this.issueAttributePathParameterMapping = issueAttributePathParameterMapping
     }
 
-    StringParameterValue resolve(Issue issue) {
-        String attributeValue = resolveProperty(issue.properties, issueAttributePathParameterMapping.issueAttributePath)
-        new StringParameterValue(issueAttributePathParameterMapping.jenkinsParameter, attributeValue)
+    String resolve(Issue issue) {
+        resolveProperty(issue.properties, issueAttributePathParameterMapping.issueAttributePath)
     }
 
     /**

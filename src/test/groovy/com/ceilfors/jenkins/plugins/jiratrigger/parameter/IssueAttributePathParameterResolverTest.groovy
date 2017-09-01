@@ -3,7 +3,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.atlassian.jira.rest.client.internal.json.IssueJsonParser
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
-import hudson.model.StringParameterValue
 import org.codehaus.jettison.json.JSONObject
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -25,12 +24,10 @@ class IssueAttributePathParameterResolverTest extends Specification {
         IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver(mapping)
 
         when:
-        StringParameterValue result = resolver.resolve(createIssueFromFile('TEST-136'))
+        String result = resolver.resolve(createIssueFromFile('TEST-136'))
 
         then:
-        result != null
-        result.value == attributeValue
-        result.name == 'parameter'
+        result == attributeValue
 
         where:
         attributePath                          | attributeValue
@@ -49,7 +46,6 @@ class IssueAttributePathParameterResolverTest extends Specification {
         IssueAttributePathParameterResolver resolver = new IssueAttributePathParameterResolver(mapping)
 
         when:
-
         resolver.resolve(createIssueFromFile('TEST-136'))
 
         then:

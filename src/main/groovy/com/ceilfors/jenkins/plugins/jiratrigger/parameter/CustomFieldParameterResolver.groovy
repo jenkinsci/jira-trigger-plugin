@@ -3,7 +3,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.atlassian.jira.rest.client.api.domain.IssueField
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
-import hudson.model.StringParameterValue
 import org.codehaus.jettison.json.JSONArray
 import org.codehaus.jettison.json.JSONObject
 
@@ -19,11 +18,11 @@ class CustomFieldParameterResolver implements ParameterResolver {
         this.customFieldParameterMapping = customFieldParameterMapping
     }
 
-    StringParameterValue resolve(Issue issue) {
+    String resolve(Issue issue) {
         String customFieldId = "customfield_${customFieldParameterMapping.customFieldId}"
         IssueField field = issue.fields.toList().find { f -> f.id == customFieldId }
         if (field) {
-            new StringParameterValue(customFieldParameterMapping.jenkinsParameter, extractValue(field))
+            extractValue(field)
         } else {
             throw new JiraTriggerException(ParameterErrorCode.FAILED_TO_RESOLVE)
                 .add('customFieldId', customFieldId)

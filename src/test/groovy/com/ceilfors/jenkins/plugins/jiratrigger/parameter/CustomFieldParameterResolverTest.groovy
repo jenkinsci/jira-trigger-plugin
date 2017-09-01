@@ -3,7 +3,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.parameter
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerException
 import com.ceilfors.jenkins.plugins.jiratrigger.webhook.WebhookChangelogEventJsonParser
-import hudson.model.StringParameterValue
 import org.codehaus.jettison.json.JSONObject
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -24,12 +23,10 @@ class CustomFieldParameterResolverTest extends Specification {
         when:
         CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('parameter', customFieldId)
         CustomFieldParameterResolver subject = new CustomFieldParameterResolver(mapping)
-        StringParameterValue result = subject.resolve(createIssueFromFile('single_value_custom_field'))
+        String result = subject.resolve(createIssueFromFile('single_value_custom_field'))
 
         then:
-        result != null
-        result.value == attributeValue
-        result.name == 'parameter'
+        result == attributeValue
 
         where:
         customFieldType                  | customFieldId | attributeValue
@@ -54,12 +51,10 @@ class CustomFieldParameterResolverTest extends Specification {
         when:
         CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('parameter', customFieldId)
         CustomFieldParameterResolver subject = new CustomFieldParameterResolver(mapping)
-        StringParameterValue result = subject.resolve(createIssueFromFile('multi_value_custom_field'))
+        String result = subject.resolve(createIssueFromFile('multi_value_custom_field'))
 
         then:
-        result != null
-        result.value == attributeValue
-        result.name == 'parameter'
+        result == attributeValue
 
         where:
         customFieldType                  | customFieldId | attributeValue
@@ -75,12 +70,10 @@ class CustomFieldParameterResolverTest extends Specification {
         when:
         CustomFieldParameterMapping mapping = new CustomFieldParameterMapping('parameter', customFieldId)
         CustomFieldParameterResolver subject = new CustomFieldParameterResolver(mapping)
-        StringParameterValue result = subject.resolve(createIssueFromFile('empty_custom_field'))
+        String result = subject.resolve(createIssueFromFile('empty_custom_field'))
 
         then:
-        result != null
-        result.value == attributeValue
-        result.name == 'parameter'
+        result == attributeValue
 
         where:
         customFieldType                  | customFieldId | attributeValue

@@ -23,7 +23,7 @@ class ParameterMappingAction implements EnvironmentContributingAction {
     void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
         parameterMappings.each { parameterMapping ->
             env.put(parameterMapping.jenkinsParameter,
-                    parameterMapping.parameterResolver.resolve(issue).value as String)
+                    parameterMapping.parameterResolver.resolve(issue))
         }
     }
 
