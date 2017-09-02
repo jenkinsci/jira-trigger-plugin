@@ -133,7 +133,7 @@ ruleset {
 
     // rulesets/enhanced.xml
 //    CloneWithoutCloneable - Gives CustomCompilerPhaseSourceDecorator error
-    JUnitAssertEqualsConstantActualValue
+//    JUnitAssertEqualsConstantActualValue - Gives CustomCompilerPhaseSourceDecorator error
 //    UnsafeImplementationAsMap - Gives CustomCompilerPhaseSourceDecorator error
 
     // rulesets/exceptions.xml
