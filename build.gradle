@@ -78,7 +78,7 @@ task jiraIntegrationTest(type: Test) {
     classpath = sourceSets.jiraIntegrationTest.runtimeClasspath
     mustRunAfter integrationTest
 }
-test.finalizedBy integrationTest
+check.dependsOn integrationTest
 
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
