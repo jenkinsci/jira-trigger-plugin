@@ -3,7 +3,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.integration
 import com.atlassian.jira.rest.client.api.GetCreateIssueMetadataOptionsBuilder
 import com.atlassian.jira.rest.client.api.IssueRestClient
 import com.atlassian.jira.rest.client.api.domain.CimProject
-import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.atlassian.jira.rest.client.api.domain.Transition
 import com.atlassian.jira.rest.client.api.domain.input.IssueInputBuilder
@@ -11,15 +10,8 @@ import com.atlassian.jira.rest.client.api.domain.input.TransitionInput
 import com.ceilfors.jenkins.plugins.jiratrigger.JiraTriggerGlobalConfiguration
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JrjcJiraClient
 import groovy.util.logging.Log
-import hudson.model.Job
-import hudson.model.Queue
 import jenkins.model.GlobalConfiguration
 
-import static org.hamcrest.Matchers.containsString
-import static org.hamcrest.Matchers.is
-import static org.hamcrest.Matchers.not
-import static org.hamcrest.Matchers.nullValue
-import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
  */
@@ -74,17 +66,6 @@ class RealJiraRunner extends JrjcJiraClient implements JiraRunner {
                     "Available transitions: ${transitions*.name}")
         }
         transitions.find { it.name == transitionName } as Transition
-    }
-
-    @Override
-    void shouldBeNotifiedWithComment(String issueKey, String jobName) {
-        Queue.Item scheduledItem = jenkinsQueue.scheduledJobs
-        assertThat('Build is not scheduled!', scheduledItem, is(not(nullValue())))
-
-        def issue = jiraRestClient.issueClient.getIssue(issueKey).claim()
-        Comment lastComment = issue.getComments().last()
-        Job job = jenkinsRunner.instance.getItemByFullName(jobName, Job)
-        assertThat("$issueKey was not notified by Jenkins!", lastComment.body, containsString(job.absoluteUrl))
     }
 
     @Override

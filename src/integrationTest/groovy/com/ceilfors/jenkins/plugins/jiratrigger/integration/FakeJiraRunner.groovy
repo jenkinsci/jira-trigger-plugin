@@ -47,11 +47,6 @@ class FakeJiraRunner implements JiraRunner {
     }
 
     @Override
-    void shouldBeNotifiedWithComment(String issueKey, String jobName) {
-
-    }
-
-    @Override
     void updateCustomField(String issueKey, String fieldName, String value) {
         Map body = createPostBody('updateCustomField', issueKey)
         body.changelog.items[0].field = fieldName
