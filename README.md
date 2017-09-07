@@ -10,6 +10,7 @@ This plugin is published through the [Jenkins official plugin center](https://pl
 - [x] Triggers a build when a comment is added to JIRA
 - [x] Triggers a build when an issue is updated in JIRA
 - [x] Transforms JIRA Webhook POST data to Jenkins parameters
+- [x] Transforms JIRA standard custom fields to Jenkins parameters (See CustomFieldParameterResolverTest for the full list of supported custom field types)
 - [x] Reply back to JIRA for scheduled builds
 - [x] Sets JIRA information as environment variables to the triggered build 
 

@@ -2,9 +2,12 @@
 
 ## [Unreleased]
 
-## [0.5.0]
-### Fixed
+## [0.5.0] - 2017-09-06
+### Added
 - [JENKINS-38797](https://issues.jenkins-ci.org/browse/JENKINS-38797) Support custom field parameter mapping
+
+### Fixed
+- [JENKINS-46482](https://issues.jenkins-ci.org/browse/JENKINS-46482) Parameter Mapping is not working due to SECURITY-170
 
 ### Changed
 - Update Jenkins core version from 1.642 to 1.651.2
@@ -69,7 +72,7 @@
 - Initial release.
 
 [Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.0...HEAD
-[0.4.2]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.2...v0.5.0
+[0.5.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.3.0...v0.4.0
