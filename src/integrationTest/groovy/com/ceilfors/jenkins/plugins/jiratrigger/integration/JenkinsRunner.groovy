@@ -10,18 +10,18 @@ import com.ceilfors.jenkins.plugins.jiratrigger.webhook.JiraWebhook
 import hudson.model.AbstractBuild
 import hudson.model.AbstractProject
 import hudson.model.FreeStyleProject
+import hudson.model.ParametersAction
 import hudson.model.Queue
-import hudson.model.TaskListener
+import hudson.model.StringParameterValue
 import jenkins.model.GlobalConfiguration
 import org.jvnet.hudson.test.JenkinsRule
 
+import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.empty
 import static org.hamcrest.Matchers.equalTo
-import static org.hamcrest.Matchers.hasEntry
 import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.not
 import static org.junit.Assert.assertThat
-
 /**
  * @author ceilfors
  */
@@ -57,9 +57,9 @@ class JenkinsRunner extends JenkinsRule {
         assertThat('Last build scheduled does not match the job name asserted', job.fullName, is(jobName))
         if (parameterMap) {
             AbstractBuild build = getScheduledBuild(job)
-            parameterMap.each { key, value ->
-                assertThat(build.getEnvironment(TaskListener.NULL), hasEntry(key, value))
-            }
+            def parametersAction = build.getAction(ParametersAction)
+            assertThat(parametersAction.parameters,
+                    containsInAnyOrder(*parameterMap.collect { key, value -> new StringParameterValue(key, value) }))
         }
     }
 

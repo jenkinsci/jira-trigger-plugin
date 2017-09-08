@@ -2,43 +2,17 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping
-import hudson.EnvVars
-import hudson.model.AbstractBuild
-import hudson.model.EnvironmentContributingAction
+import hudson.model.ParametersAction
+import hudson.model.StringParameterValue
 
 /**
  * @author ceilfors
  */
-class ParameterMappingAction implements EnvironmentContributingAction {
-
-    private final Issue issue
-    private final List<ParameterMapping> parameterMappings
+class ParameterMappingAction extends ParametersAction {
 
     ParameterMappingAction(Issue issue, List<ParameterMapping> parameterMappings) {
-        this.issue = issue
-        this.parameterMappings = parameterMappings
-    }
-
-    @Override
-    void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
-        parameterMappings.each { parameterMapping ->
-            env.put(parameterMapping.jenkinsParameter,
-                    parameterMapping.parameterResolver.resolve(issue))
-        }
-    }
-
-    @Override
-    String getIconFileName() {
-        null
-    }
-
-    @Override
-    String getDisplayName() {
-        null
-    }
-
-    @Override
-    String getUrlName() {
-        null
+        super(parameterMappings.collect { p ->
+            new StringParameterValue(p.jenkinsParameter, p.parameterResolver.resolve(issue))
+        }, parameterMappings*.jenkinsParameter)
     }
 }
