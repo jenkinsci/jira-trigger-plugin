@@ -85,7 +85,7 @@ tasks.withType(Test) {
 }
 
 jenkinsPlugin {
-    coreVersion = '1.651.2'
+    coreVersion = '1.651.3'
     shortName = 'jira-trigger'
     displayName = 'JIRA Trigger Plugin'
     url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin'
