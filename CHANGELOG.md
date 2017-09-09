@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [0.5.1] - 2017-09-08
+### Fixed
+- [JENKINS-46482](https://issues.jenkins-ci.org/browse/JENKINS-46482) Another attempt to fix this bug as the previous fix broke pipeline job
+
+### Changed
+- Update Jenkins core version from 1.651.2 to 1.651.3
+
 ## [0.5.0] - 2017-09-06
 ### Added
 - [JENKINS-38797](https://issues.jenkins-ci.org/browse/JENKINS-38797) Support custom field parameter mapping
@@ -71,7 +78,8 @@
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.0...v0.4.1
