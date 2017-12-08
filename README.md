@@ -20,7 +20,7 @@ as long as it supports the webhook type required (see Setup section below).
 Check src/test/groovy/*AcceptanceTest to see how these features are expected to behave.
 
 ## Getting help
-- Go to [Troubleshooting](#troubleshooting) section
+- Go to [Troubleshooting](#troubleshooting) section for commonly faced problems.
 - Generic questions (how to, etc), ask a question at stackoverflow with [jenkins-jira-trigger tag](http://stackoverflow.com/questions/tagged/jenkins-jira-trigger).
 - Ideas or bugs, file an issue to [JENKINS issue tracker](https://issues.jenkins-ci.org/secure/Dashboard.jspa) with `jira-trigger-plugin` component.
 
