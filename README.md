@@ -20,6 +20,7 @@ as long as it supports the webhook type required (see Setup section below).
 Check src/test/groovy/*AcceptanceTest to see how these features are expected to behave.
 
 ## Getting help
+- Go to [Troubleshooting](#troubleshooting) section
 - Generic questions (how to, etc), ask a question at stackoverflow with [jenkins-jira-trigger tag](http://stackoverflow.com/questions/tagged/jenkins-jira-trigger).
 - Ideas or bugs, file an issue to [JENKINS issue tracker](https://issues.jenkins-ci.org/secure/Dashboard.jspa) with `jira-trigger-plugin` component.
 
@@ -73,9 +74,25 @@ JIRA Trigger Plugin sets environment variables you can use during the build:
 
 ## Troubleshooting
 
-### Enable logging
-Enable Jenkins logging for package: `com.ceilfors.jenkins.plugins.jiratrigger`. If nothing comes out in the log, it is possible
-that your JIRA instance is unable to hit your Jenkins instance due to network connectivity issue.
+### Build is not triggered
+
+Firstly, enable Jenkins logging at FINE level for troubleshooting: `com.ceilfors.jenkins.plugins.jiratrigger.webhook`.
+You should see "Received Webhook callback ..." log messages when Jenkins is receiving webhook events from JIRA.
+
+If you are not seeing *anything* in the log, your problem will either be in JIRA configuration or the network connectivity
+in between JIRA and Jenkins:
+
+- Make Webhook configuration more lenient for testing:
+  - Remove JQL configuration in JIRA Webhook page if you configure one
+  - Try to update an issue again and check if you are getting the logs now. If not, you might have network connectivity problem, proceed below.
+- If using JIRA Cloud:
+  - Your Jenkins must be hosted with 80 or 443 port (I haven't tested JIRA Cloud myself, if you are using it and it works please let me know!)
+- If you own JIRA Server:
+  - SSH to JIRA machine.
+  - Try to cURL Jenkins URL and make sure that you can get a response back.
+  - If you are getting a timeout, your firewall rule might be blocking JIRA Webhook events to be sent to Jenkins. You'll need to fix this for this plugin to work.
+
+If you are seeing "Received Webhook callback ..." but your build is not triggered, your configuration for this plugin in Jenkins might be too restrictive, please double check.
 
 ## Building Project
 To build, run acceptance test, and release commands, refer to [this document](docs/Building-Project.md)
