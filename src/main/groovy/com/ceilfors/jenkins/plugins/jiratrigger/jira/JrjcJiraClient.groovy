@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 @Log
 class JrjcJiraClient implements JiraClient {
 
-    long timeout = 10
+    long timeout = 50
     TimeUnit timeoutUnit = TimeUnit.SECONDS
 
     JiraTriggerGlobalConfiguration jiraTriggerGlobalConfiguration
