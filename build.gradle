@@ -1,13 +1,12 @@
 buildscript {
     repositories {
-        jcenter()
         maven {
-            url 'http://repo.jenkins-ci.org/releases/'
+            url 'http://repo.jenkins-ci.org/public/'
         }
-
+        jcenter()
     }
     dependencies {
-        classpath 'org.jenkins-ci.tools:gradle-jpi-plugin:0.16.0'
+        classpath 'org.jenkins-ci.tools:gradle-jpi-plugin:0.26.0'
     }
 }
 
@@ -20,10 +19,10 @@ apply plugin: 'org.jenkins-ci.jpi'
 apply plugin: 'codenarc'
 
 repositories {
-    jcenter()
     maven {
-        url "http://repo.jenkins-ci.org/releases/"
+        url "http://repo.jenkins-ci.org/public/"
     }
+    jcenter()
     maven {
         url "https://m2proxy.atlassian.com/repository/public"
     }
@@ -31,7 +30,8 @@ repositories {
 
 group = 'org.jenkins-ci.plugins'
 description = 'JIRA Trigger'
-sourceCompatibility = JavaVersion.VERSION_1_6
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 sourceSets {
     integrationTest {
@@ -52,6 +52,7 @@ configurations {
 }
 
 dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.11'
     compile('com.atlassian.jira:jira-rest-java-client-core:3.0.0') {
         exclude group: 'org.slf4j'
     }
@@ -59,9 +60,9 @@ dependencies {
     testCompile 'org.jenkins-ci:test-annotations:1.2'
     testCompile 'org.jenkins-ci.plugins:matrix-auth:1.7@jar'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
-    testCompile 'org.spockframework:spock-core:0.7-groovy-1.8'
-    testCompile 'cglib:cglib-nodep:2.2.2' // used by Spock
-    testCompile 'org.objenesis:objenesis:1.2' // used by Spock
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'cglib:cglib-nodep:3.2.5' // used by Spock
+    testCompile 'org.objenesis:objenesis:2.5.1' // used by Spock
     integrationTestCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     jenkinsTest 'org.jenkins-ci.plugins.workflow:workflow-job:2.11.2@jar'
     jenkinsTest 'org.jenkins-ci.plugins.workflow:workflow-api:2.15@jar' // used by workflow-job
@@ -69,12 +70,12 @@ dependencies {
 }
 
 task integrationTest(type: Test) {
-    testClassesDir = sourceSets.integrationTest.output.classesDir
+    testClassesDirs = sourceSets.integrationTest.output
     classpath = sourceSets.integrationTest.runtimeClasspath
     mustRunAfter test
 }
 task jiraIntegrationTest(type: Test) {
-    testClassesDir = sourceSets.jiraIntegrationTest.output.classesDir
+    testClassesDirs = sourceSets.jiraIntegrationTest.output
     classpath = sourceSets.jiraIntegrationTest.runtimeClasspath
     mustRunAfter integrationTest
 }
@@ -85,7 +86,7 @@ tasks.withType(Test) {
 }
 
 jenkinsPlugin {
-    coreVersion = '1.651.3'
+    coreVersion = '2.73'
     shortName = 'jira-trigger'
     displayName = 'JIRA Trigger Plugin'
     url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin'
@@ -119,7 +120,7 @@ project.version = scmVersion.version
 
 codenarc {
     configFile = file('config/codenarc/rules.groovy')
-    toolVersion = '0.26.0'
+    toolVersion = '1.1'
 }
 codenarcTest {
     configFile = file('config/codenarc/rulesTest.groovy')

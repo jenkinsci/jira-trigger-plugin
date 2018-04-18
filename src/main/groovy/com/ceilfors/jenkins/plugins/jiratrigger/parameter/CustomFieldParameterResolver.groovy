@@ -37,12 +37,12 @@ class CustomFieldParameterResolver implements ParameterResolver {
         extractSingleValue(fieldValue)
     }
 
-    private static toList(JSONArray jsonArray) {
+    private static List toList(JSONArray jsonArray) {
         (0..jsonArray.length() - 1).collect { i -> jsonArray.get(i) }
     }
 
     @SuppressWarnings('DuplicateStringLiteral') // Clearer with String literals
-    private static String extractSingleValue(singleValue) {
+    private static String extractSingleValue(Object singleValue) {
         if (singleValue == null) {
             return null
         } else if (singleValue instanceof String) {

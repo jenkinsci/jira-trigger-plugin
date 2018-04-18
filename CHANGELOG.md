@@ -1,6 +1,13 @@
 # Change Log
 
 ## [Unreleased]
+### Changed (Breaking Change)
+- Upgraded Java 7 to Java 8
+- Upgraded Groovy from 1.8 to 2.4
+- Upgraded Jenkins core version from 1.651.3 to 2.73
+- Upgraded CodeNarc from 0.26.0 to 1.1
+- Upgraded gradle from 2.9 to 4.6
+- Upgraded gradle-jpi-plugin from 0.16.0 to 0.26.0
 
 ## [0.5.1] - 2017-09-08
 ### Fixed
