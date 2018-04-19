@@ -17,6 +17,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'org.jenkins-ci.jpi'
 apply plugin: 'codenarc'
+apply plugin: 'idea'
 
 repositories {
     maven {
@@ -130,4 +131,12 @@ codenarcIntegrationTest {
 }
 codenarcJiraIntegrationTest {
     configFile = file('config/codenarc/rulesTest.groovy')
+}
+
+idea {
+    module {
+        testSourceDirs += file('src/integrationTest/groovy')
+        testSourceDirs += file('src/jiraIntegrationTest/groovy')
+        scopes.TEST.plus += [ configurations.integrationTestCompile, configurations.jiraIntegrationTestRuntime ]
+    }
 }
