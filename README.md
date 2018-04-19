@@ -5,6 +5,8 @@
 
 This plugin is published through the [Jenkins official plugin center](https://plugins.jenkins.io/jira-trigger).
 
+Please consider starring the project to show your ❤️ and support.
+
 ## Features
 
 - [x] Triggers a build when a comment is added to JIRA
