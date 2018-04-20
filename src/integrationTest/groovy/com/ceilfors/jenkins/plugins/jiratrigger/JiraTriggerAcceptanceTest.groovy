@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraCloudRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JiraRunner
@@ -11,6 +12,7 @@ import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
@@ -23,6 +25,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     JenkinsRunner jenkins = new JenkinsRunner()
     JiraRunner jira
+    JiraRunner jiraCloud
 
     @Rule
     RuleChain ruleChain = RuleChain
@@ -33,6 +36,7 @@ class JiraTriggerAcceptanceTest extends Specification {
                 @Override
                 protected void before() throws Throwable {
                     jira = new FakeJiraRunner(jenkins)
+                    jiraCloud = new FakeJiraCloudRunner(jenkins)
                 }
             })
 
@@ -52,6 +56,19 @@ class JiraTriggerAcceptanceTest extends Specification {
 
         when:
         jira.addComment(issueKey, DEFAULT_COMMENT)
+
+        then:
+        jenkins.buildShouldBeScheduled('job')
+    }
+
+    @Ignore
+    def 'Should trigger a build when a comment is added in JIRA cloud'() {
+        given:
+        String issueKey = jiraCloud.createIssue()
+        jenkins.createJiraCommentTriggeredProject('job')
+
+        when:
+        jiraCloud.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
         jenkins.buildShouldBeScheduled('job')

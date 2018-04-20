@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.empty
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.not
+import static org.hamcrest.Matchers.nullValue
 import static org.junit.Assert.assertThat
 /**
  * @author ceilfors
@@ -50,6 +51,7 @@ class JenkinsRunner extends JenkinsRule {
 
     void buildShouldBeScheduled(String jobName, Map<String, String> parameterMap = [:]) {
         Collection<AbstractProject> jobs  = jenkinsQueue.scheduledJobs
+        assertThat('Build is not scheduled! Check error logs.', jobs, is(not(nullValue())))
         assertThat('Build is not scheduled!', jobs, is(not(empty())))
         assertThat('Only one project is scheduled', jobs.size(), is(equalTo(1)))
 

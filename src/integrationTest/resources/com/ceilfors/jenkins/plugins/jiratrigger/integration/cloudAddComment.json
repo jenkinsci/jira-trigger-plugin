@@ -1,0 +1,107 @@
+{
+  "timestamp": 1516745644071,
+  "webhookEvent": "comment_created",
+  "comment": {
+    "self": "https://sportsrecruits.atlassian.net/rest/api/2/issue/38747/comment/43735",
+    "id": "43735",
+    "author": {
+      "self": "https://sportsrecruits.atlassian.net/rest/api/2/user?username=alex",
+      "name": "alex",
+      "key": "alex",
+      "accountId": "557058:93f71831-7090-4c70-ab8e-c9a5c9aa2d8e",
+      "avatarUrls": {
+        "48x48": "https://avatar-cdn.atlassian.com/07be219aa1f894b95a868f2eef9d4e17?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F07be219aa1f894b95a868f2eef9d4e17%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue",
+        "24x24": "https://avatar-cdn.atlassian.com/07be219aa1f894b95a868f2eef9d4e17?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F07be219aa1f894b95a868f2eef9d4e17%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue",
+        "16x16": "https://avatar-cdn.atlassian.com/07be219aa1f894b95a868f2eef9d4e17?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F07be219aa1f894b95a868f2eef9d4e17%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue",
+        "32x32": "https://avatar-cdn.atlassian.com/07be219aa1f894b95a868f2eef9d4e17?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F07be219aa1f894b95a868f2eef9d4e17%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"
+      },
+      "displayName": "Alex Figueroa ",
+      "active": true,
+      "timeZone": "America/New_York"
+    },
+    "body": "Jenkins go home",
+    "updateAuthor": {
+      "self": "https://sportsrecruits.atlassian.net/rest/api/2/user?username=alex",
+      "name": "alex",
+      "key": "alex",
+      "accountId": "557058:93f71831-7090-4c70-ab8e-c9a5c9aa2d8e",
+      "avatarUrls": {
+        "48x48": "https://avatar-cdn.atlassian.com/07be219aa1f894b95a868f2eef9d4e17?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F07be219aa1f894b95a868f2eef9d4e17%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue",
+        "24x24": "https://avatar-cdn.atlassian.com/07be219aa1f894b95a868f2eef9d4e17?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F07be219aa1f894b95a868f2eef9d4e17%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue",
+        "16x16": "https://avatar-cdn.atlassian.com/07be219aa1f894b95a868f2eef9d4e17?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F07be219aa1f894b95a868f2eef9d4e17%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue",
+        "32x32": "https://avatar-cdn.atlassian.com/07be219aa1f894b95a868f2eef9d4e17?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F07be219aa1f894b95a868f2eef9d4e17%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"
+      },
+      "displayName": "Alex Figueroa ",
+      "active": true,
+      "timeZone": "America/New_York"
+    },
+    "created": "2018-01-23T17:14:04.071-0500",
+    "updated": "2018-01-23T17:14:04.071-0500"
+  },
+  "issue": {
+    "id": "38747",
+    "self": "https://sportsrecruits.atlassian.net/rest/api/2/issue/38747",
+    "key": "SR-4186",
+    "fields": {
+      "summary": "Identify and fix email address entry points to strip white space",
+      "issuetype": {
+        "self": "https://sportsrecruits.atlassian.net/rest/api/2/issuetype/3",
+        "id": "3",
+        "description": "A task that needs to be done.",
+        "iconUrl": "https://sportsrecruits.atlassian.net/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+        "name": "Task",
+        "subtask": false,
+        "avatarId": 10318
+      },
+      "project": {
+        "self": "https://sportsrecruits.atlassian.net/rest/api/2/project/10000",
+        "id": "10000",
+        "key": "SR",
+        "name": "Sports Recruits",
+        "projectTypeKey": "software",
+        "avatarUrls": {
+          "48x48": "https://sportsrecruits.atlassian.net/secure/projectavatar?pid=10000&avatarId=11300",
+          "24x24": "https://sportsrecruits.atlassian.net/secure/projectavatar?size=small&pid=10000&avatarId=11300",
+          "16x16": "https://sportsrecruits.atlassian.net/secure/projectavatar?size=xsmall&pid=10000&avatarId=11300",
+          "32x32": "https://sportsrecruits.atlassian.net/secure/projectavatar?size=medium&pid=10000&avatarId=11300"
+        }
+      },
+      "assignee": {
+        "self": "https://sportsrecruits.atlassian.net/rest/api/2/user?username=Paul",
+        "name": "Paul",
+        "key": "paul",
+        "accountId": "5a43c904b66c2f374530f7b7",
+        "emailAddress": "paul@sportsrecruits.com",
+        "avatarUrls": {
+          "48x48": "https://avatar-cdn.atlassian.com/d7a71cabea4d48b35a499dd3a68a5fcb?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fd7a71cabea4d48b35a499dd3a68a5fcb%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue",
+          "24x24": "https://avatar-cdn.atlassian.com/d7a71cabea4d48b35a499dd3a68a5fcb?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fd7a71cabea4d48b35a499dd3a68a5fcb%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue",
+          "16x16": "https://avatar-cdn.atlassian.com/d7a71cabea4d48b35a499dd3a68a5fcb?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fd7a71cabea4d48b35a499dd3a68a5fcb%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue",
+          "32x32": "https://avatar-cdn.atlassian.com/d7a71cabea4d48b35a499dd3a68a5fcb?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fd7a71cabea4d48b35a499dd3a68a5fcb%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"
+        },
+        "displayName": "Paul Cox",
+        "active": true,
+        "timeZone": "America/New_York"
+      },
+      "priority": {
+        "self": "https://sportsrecruits.atlassian.net/rest/api/2/priority/3",
+        "iconUrl": "https://sportsrecruits.atlassian.net/images/icons/priorities/major.svg",
+        "name": "Major",
+        "id": "3"
+      },
+      "status": {
+        "self": "https://sportsrecruits.atlassian.net/rest/api/2/status/10500",
+        "description": "This is managed by JIRA",
+        "iconUrl": "https://sportsrecruits.atlassian.net/images/icons/statuses/generic.png",
+        "name": "QA on stage",
+        "id": "10500",
+        "statusCategory": {
+          "self": "https://sportsrecruits.atlassian.net/rest/api/2/statuscategory/4",
+          "id": 4,
+          "key": "indeterminate",
+          "colorName": "yellow",
+          "name": "In Progress"
+        }
+      }
+    }
+  }
+}

@@ -70,7 +70,7 @@ class FakeJiraRunner implements JiraRunner {
         new RESTClient(jenkinsUrl, ContentType.JSON)
     }
 
-    private Map createPostBody(String method, String issueKey) {
+    protected Map createPostBody(String method, String issueKey) {
         def slurper = new JsonSlurper()
         Map body = slurper.parse(new FileReader(new File(this.class.getResource("${method}.json").toURI()))) as Map
         body.issue.key = issueKey
@@ -78,7 +78,11 @@ class FakeJiraRunner implements JiraRunner {
         body
     }
 
-    private class FakeIssue {
+    protected RESTClient getRestClient() {
+        restClient
+    }
+
+    protected static class FakeIssue {
         String issueKey
         String description
     }
