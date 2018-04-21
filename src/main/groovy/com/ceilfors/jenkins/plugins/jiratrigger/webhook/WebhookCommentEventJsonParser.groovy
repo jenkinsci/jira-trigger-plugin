@@ -22,22 +22,22 @@ class WebhookCommentEventJsonParser implements JsonObjectParser<WebhookCommentEv
     /**
      * Fills details needed by JRC JSON Parser that are missing in JIRA Cloud Webhook events.
      */
-    private static void satisfyCloudRequiredKeys(JSONObject json) {
-        JSONObject fields = json.getJSONObject(ISSUE_KEY).getJSONObject('fields')
+    private static void satisfyCloudRequiredKeys(JSONObject webhookEvent) {
+        JSONObject fields = webhookEvent.getJSONObject(ISSUE_KEY).getJSONObject('fields')
         putIfAbsent(fields, 'created', DATE_FIELD_NOT_EXIST)
         putIfAbsent(fields, 'updated', DATE_FIELD_NOT_EXIST)
     }
 
     @Override
-    WebhookCommentEvent parse(JSONObject json) throws JSONException {
-        satisfyRequiredKeys(json)
-        satisfyCloudRequiredKeys(json)
+    WebhookCommentEvent parse(JSONObject webhookEvent) throws JSONException {
+        satisfyRequiredKeys(webhookEvent)
+        satisfyCloudRequiredKeys(webhookEvent)
 
         new WebhookCommentEvent(
-                json.getLong('timestamp'),
-                json.getString('webhookEvent'),
-                issueJsonParser.parse(json.getJSONObject(ISSUE_KEY)),
-                new CommentJsonParser().parse(json.getJSONObject('comment'))
+                webhookEvent.getLong('timestamp'),
+                webhookEvent.getString('webhookEvent'),
+                issueJsonParser.parse(webhookEvent.getJSONObject(ISSUE_KEY)),
+                new CommentJsonParser().parse(webhookEvent.getJSONObject('comment'))
         )
     }
 }

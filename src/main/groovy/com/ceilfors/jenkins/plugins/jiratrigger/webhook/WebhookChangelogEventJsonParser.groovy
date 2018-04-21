@@ -24,15 +24,15 @@ class WebhookChangelogEventJsonParser implements JsonObjectParser<WebhookChangel
     private final IssueJsonParser issueJsonParser = new IssueJsonParser(new JSONObject([:]), new JSONObject([:]))
 
     @Override
-    WebhookChangelogEvent parse(JSONObject json) throws JSONException {
-        satisfyRequiredKeys(json)
+    WebhookChangelogEvent parse(JSONObject webhookEvent) throws JSONException {
+        satisfyRequiredKeys(webhookEvent)
 
         Collection<ChangelogItem> items = JsonParseUtil.parseJsonArray(
-                json.getJSONObject('changelog').getJSONArray('items'), changelogItemJsonParser)
+                webhookEvent.getJSONObject('changelog').getJSONArray('items'), changelogItemJsonParser)
         new WebhookChangelogEvent(
-                json.getLong('timestamp'),
-                json.getString('webhookEvent'),
-                issueJsonParser.parse(json.getJSONObject('issue')),
+                webhookEvent.getLong('timestamp'),
+                webhookEvent.getString('webhookEvent'),
+                issueJsonParser.parse(webhookEvent.getJSONObject('issue')),
                 new ChangelogGroup(null, null, items)
         )
     }

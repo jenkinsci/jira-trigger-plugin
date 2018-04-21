@@ -10,8 +10,8 @@ class WebhookJsonParserUtils {
     /**
      * Fills details needed by JRC JSON Parser that are missing in Webhook events.
      */
-    static void satisfyRequiredKeys(JSONObject json) {
-        JSONObject issue = json.getJSONObject('issue')
+    static void satisfyRequiredKeys(JSONObject webhookEvent) {
+        JSONObject issue = webhookEvent.getJSONObject('issue')
         putIfAbsent(issue, 'expand', '')
     }
 
