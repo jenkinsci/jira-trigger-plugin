@@ -12,7 +12,7 @@ class ParameterMappingAction extends ParametersAction {
 
     ParameterMappingAction(Issue issue, List<ParameterMapping> parameterMappings) {
         super(parameterMappings.collect { p ->
-            new StringParameterValue(p.jenkinsParameter, p.parameterResolver.resolve(issue))
+            new StringParameterValue(p.jenkinsParameter, p.parameterResolver.resolve(issue) ?: '')
         }, parameterMappings*.jenkinsParameter)
     }
 }

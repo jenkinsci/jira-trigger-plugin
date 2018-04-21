@@ -109,6 +109,25 @@ class JiraTriggerIntegrationTest extends Specification {
         build.getEnvironment(TaskListener.NULL).get('JIRA_ISSUE_KEY') == 'TEST-1234'
     }
 
+    @Issue('JENKINS-46836')
+    def 'Should be able to set parameter mapping when value resolved is null'() {
+        given:
+        def issue = TestUtils.createIssue('TEST-1234')
+        def project = jenkins.createJiraCommentTriggeredProject('job')
+        jenkins.quietPeriod = 0
+        project.addParameterMapping('ASSIGNEE', 'assignee')
+
+        when:
+        def scheduledProjects = jenkins.jiraTriggerExecutor.scheduleBuilds(
+                issue, TestUtils.createComment(JiraCommentTrigger.DEFAULT_COMMENT))
+
+        then:
+        issue.assignee == null
+        scheduledProjects.size() != 0
+        AbstractBuild build = jenkins.getScheduledBuild(scheduledProjects[0])
+        build.getEnvironment(TaskListener.NULL).get('ASSIGNEE') == ''
+    }
+
     @Issue('JENKINS-41878')
     def 'Should not serialize any Atlassian issue object into build.xml'() {
         given:
