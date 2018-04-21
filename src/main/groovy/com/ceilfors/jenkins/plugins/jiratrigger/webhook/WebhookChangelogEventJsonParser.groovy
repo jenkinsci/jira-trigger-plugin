@@ -9,6 +9,8 @@ import com.atlassian.jira.rest.client.internal.json.JsonParseUtil
 import org.codehaus.jettison.json.JSONException
 import org.codehaus.jettison.json.JSONObject
 
+import static com.ceilfors.jenkins.plugins.jiratrigger.webhook.WebhookJsonParserUtils.satisfyRequiredKeys
+
 /**
  * @author ceilfors
  */
@@ -23,14 +25,14 @@ class WebhookChangelogEventJsonParser implements JsonObjectParser<WebhookChangel
 
     @Override
     WebhookChangelogEvent parse(JSONObject json) throws JSONException {
+        satisfyRequiredKeys(json)
+
         Collection<ChangelogItem> items = JsonParseUtil.parseJsonArray(
                 json.getJSONObject('changelog').getJSONArray('items'), changelogItemJsonParser)
-        JSONObject issue = json.getJSONObject('issue')
-        issue.put('expand', '') // Webhook event doesn't have expand
         new WebhookChangelogEvent(
                 json.getLong('timestamp'),
                 json.getString('webhookEvent'),
-                issueJsonParser.parse(issue),
+                issueJsonParser.parse(json.getJSONObject('issue')),
                 new ChangelogGroup(null, null, items)
         )
     }

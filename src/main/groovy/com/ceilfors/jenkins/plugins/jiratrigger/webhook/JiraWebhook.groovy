@@ -21,7 +21,8 @@ import java.util.logging.Level
 class JiraWebhook implements UnprotectedRootAction {
 
     public static final URL_NAME = 'jira-trigger-webhook-receiver'
-    public static final WEBHOOK_EVENT = 'jira:issue_updated'
+    public static final ISSUE_UPDATED_WEBHOOK_EVENT = 'jira:issue_updated'
+    public static final COMMENT_CREATED_WEBHOOK_EVENT = 'comment_created'
     private JiraWebhookListener jiraWebhookListener
 
     @Inject
@@ -101,11 +102,12 @@ class JiraWebhook implements UnprotectedRootAction {
         }
 
         boolean isChangelogEvent() {
-            eventType == WEBHOOK_EVENT && webhookEventMap['changelog']
+            eventType == ISSUE_UPDATED_WEBHOOK_EVENT && webhookEventMap['changelog']
         }
 
         boolean isCommentEvent() {
-            eventType == WEBHOOK_EVENT && webhookEventMap['comment']
+            (eventType == ISSUE_UPDATED_WEBHOOK_EVENT
+                    || eventType == COMMENT_CREATED_WEBHOOK_EVENT) && webhookEventMap['comment']
         }
 
         String getUserId() {

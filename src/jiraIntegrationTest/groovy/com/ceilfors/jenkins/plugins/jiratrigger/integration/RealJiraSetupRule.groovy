@@ -106,7 +106,10 @@ class RealJiraSetupRule extends ExternalResource {
                  url : "http://${vagrantHostDefaultIp}:8080/${jenkinsRunner.jiraWebhook.urlName}/"],
         ].each {
             webhookRestClient.registerWebhook(
-                    new WebhookInput(name: it.name, events: [JiraWebhook.WEBHOOK_EVENT], url: it.url)).claim()
+                    new WebhookInput(name: it.name, events: [
+                            JiraWebhook.ISSUE_UPDATED_WEBHOOK_EVENT,
+                            JiraWebhook.COMMENT_CREATED_WEBHOOK_EVENT
+                    ], url: it.url)).claim()
         }
     }
 

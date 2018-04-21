@@ -12,7 +12,6 @@ import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static JiraCommentTrigger.DEFAULT_COMMENT
@@ -61,7 +60,6 @@ class JiraTriggerAcceptanceTest extends Specification {
         jenkins.buildShouldBeScheduled('job')
     }
 
-    @Ignore
     def 'Should trigger a build when a comment is added in JIRA cloud'() {
         given:
         String issueKey = jiraCloud.createIssue()
