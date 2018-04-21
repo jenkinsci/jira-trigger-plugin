@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [0.6.0] - 2018-04-21
 ### Changed (Breaking Change)
 - Upgraded Java 7 to Java 8
 - Upgraded Groovy from 1.8 to 2.4
@@ -11,6 +13,7 @@
 
 ### Fixed
 - [JENKINS-49178](https://issues.jenkins-ci.org/browse/JENKINS-49178) Comment trigger is no longer supported in JIRA Cloud
+  - Add comment_created webhook event in JIRA Cloud to make this work
 
 ## [0.5.1] - 2017-09-08
 ### Fixed
@@ -88,7 +91,8 @@
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.1...v0.4.2
