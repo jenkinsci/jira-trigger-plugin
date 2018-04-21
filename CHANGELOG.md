@@ -9,6 +9,9 @@
 - Upgraded gradle from 2.9 to 4.6
 - Upgraded gradle-jpi-plugin from 0.16.0 to 0.26.0
 
+### Fixed
+- [JENKINS-49178](https://issues.jenkins-ci.org/browse/JENKINS-49178) Comment trigger is no longer supported in JIRA Cloud
+
 ## [0.5.1] - 2017-09-08
 ### Fixed
 - [JENKINS-46482](https://issues.jenkins-ci.org/browse/JENKINS-46482) Another attempt to fix this bug as the previous fix broke pipeline job
