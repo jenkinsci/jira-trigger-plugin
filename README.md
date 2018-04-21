@@ -38,11 +38,6 @@ Check src/test/groovy/*AcceptanceTest to see how these features are expected to 
 6. Do **not** check *Exclude body* as this plugin requires the JSON to operate
 7. Save!
 
-To troubleshoot:
-
-1. Enable Jenkins logging at FINE level for troubleshooting: `com.ceilfors.jenkins.plugins.jiratrigger.webhook`
-2. You should see "Received Webhook callback ..." log messages when Jenkins is receiving webhook events
-
 ### Jenkins global configuration (One time)
 
 This configuration is crucial, especially for *JQL filter* usage. 
@@ -89,7 +84,7 @@ in between JIRA and Jenkins:
   - Remove JQL configuration in JIRA Webhook page if you configure one
   - Try to update an issue again and check if you are getting the logs now. If not, you might have network connectivity problem, proceed below.
 - If using JIRA Cloud:
-  - Your Jenkins must be hosted with 80 or 443 port (I haven't tested JIRA Cloud myself, if you are using it and it works please let me know!)
+  - Your Jenkins must be hosted with 80 or 443 port
 - If you own JIRA Server:
   - SSH to JIRA machine.
   - Try to cURL Jenkins URL and make sure that you can get a response back.
