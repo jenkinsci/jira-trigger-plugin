@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.6.1] - 2018-04-22
+### Fixed
+- [JENKINS-46836](https://issues.jenkins-ci.org/browse/JENKINS-46836) Support null value parameter mapping
+
 ## [0.6.0] - 2018-04-21
 ### Changed (Breaking Change)
 - Upgraded Java 7 to Java 8
@@ -91,7 +95,8 @@
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.4.2...v0.5.0
