@@ -4,6 +4,7 @@ import com.ceilfors.jenkins.plugins.jiratrigger.JiraTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.CustomFieldParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
 import hudson.model.FreeStyleProject
+import hudson.model.JobProperty
 
 /**
  * @author ceilfors
@@ -28,6 +29,11 @@ abstract class JiraTriggerProject {
 
     void setJqlFilter(String jqlFilter) {
         jiraTrigger.jqlFilter = jqlFilter
+        project.save()
+    }
+
+    void addProperty(JobProperty jobProperty) {
+        project.addProperty(jobProperty)
         project.save()
     }
 

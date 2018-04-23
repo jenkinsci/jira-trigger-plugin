@@ -3,6 +3,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger
 import com.atlassian.jira.rest.client.api.AddressableEntity
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
+import com.ceilfors.jenkins.plugins.jiratrigger.parameter.DefaultParametersAction
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping
 import groovy.util.logging.Log
 import hudson.model.Action
@@ -50,6 +51,7 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         if (parameterMappings) {
             actions << new ParameterMappingAction(issue, parameterMappings)
         }
+        actions << new DefaultParametersAction(this.job)
         actions << new JiraIssueEnvironmentContributingAction(issue)
         actions << new CauseAction(getCause(issue, t))
         log.fine("[${job.fullName}] - Scheduling build for ${issue.key} - ${getId(t)}")

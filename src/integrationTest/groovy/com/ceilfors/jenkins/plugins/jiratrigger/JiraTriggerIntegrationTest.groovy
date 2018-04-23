@@ -7,6 +7,8 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException
 import hudson.model.AbstractBuild
 import hudson.model.FreeStyleProject
+import hudson.model.ParametersDefinitionProperty
+import hudson.model.StringParameterDefinition
 import hudson.model.TaskListener
 import hudson.security.GlobalMatrixAuthorizationStrategy
 import hudson.security.HudsonPrivateSecurityRealm
@@ -126,6 +128,28 @@ class JiraTriggerIntegrationTest extends Specification {
         scheduledProjects.size() != 0
         AbstractBuild build = jenkins.getScheduledBuild(scheduledProjects[0])
         build.getEnvironment(TaskListener.NULL).get('ASSIGNEE') == ''
+    }
+
+    @Issue('JENKINS-50125')
+    def 'Should retain default parameters from parameterised job'() {
+        given:
+        def issue = TestUtils.createIssue('TEST-1234')
+        def project = jenkins.createJiraCommentTriggeredProject('job')
+        project.addProperty(new ParametersDefinitionProperty([new StringParameterDefinition('PARAM', 'param')]))
+        project.addParameterMapping('KEY', 'key')
+        jenkins.quietPeriod = 0
+
+        when:
+        def scheduledProjects = jenkins.jiraTriggerExecutor.scheduleBuilds(
+                issue, TestUtils.createComment(JiraCommentTrigger.DEFAULT_COMMENT))
+
+        then:
+        issue.assignee == null
+        scheduledProjects.size() != 0
+        AbstractBuild build = jenkins.getScheduledBuild(scheduledProjects[0])
+        def environment = build.getEnvironment(TaskListener.NULL)
+        environment.get('PARAM') == 'param'
+        environment.get('KEY') == 'TEST-1234'
     }
 
     @Issue('JENKINS-41878')
