@@ -4,8 +4,8 @@ import com.ceilfors.jenkins.plugins.jiratrigger.JiraTrigger
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.CustomFieldParameterMapping
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.IssueAttributePathParameterMapping
 import hudson.model.FreeStyleProject
-import hudson.model.JobProperty
-
+import hudson.model.ParametersDefinitionProperty
+import hudson.model.StringParameterDefinition
 /**
  * @author ceilfors
  */
@@ -32,8 +32,14 @@ abstract class JiraTriggerProject {
         project.save()
     }
 
-    void addProperty(JobProperty jobProperty) {
-        project.addProperty(jobProperty)
+    void addParameter(String name, String defaultValue) {
+        def parameterDefinition = new StringParameterDefinition(name, defaultValue)
+        ParametersDefinitionProperty pdp = project.getProperty(ParametersDefinitionProperty)
+        if (pdp != null) {
+            pdp.parameterDefinitions.add(parameterDefinition)
+        } else {
+            project.addProperty(new ParametersDefinitionProperty([parameterDefinition]))
+        }
         project.save()
     }
 

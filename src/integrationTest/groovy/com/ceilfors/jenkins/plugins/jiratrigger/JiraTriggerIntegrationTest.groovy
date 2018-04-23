@@ -7,8 +7,6 @@ import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException
 import hudson.model.AbstractBuild
 import hudson.model.FreeStyleProject
-import hudson.model.ParametersDefinitionProperty
-import hudson.model.StringParameterDefinition
 import hudson.model.TaskListener
 import hudson.security.GlobalMatrixAuthorizationStrategy
 import hudson.security.HudsonPrivateSecurityRealm
@@ -135,7 +133,8 @@ class JiraTriggerIntegrationTest extends Specification {
         given:
         def issue = TestUtils.createIssue('TEST-1234')
         def project = jenkins.createJiraCommentTriggeredProject('job')
-        project.addProperty(new ParametersDefinitionProperty([new StringParameterDefinition('PARAM', 'param')]))
+        project.addParameter('PARAM1', 'param1')
+        project.addParameter('PARAM2', 'param2')
         project.addParameterMapping('KEY', 'key')
         jenkins.quietPeriod = 0
 
@@ -148,7 +147,8 @@ class JiraTriggerIntegrationTest extends Specification {
         scheduledProjects.size() != 0
         AbstractBuild build = jenkins.getScheduledBuild(scheduledProjects[0])
         def environment = build.getEnvironment(TaskListener.NULL)
-        environment.get('PARAM') == 'param'
+        environment.get('PARAM1') == 'param1'
+        environment.get('PARAM2') == 'param2'
         environment.get('KEY') == 'TEST-1234'
     }
 
