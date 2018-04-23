@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.6.2] - 2018-04-23
+### Fixed
+- [JENKINS-50125](https://issues.jenkins-ci.org/browse/JENKINS-50125) Set default parameters when a job is parameterised
+
 ## [0.6.1] - 2018-04-22
 ### Fixed
 - [JENKINS-46836](https://issues.jenkins-ci.org/browse/JENKINS-46836) Support null value parameter mapping
