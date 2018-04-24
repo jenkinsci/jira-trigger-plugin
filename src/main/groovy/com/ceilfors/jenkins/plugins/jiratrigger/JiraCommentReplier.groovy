@@ -19,7 +19,7 @@ class JiraCommentReplier implements JiraTriggerListener {
     @Override
     void buildScheduled(Issue issue, Collection<? extends AbstractProject> projects) {
         if (jiraTriggerGlobalConfiguration.jiraCommentReply) {
-            jiraClient.addComment(issue.key, 'Build is scheduled for: ' + projects*.absoluteUrl)
+            jiraClient.addComment(issue.key, 'Build is scheduled for: ' + projects*.absoluteUrl.join(', '))
         }
     }
 

@@ -14,7 +14,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import spock.lang.Specification
 
-import static JiraCommentTrigger.DEFAULT_COMMENT
+import static com.ceilfors.jenkins.plugins.jiratrigger.JiraCommentTrigger.DEFAULT_COMMENT
 import static com.ceilfors.jenkins.plugins.jiratrigger.integration.FakeJiraRunner.CUSTOM_FIELD_NAME
 
 /**
@@ -86,6 +86,7 @@ class JiraTriggerAcceptanceTest extends Specification {
 
     def "Should reply back to JIRA when a build is scheduled"() {
         given:
+        def expectedComment
         jenkins.quietPeriod = 100
         String issueKey = jira.createIssue()
         def project = jenkins.createJiraCommentTriggeredProject('job')
@@ -95,10 +96,19 @@ class JiraTriggerAcceptanceTest extends Specification {
 
         when:
         jenkins.setJiraCommentReply(true)
+        expectedComment = "Build is scheduled for: ${project.absoluteUrl}"
         jira.addComment(issueKey, DEFAULT_COMMENT)
 
         then:
-        1 * jiraClient.addComment(issueKey, { it ==~ "Build is scheduled for: \\[${project.absoluteUrl}\\]" })
+        1 * jiraClient.addComment(issueKey, { it ==~ expectedComment })
+
+        when:
+        def project2 = jenkins.createJiraCommentTriggeredProject('job2')
+        expectedComment = "Build is scheduled for: ${project.absoluteUrl}, ${project2.absoluteUrl}"
+        jira.addComment(issueKey, DEFAULT_COMMENT)
+
+        then:
+        1 * jiraClient.addComment(issueKey, { it ==~ expectedComment })
     }
 
     def 'Should map parameters to the triggered build when a comment is created'() {
