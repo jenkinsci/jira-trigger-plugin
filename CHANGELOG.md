@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.6.3] - 2018-04-24
+### Fixed
+- [JENKINS-43964](https://issues.jenkins-ci.org/browse/JENKINS-43964) Remove square brackets from comment replier
+
 ## [0.6.2] - 2018-04-23
 ### Fixed
 - [JENKINS-50125](https://issues.jenkins-ci.org/browse/JENKINS-50125) Set default parameters when a job is parameterised
