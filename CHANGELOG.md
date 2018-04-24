@@ -103,7 +103,8 @@
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.2...HEAD
+[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.3...HEAD
+[0.6.3]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.5.1...v0.6.0
