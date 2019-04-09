@@ -22,7 +22,7 @@ class JiraIssueEnvironmentContributingAction implements EnvironmentContributingA
     @Override
     @Deprecated
     void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
-        buildEnvironment(build,env)
+        buildEnvironment(build, env)
     }
 
     @Override
