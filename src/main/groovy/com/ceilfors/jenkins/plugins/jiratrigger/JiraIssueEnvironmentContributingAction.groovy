@@ -4,6 +4,9 @@ import com.atlassian.jira.rest.client.api.domain.Issue
 import hudson.EnvVars
 import hudson.model.AbstractBuild
 import hudson.model.EnvironmentContributingAction
+import hudson.model.Run
+
+import javax.annotation.Nonnull
 
 /**
  * @author ceilfors
@@ -17,7 +20,13 @@ class JiraIssueEnvironmentContributingAction implements EnvironmentContributingA
     }
 
     @Override
+    @Deprecated
     void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
+        buildEnvironment(build, env)
+    }
+
+    @Override
+    void buildEnvironment(@Nonnull Run<?, ?> run, @Nonnull EnvVars env) {
         env.put('JIRA_ISSUE_KEY', issueKey)
     }
 
