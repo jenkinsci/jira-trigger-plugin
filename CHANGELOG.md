@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2019-04-14
+### Changed
+- [GH-3](https://github.com/jenkinsci/jira-trigger-plugin/pull/3) Upgraded Jenkins core version from 2.73 to 2.76
+
 ## [0.6.3] - 2018-04-24
 ### Fixed
 - [JENKINS-43964](https://issues.jenkins-ci.org/browse/JENKINS-43964) Remove square brackets from comment replier
