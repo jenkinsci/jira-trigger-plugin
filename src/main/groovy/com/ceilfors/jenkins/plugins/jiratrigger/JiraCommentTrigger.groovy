@@ -16,7 +16,7 @@ import org.kohsuke.stapler.DataBoundSetter
 @Log
 class JiraCommentTrigger extends JiraTrigger<Comment> {
 
-    public static final String DEFAULT_COMMENT = 'build this please'
+    public static final String DEFAULT_COMMENT = '.*'
 
     @DataBoundSetter
     String commentPattern = JiraCommentTriggerDescriptor.DEFAULT_COMMENT_PATTERN

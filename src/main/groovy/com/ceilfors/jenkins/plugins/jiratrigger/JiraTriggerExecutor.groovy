@@ -72,7 +72,7 @@ class JiraTriggerExecutor implements JiraWebhookListener {
     }
 
     List<AbstractProject> scheduleBuilds(Issue issue) {
-        scheduleBuildsInternal(JiraCommentTrigger, issue, null)
+        scheduleBuildsInternal(JiraIssueCreatedTrigger, issue, issue.key)
     }
 
     List<AbstractProject> scheduleBuilds(Issue issue, ChangelogGroup changelogGroup) {

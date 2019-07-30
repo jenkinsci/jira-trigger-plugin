@@ -69,7 +69,7 @@ class JiraWebhook implements UnprotectedRootAction {
         }
         if (rawWebhookEvent.isIssueCreatedEvent()) {
             log.fine("Received Webhook callback from issue creation. Event type: ${rawWebhookEvent.eventType}")
-            WebhookIssueCreatedEvent issueCreatedEvent = new WebhookIssueCreatedEventParser().parse(webhookJsonObject)
+            WebhookIssueCreatedEvent issueCreatedEvent = new WebhookIssueCreatedEventJsonParser().parse(webhookJsonObject)
             issueCreatedEvent.userId = rawWebhookEvent.userId
             issueCreatedEvent.userKey = rawWebhookEvent.userKey
             jiraWebhookListener.issueCreated(issueCreatedEvent)
