@@ -21,6 +21,7 @@ import java.util.logging.Level
 class JiraWebhook implements UnprotectedRootAction {
 
     public static final URL_NAME = 'jira-trigger-webhook-receiver'
+    public static final ISSUE_CREATED_WEBHOOK_EVENT = 'jira:issue_created'
     public static final ISSUE_UPDATED_WEBHOOK_EVENT = 'jira:issue_updated'
     public static final COMMENT_CREATED_WEBHOOK_EVENT = 'comment_created'
     private JiraWebhookListener jiraWebhookListener
@@ -66,6 +67,14 @@ class JiraWebhook implements UnprotectedRootAction {
             jiraWebhookListener.changelogCreated(changelogEvent)
             validEvent = true
         }
+        if (rawWebhookEvent.isIssueCreatedEvent()) {
+            log.fine("Received Webhook callback from issue creation. Event type: ${rawWebhookEvent.eventType}")
+            WebhookIssueCreatedEvent issueCreatedEvent = new WebhookIssueCreatedEventParser().parse(webhookJsonObject)
+            issueCreatedEvent.userId = rawWebhookEvent.userId
+            issueCreatedEvent.userKey = rawWebhookEvent.userKey
+            jiraWebhookListener.issueCreated(issueCreatedEvent)
+            validEvent = true
+        }
         if (rawWebhookEvent.isCommentEvent()) {
             log.fine("Received Webhook callback from comment. Event type: ${rawWebhookEvent.eventType}")
             WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(webhookJsonObject)
@@ -103,6 +112,10 @@ class JiraWebhook implements UnprotectedRootAction {
 
         boolean isChangelogEvent() {
             eventType == ISSUE_UPDATED_WEBHOOK_EVENT && webhookEventMap['changelog']
+        }
+
+        boolean isIssueCreatedEvent() {
+            eventType == ISSUE_CREATED_WEBHOOK_EVENT
         }
 
         boolean isCommentEvent() {
