@@ -2,7 +2,6 @@ package com.ceilfors.jenkins.plugins.jiratrigger.webhook
 
 import com.atlassian.jira.rest.client.internal.json.IssueJsonParser
 import com.atlassian.jira.rest.client.internal.json.JsonObjectParser
-import com.atlassian.jira.rest.client.internal.json.JsonParseUtil
 import org.codehaus.jettison.json.JSONException
 import org.codehaus.jettison.json.JSONObject
 

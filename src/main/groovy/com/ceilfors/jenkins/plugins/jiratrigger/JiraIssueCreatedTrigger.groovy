@@ -5,7 +5,6 @@ import groovy.util.logging.Log
 import hudson.Extension
 import hudson.model.Cause
 import org.kohsuke.stapler.DataBoundConstructor
-import org.kohsuke.stapler.DataBoundSetter
 
 /**
  * Responsible for processing <tt>String</tt> and determine if a job should be scheduled.

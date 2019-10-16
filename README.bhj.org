@@ -1,0 +1,13 @@
+* How to build:
+
+#+BEGIN_SRC sh
+./gradlew -x compileIntegrationTestGroovy -x test build
+#+END_SRC
+
+* How to install
+
+In Jenkins, upload and install =build/libs/jira-trigger.jpi=.
+
+#+BEGIN_SRC
+of ${scm_jenkins_url}pluginManager/advanced
+#+END_SRC
