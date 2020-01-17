@@ -14,7 +14,6 @@ class WebhookInputJsonGenerator implements JsonGenerator<WebhookInput> {
         new JSONObject()
                 .put('name', webhook.name)
                 .put('url', webhook.url)
-                .put('jqlFilter', webhook.jqlFilter)
                 .put('events', webhook.events)
     }
 }

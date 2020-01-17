@@ -8,5 +8,4 @@ class WebhookInput {
     String url
     String name
     List<String> events
-    String jqlFilter
 }

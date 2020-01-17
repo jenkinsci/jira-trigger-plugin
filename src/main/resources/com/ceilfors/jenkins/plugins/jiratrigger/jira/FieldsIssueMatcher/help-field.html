@@ -1,0 +1,22 @@
+<div>
+<p>
+The JIRA Field name (both builtin such as “Issue Type” and customfields).
+</p>
+
+<p>
+All the field names for your Jira server is provided, you need to select one (if it's not displayed, you need type a few letters first for it to be filtered).
+</p>
+
+<p>
+<b>Note</b>: This is intended to replace the old jqlFilter setting. jqlFilter won't work for Jira Data Center version, because of the following scenario:
+</p>
+
+<ol class="org-ol">
+<li>User create a Jira Issue on Node A.</li>
+<li>JTP (Jira Trigger Plugin, this one) searches jql on Node B.</li>
+</ol>
+
+<p>
+This won't work, because for jql search to work, the Jira search index need to be in <b>SYNC</b>, but Jira <a href="https://confluence.atlassian.com/jirakb/lucene-index-synchronization-in-jira-data-center-800694054.html">does not assure it's realtime</a>.
+</p>
+</div>

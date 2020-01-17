@@ -1,7 +1,10 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-    <f:entry title="JQL filter" field="jqlFilter">
-        <f:textbox/>
+    <f:entry title="Issue matcher">
+        <f:hetero-list name="issueMatchers" items="${instance.issueMatchers}" hasHeader="true"
+                       descriptors="${descriptor.issueMatcherDescriptors}"
+                       targetType="com.ceilfors.jenkins.plugins.jiratrigger.jira.IssueMatcher"
+                       addCaption="Add issue matcher"/>
     </f:entry>
 
     <f:entry title="Changelog matcher">

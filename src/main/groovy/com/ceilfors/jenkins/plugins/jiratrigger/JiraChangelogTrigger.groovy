@@ -55,6 +55,7 @@ class JiraChangelogTrigger extends JiraTrigger<ChangelogGroup> {
         List<ChangelogMatcher.ChangelogMatcherDescriptor> getChangelogMatcherDescriptors() {
             jenkins.getDescriptorList(ChangelogMatcher)
         }
+
     }
 
     static class JiraChangelogTriggerCause extends Cause {

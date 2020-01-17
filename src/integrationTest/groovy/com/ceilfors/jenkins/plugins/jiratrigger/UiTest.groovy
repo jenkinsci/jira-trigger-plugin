@@ -52,29 +52,6 @@ class UiTest extends Specification {
         globalConfig.jiraPassword.plainText == 'test password'
     }
 
-    def 'Sets JQL filter'() {
-        given:
-        def jqlFilter = 'non default jql filter'
-        FreeStyleProject project = jenkins.createFreeStyleProject('job')
-        JiraTriggerConfigurer configurer = createUiConfigurer(triggerType, 'job')
-
-        when:
-        configurer.activate()
-
-        then:
-        assertThat(project.triggers.values(), hasItem(instanceOf(triggerType)))
-
-        when:
-        configurer.setJqlFilter(jqlFilter)
-        def trigger = project.getTrigger(triggerType)
-
-        then:
-        trigger.jqlFilter == jqlFilter
-
-        where:
-        triggerType << [JiraCommentTrigger, JiraChangelogTrigger]
-    }
-
     def 'Adds parameter mappings'() {
         given:
         FreeStyleProject project = jenkins.createFreeStyleProject('job')

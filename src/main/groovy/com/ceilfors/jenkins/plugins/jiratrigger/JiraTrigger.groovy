@@ -1,8 +1,10 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import org.codehaus.jettison.json.JSONObject
 import com.atlassian.jira.rest.client.api.AddressableEntity
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.IssueMatcher
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.DefaultParametersAction
 import com.ceilfors.jenkins.plugins.jiratrigger.parameter.ParameterMapping
 import groovy.util.logging.Log
@@ -28,23 +30,34 @@ import java.util.concurrent.CopyOnWriteArrayList
 abstract class JiraTrigger<T> extends Trigger<Job> {
 
     @DataBoundSetter
-    String jqlFilter = ''
+    List<IssueMatcher> issueMatchers = []
 
     @DataBoundSetter
     List<ParameterMapping> parameterMappings = []
 
-    final boolean run(Issue issue, T t) {
+    boolean issueMatches(JSONObject issueJsonObject) {
+        for (iMacher in issueMatchers) {
+            if (!iMacher.matches(issueJsonObject)) {
+                log.fine("[${job.fullName}] - Not scheduling build: The issue doesn't " +
+                         "match with the issue matcher [${iMacher}]")
+                return false
+            } else {
+                log.fine("[${job.fullName}] - scheduling build: The issue " +
+                         "matches with the issue matcher [${iMacher}]")
+            }
+        }
+        true
+    }
+
+    final boolean run(Issue issue, JSONObject issueJsonObject, T t) {
         log.fine("[${job.fullName}] - Processing ${issue.key} - ${getId(t)}")
+
+        if (! issueMatches(issueJsonObject)) {
+            return false;
+        }
 
         if (!filter(issue, t)) {
             return false
-        }
-        if (jqlFilter) {
-            if (!jiraTriggerDescriptor.jiraClient.validateIssueKey(issue.key, jqlFilter)) {
-                log.fine("[${job.fullName}] - Not scheduling build: The issue ${issue.key} doesn't " +
-                        "match with the jqlFilter [$jqlFilter]")
-                return false
-            }
         }
 
         List<Action> actions = []
@@ -107,6 +120,11 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         @SuppressWarnings('GroovyUnusedDeclaration') // Jenkins jelly
         List<ParameterMapping.ParameterMappingDescriptor> getParameterMappingDescriptors() {
             jenkins.getDescriptorList(ParameterMapping)
+        }
+
+        @SuppressWarnings('GroovyUnusedDeclaration') // Jenkins jelly
+        List<IssueMatcher.IssueMatcherDescriptor> getIssueMatcherDescriptors() {
+            jenkins.getDescriptorList(IssueMatcher)
         }
 
         protected void addTrigger(JiraTrigger jiraTrigger) {

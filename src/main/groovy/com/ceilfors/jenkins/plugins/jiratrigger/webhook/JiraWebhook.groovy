@@ -57,6 +57,10 @@ class JiraWebhook implements UnprotectedRootAction {
         Map webhookEventMap = new JsonSlurper().parseText(webhookEvent) as Map
         RawWebhookEvent rawWebhookEvent = new RawWebhookEvent(request, webhookEventMap)
         JSONObject webhookJsonObject = new JSONObject(webhookEvent)
+        JSONObject issueJsonObject = null
+        if (webhookJsonObject.has('issue')) {
+            issueJsonObject = webhookJsonObject.get('issue')
+        }
         boolean validEvent = false
 
         if (rawWebhookEvent.isChangelogEvent()) {
@@ -64,7 +68,7 @@ class JiraWebhook implements UnprotectedRootAction {
             WebhookChangelogEvent changelogEvent = new WebhookChangelogEventJsonParser().parse(webhookJsonObject)
             changelogEvent.userId = rawWebhookEvent.userId
             changelogEvent.userKey = rawWebhookEvent.userKey
-            jiraWebhookListener.changelogCreated(changelogEvent)
+            jiraWebhookListener.changelogCreated(changelogEvent, issueJsonObject)
             validEvent = true
         }
         if (rawWebhookEvent.isIssueCreatedEvent()) {
@@ -73,7 +77,7 @@ class JiraWebhook implements UnprotectedRootAction {
                 new WebhookIssueCreatedEventJsonParser().parse(webhookJsonObject)
             issueCreatedEvent.userId = rawWebhookEvent.userId
             issueCreatedEvent.userKey = rawWebhookEvent.userKey
-            jiraWebhookListener.issueCreated(issueCreatedEvent)
+            jiraWebhookListener.issueCreated(issueCreatedEvent, issueJsonObject)
             validEvent = true
         }
         if (rawWebhookEvent.isCommentEvent()) {
@@ -81,7 +85,7 @@ class JiraWebhook implements UnprotectedRootAction {
             WebhookCommentEvent commentEvent = new WebhookCommentEventJsonParser().parse(webhookJsonObject)
             commentEvent.userId = rawWebhookEvent.userId
             commentEvent.userKey = rawWebhookEvent.userKey
-            jiraWebhookListener.commentCreated(commentEvent)
+            jiraWebhookListener.commentCreated(commentEvent, issueJsonObject)
             validEvent = true
         }
         if (!validEvent) {

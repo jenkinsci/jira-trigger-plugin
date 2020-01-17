@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import org.codehaus.jettison.json.JSONObject
 import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
@@ -42,20 +43,20 @@ class JiraTriggerExecutor implements JiraWebhookListener {
     }
 
     @Override
-    void commentCreated(WebhookCommentEvent commentEvent) {
-        List<AbstractProject> scheduledProjects = scheduleBuilds(commentEvent.issue, commentEvent.comment)
+    void commentCreated(WebhookCommentEvent commentEvent, JSONObject issueJsonObject) {
+        List<AbstractProject> scheduledProjects = scheduleBuilds(commentEvent.issue, issueJsonObject, commentEvent.comment)
         fireListeners(scheduledProjects, commentEvent.issue)
     }
 
     @Override
-    void changelogCreated(WebhookChangelogEvent changelogEvent) {
-        List<AbstractProject> scheduledProjects = scheduleBuilds(changelogEvent.issue, changelogEvent.changelog)
+    void changelogCreated(WebhookChangelogEvent changelogEvent, JSONObject issueJsonObject) {
+        List<AbstractProject> scheduledProjects = scheduleBuilds(changelogEvent.issue, issueJsonObject, changelogEvent.changelog)
         fireListeners(scheduledProjects, changelogEvent.issue)
     }
 
     @Override
-    void issueCreated(WebhookIssueCreatedEvent issueCreatedEvent) {
-        List<AbstractProject> scheduledProjects = scheduleBuilds(issueCreatedEvent.issue)
+    void issueCreated(WebhookIssueCreatedEvent issueCreatedEvent, JSONObject issueJsonObject) {
+        List<AbstractProject> scheduledProjects = scheduleBuilds(issueCreatedEvent.issue, issueJsonObject)
         fireListeners(scheduledProjects, issueCreatedEvent.issue)
     }
 
@@ -67,27 +68,27 @@ class JiraTriggerExecutor implements JiraWebhookListener {
         }
     }
 
-    List<AbstractProject> scheduleBuilds(Issue issue, Comment comment) {
-        scheduleBuildsInternal(JiraCommentTrigger, issue, comment)
+    List<AbstractProject> scheduleBuilds(Issue issue, JSONObject issueJsonObject, Comment comment) {
+        scheduleBuildsInternal(JiraCommentTrigger, issue, issueJsonObject, comment)
     }
 
-    List<AbstractProject> scheduleBuilds(Issue issue) {
-        scheduleBuildsInternal(JiraIssueCreatedTrigger, issue, issue.key)
+    List<AbstractProject> scheduleBuilds(Issue issue, JSONObject issueJsonObject) {
+        scheduleBuildsInternal(JiraIssueCreatedTrigger, issue, issueJsonObject, issue.key)
     }
 
-    List<AbstractProject> scheduleBuilds(Issue issue, ChangelogGroup changelogGroup) {
-        scheduleBuildsInternal(JiraChangelogTrigger, issue, changelogGroup)
+    List<AbstractProject> scheduleBuilds(Issue issue, JSONObject issueJsonObject, ChangelogGroup changelogGroup) {
+        scheduleBuildsInternal(JiraChangelogTrigger, issue, issueJsonObject, changelogGroup)
     }
 
     /**
      * @return the scheduled projects
      */
     private List<AbstractProject> scheduleBuildsInternal(
-            Class<? extends JiraTrigger> triggerClass, Issue issue, Object jiraObject) {
+        Class<? extends JiraTrigger> triggerClass, Issue issue, JSONObject issueJsonObject, Object jiraObject) {
         List<AbstractProject> scheduledProjects = []
         List<? extends JiraTrigger> triggers = getTriggers(triggerClass)
         for (trigger in triggers) {
-            boolean scheduled = trigger.run(issue, jiraObject)
+            boolean scheduled = trigger.run(issue, issueJsonObject, jiraObject)
             if (scheduled) {
                 scheduledProjects << trigger.job
             }

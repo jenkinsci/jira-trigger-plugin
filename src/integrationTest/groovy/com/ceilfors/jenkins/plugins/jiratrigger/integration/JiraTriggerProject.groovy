@@ -27,11 +27,6 @@ abstract class JiraTriggerProject {
         project.save()
     }
 
-    void setJqlFilter(String jqlFilter) {
-        jiraTrigger.jqlFilter = jqlFilter
-        project.save()
-    }
-
     void addParameter(String name, String defaultValue) {
         def parameterDefinition = new StringParameterDefinition(name, defaultValue)
         ParametersDefinitionProperty pdp = project.getProperty(ParametersDefinitionProperty)

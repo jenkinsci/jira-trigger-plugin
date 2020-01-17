@@ -61,11 +61,6 @@ class FakeJiraRunner implements JiraRunner {
         restClient.post(body: body)
     }
 
-    @Override
-    boolean validateIssueKey(String issueKey, String jqlFilter) {
-        true
-    }
-
     private RESTClient createRestClient(String jenkinsUrl) {
         new RESTClient(jenkinsUrl, ContentType.JSON)
     }

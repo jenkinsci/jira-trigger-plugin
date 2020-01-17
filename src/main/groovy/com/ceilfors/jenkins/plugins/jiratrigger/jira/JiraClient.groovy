@@ -1,5 +1,7 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.jira
 
+import com.atlassian.jira.rest.client.api.domain.Field
+
 /**
  * Adapter layer to communicate with JIRA. There are too many
  * ways of communicating with JIRA i.e. JRJC, rcarz/jira-client, plain REST, etc.
@@ -9,6 +11,5 @@ package com.ceilfors.jenkins.plugins.jiratrigger.jira
 interface JiraClient {
 
     void addComment(String issueKey, String comment)
-
-    boolean validateIssueKey(String issueKey, String jqlFilter)
+    List<Field> getFields()
 }

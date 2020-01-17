@@ -1,0 +1,66 @@
+<div>
+  <p>
+    When a Jira webhook event arrives, the event body (JSON data) contains details of an issue, including the fields.
+  </p>
+
+  <p>
+    The fields can be used to match against this configuration like this:
+  </p>
+
+  <ol class="org-ol">
+    <li><p>
+        You specify the FIELD NAME and the expected FIELD VALUE here
+      </p>
+
+      <p>
+        We choose FIELD NAMES over FIELD IDS, because
+      </p>
+
+      <ul class="org-ul">
+        <li>Ids like <code>customfield_11523</code> doesn't make much sense to human beings</li>
+        <li><p>
+            Ids are not portable over test environment and production environment
+          </p>
+
+          <p>
+            It's very likely for the fields that server the same purpose on both Test Jira and Production Jira to have the same FIELD NAMEs but not the same FIELD IDs.
+        </p></li>
+    </ul></li>
+
+    <li><p>
+        The FIELD NAME you specified will be calculated to the FIELD ID, all there are saved:
+      </p>
+      <ul class="org-ul">
+        <li>FIELD NAME</li>
+        <li>FIELD ID</li>
+        <li>expected FIELD VALUE</li>
+      </ul>
+
+      <p>
+        Note that you need to make sure the field names and ids of your Jira server is 1-on-1. It's undefined to have 2 fields with different ids but the same name.
+    </p></li>
+
+    <li><p>
+        When webhook event fires, the fields of the issue will be compared the the saved FIELD ID and FIELD VALUE (webhook event does not contain field names).
+      </p>
+
+      <p>
+        For a field to match, it must satisfy both:
+      </p>
+
+      <ul class="org-ul">
+        <li>Its field id is equal to the saved FIELD ID</li>
+        <li><p>
+            Its field value is <i>equal</i> to the saved FIELD VALUE
+          </p>
+
+          <p>
+            Please read the source code at <a href="https://github.com/baohaojun/jira-trigger-plugin/raw/master/src/main/groovy/com/ceilfors/jenkins/plugins/jiratrigger/jira/IssueMatcher.groovy">IssueMatcher.groovy</a>.
+        </p></li>
+      </ul>
+
+      <p>
+        If no matching field can be found, then the job is not scheduled.
+    </p></li>
+  </ol>
+</div>

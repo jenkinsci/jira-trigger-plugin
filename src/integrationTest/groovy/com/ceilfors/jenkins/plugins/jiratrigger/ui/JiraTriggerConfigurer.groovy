@@ -17,12 +17,6 @@ abstract class JiraTriggerConfigurer {
         this.jobName = jobName
     }
 
-    void setJqlFilter(String jqlFilter) {
-        JiraTriggerConfigurationPage configPage = configure()
-        configPage.setJqlFilter(jqlFilter)
-        configPage.save()
-    }
-
     void addParameterMapping(String jenkinsParameter, String issueAttributePath) {
         JiraTriggerConfigurationPage configPage = configure()
         configPage.addParameterMapping(jenkinsParameter, issueAttributePath)

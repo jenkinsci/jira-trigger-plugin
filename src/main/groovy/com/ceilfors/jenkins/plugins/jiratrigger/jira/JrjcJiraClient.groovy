@@ -1,5 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.jira
 
+import com.atlassian.jira.rest.client.api.domain.Field
 import com.atlassian.jira.rest.client.api.domain.Comment
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.atlassian.jira.rest.client.api.domain.SearchResult
@@ -57,10 +58,10 @@ class JrjcJiraClient implements JiraClient {
     }
 
     @Override
-    boolean validateIssueKey(String issueKey, String jqlFilter) {
-        String jql = "key=$issueKey and ($jqlFilter)"
-        SearchResult searchResult = jiraRestClient.searchClient.searchJql(jql).get(timeout, timeoutUnit)
-        searchResult.total != 0
+    List<Field> getFields() {
+        def fields = new ArrayList<Field>()
+        fields = jiraRestClient.metadataClient.getFields().claim()
+        return fields
     }
 
     @Override
