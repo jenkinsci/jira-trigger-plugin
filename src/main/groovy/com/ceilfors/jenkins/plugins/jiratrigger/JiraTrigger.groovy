@@ -128,8 +128,20 @@ abstract class JiraTrigger<T> extends Trigger<Job> {
         }
 
         protected void addTrigger(JiraTrigger jiraTrigger) {
+            def addOrUpdate = "Added"
+            triggers.removeIf {
+                if (it.job.fullName == jiraTrigger.job.fullName &&
+                    it.class == jiraTrigger.class) {
+                    addOrUpdate = "Updated"
+                    return true
+                } else {
+                    return false
+                }
+            }
+
             triggers.add(jiraTrigger)
-            log.finest("Added [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] to triggers list")
+
+            log.finest("${addOrUpdate} [${jiraTrigger.job.fullName}]:[${jiraTrigger.class.simpleName}] to triggers list")
         }
 
         protected void removeTrigger(JiraTrigger jiraTrigger) {
