@@ -69,7 +69,9 @@ abstract class IssueMatcher extends AbstractDescribableImpl<IssueMatcher> {
             if (! (value instanceof String)) {
                 if (value instanceof JSONObject) {
                     value = value as JSONObject
-                    if (value.has('name')) {
+                    if (value.has('key')) {
+                        value = value.get('key').toString()
+                    } else if (value.has('name')) {
                         value = value.get('name').toString()
                     } else if (value.has('value')) {
                         value = value.get('value').toString()
