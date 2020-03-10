@@ -54,7 +54,7 @@ configurations {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.11'
-    compile('com.atlassian.jira:jira-rest-java-client-core:3.0.0') {
+    compile('com.atlassian.jira:jira-rest-java-client-core:5.2.1') {
         exclude group: 'org.slf4j'
     }
     compile 'com.google.inject.extensions:guice-multibindings:4.0'
