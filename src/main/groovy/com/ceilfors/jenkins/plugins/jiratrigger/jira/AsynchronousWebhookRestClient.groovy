@@ -3,7 +3,7 @@ package com.ceilfors.jenkins.plugins.jiratrigger.jira
 import com.atlassian.httpclient.api.HttpClient
 import com.atlassian.jira.rest.client.internal.async.AbstractAsynchronousRestClient
 import com.atlassian.jira.rest.client.internal.json.JsonParser
-import com.atlassian.util.concurrent.Promise
+import io.atlassian.util.concurrent.Promise
 
 import javax.ws.rs.core.UriBuilder
 

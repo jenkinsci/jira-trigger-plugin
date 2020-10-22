@@ -1,6 +1,6 @@
 package com.ceilfors.jenkins.plugins.jiratrigger.jira
 
-import com.atlassian.util.concurrent.Promise
+import io.atlassian.util.concurrent.Promise
 
 /**
  * @author ceilfors

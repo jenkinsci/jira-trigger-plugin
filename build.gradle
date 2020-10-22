@@ -54,9 +54,11 @@ configurations {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.11'
-    compile('com.atlassian.jira:jira-rest-java-client-core:3.0.0') {
+    compile('com.atlassian.jira:jira-rest-java-client-core:5.2.1') {
         exclude group: 'org.slf4j'
+        exclude group: 'org.springframework'
     }
+    compile 'io.atlassian.fugue:fugue:4.7.2'
     compile 'com.google.inject.extensions:guice-multibindings:4.0'
     testCompile 'org.jenkins-ci:test-annotations:1.2'
     testCompile 'org.jenkins-ci.plugins:matrix-auth:1.7@jar'
