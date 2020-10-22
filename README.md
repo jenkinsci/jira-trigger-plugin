@@ -1,4 +1,7 @@
 # JIRA Trigger Plugin
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Build Status](https://ci.jenkins.io/job/Plugins/job/jira-trigger-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/jira-trigger-plugin/job/master/)
 [![Java 1.8](https://img.shields.io/badge/java-1.8-red.svg)](https://java.com)
@@ -94,3 +97,22 @@ If you are seeing "Received Webhook callback ..." but your build is not triggere
 
 ## Building Project
 To build, run acceptance test, and release commands, refer to [this document](docs/Building-Project.md)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://linkedin.com/in/rodrigc"><img src="https://avatars1.githubusercontent.com/u/1895943?v=4" width="100px;" alt=""/><br /><sub><b>Craig Rodrigues</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=rodrigc" title="Code">💻</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
