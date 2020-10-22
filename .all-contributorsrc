@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "rodrigc",
+      "name": "Craig Rodrigues",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1895943?v=4",
+      "profile": "https://linkedin.com/in/rodrigc",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "jira-trigger-plugin",
+  "projectOwner": "jenkinsci",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
