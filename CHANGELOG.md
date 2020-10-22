@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 2020-10-22
+
+## Fixed
+- [JENKINS-58987](https://issues.jenkins-ci.org/browse/JENKINS-58987) issue_updated trigger handler can't find "name" field in JSON ([zztalker](https://github.com/zztalker) [rodrigc](https://github.com/rodrigc))
+
 ## [1.0.0] - 2019-04-14
 ### Changed
 - [GH-3](https://github.com/jenkinsci/jira-trigger-plugin/pull/3) Upgraded Jenkins core version from 2.73 to 2.76
@@ -107,7 +112,9 @@
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.3...HEAD
+[Unreleased]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.3...v1.0.0
 [0.6.3]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/jenkinsci/jira-trigger-plugin/compare/v0.6.0...v0.6.1
