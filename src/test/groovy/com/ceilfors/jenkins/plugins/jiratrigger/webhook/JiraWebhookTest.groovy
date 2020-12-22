@@ -8,7 +8,9 @@ import spock.lang.Specification
 
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
+import static org.joda.time.DateTimeZone.UTC
 import static spock.util.matcher.HamcrestSupport.expect
+
 /**
  * @author ceilfors
  */
@@ -102,12 +104,13 @@ class JiraWebhookTest extends Specification {
         jiraWebhook.processEvent(Mock(StaplerRequest), createIssueUpdatedWithCommentEvent())
 
         then:
+        def expectedDateTime = new DateTime(2015, 12, 20, 18, 25, 9, 582, UTC)
         1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
         expect commentEvent.comment.body, is('comment body')
         expect commentEvent.comment.author.name, is('admin')
         expect commentEvent.webhookEventType, is(JiraWebhook.ISSUE_UPDATED_WEBHOOK_EVENT)
-        expect commentEvent.issue.creationDate, is(new DateTime(2015, 12, 20, 18, 25, 9, 582))
-        expect commentEvent.issue.updateDate, is(new DateTime(2015, 12, 20, 18, 25, 9, 582))
+        expect commentEvent.issue.creationDate.toDateTime(UTC), is(expectedDateTime)
+        expect commentEvent.issue.updateDate.toDateTime(UTC), is(expectedDateTime)
     }
 
     def 'Should not fire comment created event when an issue is updated without comments'() {
@@ -136,11 +139,12 @@ class JiraWebhookTest extends Specification {
         jiraWebhook.processEvent(Mock(StaplerRequest), createCloudCommentAddedEvent())
 
         then:
+        def expectedDateTime = new DateTime(1980, 1, 1, 0, 0, 0, 0, UTC)
         1 * listener.commentCreated(_) >> { args -> commentEvent = args[0] }
         expect commentEvent.comment.body, is('comment body')
         expect commentEvent.comment.author.name, is('admin')
         expect commentEvent.webhookEventType, is(JiraWebhook.COMMENT_CREATED_WEBHOOK_EVENT)
-        expect commentEvent.issue.creationDate, is(new DateTime(1980, 1, 1, 0, 0, 0, 0))
-        expect commentEvent.issue.updateDate, is(new DateTime(1980, 1, 1, 0, 0, 0, 0))
+        expect commentEvent.issue.creationDate.toDateTime(UTC), is(expectedDateTime)
+        expect commentEvent.issue.updateDate.toDateTime(UTC), is(expectedDateTime)
     }
 }
