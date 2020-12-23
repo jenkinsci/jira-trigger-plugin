@@ -13,6 +13,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rodrigc",
+      "name": "Craig Rodrigues",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1895943?v=4",
+      "profile": "https://linkedin.com/in/rodrigc",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sghill",
+      "name": "Steve Hill",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/230004?v=4",
+      "profile": "https://github.com/sghill",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
