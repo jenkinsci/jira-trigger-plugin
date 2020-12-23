@@ -107,6 +107,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
+    <td align="center"><a href="https://medium.com/@zztalker"><img src="https://avatars0.githubusercontent.com/u/1027857?v=4" width="100px;" alt=""/><br /><sub><b>Pavel Zaikin</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=zztalker" title="Code">💻</a></td>
     <td align="center"><a href="https://linkedin.com/in/rodrigc"><img src="https://avatars1.githubusercontent.com/u/1895943?v=4" width="100px;" alt=""/><br /><sub><b>Craig Rodrigues</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=rodrigc" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/sghill"><img src="https://avatars3.githubusercontent.com/u/230004?v=4" width="100px;" alt=""/><br /><sub><b>Steve Hill</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=sghill" title="Code">💻</a></td>
   </tr>

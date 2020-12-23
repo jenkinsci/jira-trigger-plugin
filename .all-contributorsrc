@@ -6,6 +6,15 @@
   "commit": false,
   "contributors": [
     {
+      "login": "zztalker",
+      "name": "Pavel Zaikin",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1027857?v=4",
+      "profile": "https://medium.com/@zztalker",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
       "login": "rodrigc",
       "name": "Craig Rodrigues",
       "avatar_url": "https://avatars1.githubusercontent.com/u/1895943?v=4",
