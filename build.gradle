@@ -59,6 +59,10 @@ dependencies {
     jenkinsTest 'org.jenkins-ci.plugins.workflow:workflow-step-api:2.10@jar' // used by workflow-job
 }
 
+test {
+    dependsOn('generate-test-hpl')
+}
+
 task integrationTest(type: Test) {
     testClassesDirs = sourceSets.integrationTest.output
     classpath = sourceSets.integrationTest.runtimeClasspath
