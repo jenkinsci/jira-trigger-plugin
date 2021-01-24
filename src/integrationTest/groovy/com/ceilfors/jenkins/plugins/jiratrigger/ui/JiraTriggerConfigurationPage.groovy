@@ -24,7 +24,7 @@ abstract class JiraTriggerConfigurationPage {
 
     void save() {
         HtmlForm form = configPage.getFormByName('config')
-        form.submit((HtmlButton) (form.getHtmlElementsByTagName('button')).last())
+        form.submit((HtmlButton) (form.getElementsByTagName('button')).last())
         configPage.cleanUp()
     }
 
