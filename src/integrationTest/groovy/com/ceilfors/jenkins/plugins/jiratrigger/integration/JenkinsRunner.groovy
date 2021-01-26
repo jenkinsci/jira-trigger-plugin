@@ -81,7 +81,7 @@ class JenkinsRunner extends JenkinsRule {
     }
 
     String getWebhookUrl() {
-        "${URL.toString()}${jiraWebhook.urlName}/"
+        "${this.URL.toString()}${jiraWebhook.urlName}/"
     }
 
     JiraChangelogTriggerProject createJiraChangelogTriggeredProject(String name) {

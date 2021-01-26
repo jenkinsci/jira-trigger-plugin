@@ -20,7 +20,7 @@ class JiraTriggerGlobalConfigurationPage {
 
     void save() {
         HtmlForm form = configPage.getFormByName('config')
-        form.submit((HtmlButton) (form.getHtmlElementsByTagName('button')).last())
+        form.submit((HtmlButton) (form.getElementsByTagName('button')).last())
     }
 
     void setRootUrl(String rootUrl) {
