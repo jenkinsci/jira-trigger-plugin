@@ -35,7 +35,7 @@ Check src/test/groovy/*AcceptanceTest to see how these features are expected to 
 
 1. Go to JIRA > Cog > System > Advanced > WebHooks (Requires admin permission)
 2. Create a new Webhook
-3. Set URL to: ${Jenkins URL}/jira-trigger-webhook-receiver/ e.g. http://localhost:8080/jenkins/jira-trigger-webhook-receiver/
+3. Set URL to: ${Jenkins URL}/jira-trigger-webhook-receiver/ e.g. http://localhost:8080/jira-trigger-webhook-receiver/
 4. Enable _issue updated_ event
 5. If you are on JIRA Cloud, enable _comment created_ event 
 6. Do **not** check *Exclude body* as this plugin requires the JSON to operate
