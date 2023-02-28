@@ -1,6 +1,6 @@
 # JIRA Trigger Plugin
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Build Status](https://ci.jenkins.io/job/Plugins/job/jira-trigger-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/jira-trigger-plugin/job/master/)
@@ -106,15 +106,19 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://medium.com/@zztalker"><img src="https://avatars0.githubusercontent.com/u/1027857?v=4" width="100px;" alt=""/><br /><sub><b>Pavel Zaikin</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=zztalker" title="Code">💻</a></td>
-    <td align="center"><a href="https://linkedin.com/in/rodrigc"><img src="https://avatars1.githubusercontent.com/u/1895943?v=4" width="100px;" alt=""/><br /><sub><b>Craig Rodrigues</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=rodrigc" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/sghill"><img src="https://avatars3.githubusercontent.com/u/230004?v=4" width="100px;" alt=""/><br /><sub><b>Steve Hill</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=sghill" title="Code">💻</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://medium.com/@zztalker"><img src="https://avatars0.githubusercontent.com/u/1027857?v=4?s=100" width="100px;" alt="Pavel Zaikin"/><br /><sub><b>Pavel Zaikin</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=zztalker" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://linkedin.com/in/rodrigc"><img src="https://avatars1.githubusercontent.com/u/1895943?v=4?s=100" width="100px;" alt="Craig Rodrigues"/><br /><sub><b>Craig Rodrigues</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=rodrigc" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sghill"><img src="https://avatars3.githubusercontent.com/u/230004?v=4?s=100" width="100px;" alt="Steve Hill"/><br /><sub><b>Steve Hill</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=sghill" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.duemir.net/"><img src="https://avatars.githubusercontent.com/u/348580?v=4?s=100" width="100px;" alt="Denys Digtiar"/><br /><sub><b>Denys Digtiar</b></sub></a><br /><a href="https://github.com/jenkinsci/jira-trigger-plugin/commits?author=duemir" title="Code">💻</a></td>
+    </tr>
+  </tbody>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
