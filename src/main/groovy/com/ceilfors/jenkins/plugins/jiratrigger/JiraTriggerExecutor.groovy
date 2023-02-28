@@ -13,6 +13,7 @@ import jenkins.model.Jenkins
 
 import javax.inject.Inject
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.logging.Level
 
 import static com.ceilfors.jenkins.plugins.jiratrigger.JiraTrigger.JiraTriggerDescriptor
 
@@ -76,9 +77,13 @@ class JiraTriggerExecutor implements JiraWebhookListener {
         List<AbstractProject> scheduledProjects = []
         List<? extends JiraTrigger> triggers = getTriggers(triggerClass)
         for (trigger in triggers) {
-            boolean scheduled = trigger.run(issue, jiraObject)
-            if (scheduled) {
-                scheduledProjects << trigger.job
+            try {
+                boolean scheduled = trigger.run(issue, jiraObject)
+                if (scheduled) {
+                    scheduledProjects << trigger.job
+                }
+            } catch (e) {
+                log.log(Level.WARNING, e, {"Error triggering \"${trigger.job?.fullName}\""})
             }
         }
         scheduledProjects
