@@ -31,6 +31,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "duemir",
+      "name": "Denys Digtiar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/348580?v=4",
+      "profile": "https://www.duemir.net/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -38,5 +47,6 @@
   "projectOwner": "jenkinsci",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
