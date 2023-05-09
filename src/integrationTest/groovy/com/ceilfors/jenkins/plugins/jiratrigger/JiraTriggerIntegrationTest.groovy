@@ -226,18 +226,16 @@ class JiraTriggerIntegrationTest extends Specification {
     @Issue('JENKINS-66646')
     def 'Should not let Jira client exception bubble up'() {
         given:
-        def testIssueKey = "JENKINS-66646"
-        def testFilter = 'foo = bar'
-        def project = jenkins.createJiraChangelogTriggeredProject(testIssueKey)
-        project.jiraTrigger.jqlFilter = testFilter
+        def project = jenkins.createJiraChangelogTriggeredProject('JENKINS-66646')
+        project.jiraTrigger.jqlFilter = 'foo = bar'
         // I tried to use `Stub` here but couldn't make it work for unclear reason.
         jenkins.jiraClient = new JiraClient() {
             @Override
-            void addComment(String issueKey, String comment) {}
+            void addComment(String issueKey, String comment) { /* unused */ }
 
             @Override
             boolean validateIssueKey(String issueKey, String jqlFilter) {
-                throw new RestClientException([new ErrorCollection("Bad JQL")], 400)
+                throw new RestClientException([new ErrorCollection('Bad JQL')], 400)
             }
         }
 
