@@ -84,7 +84,7 @@ class JiraTriggerExecutor implements JiraWebhookListener {
                 }
             } catch (e) {
                 log.log(Level.WARNING, e) {
-                    "Error triggering \"${trigger.job?.fullName}\""
+                    "Error triggering \"${trigger.job?.fullName}\"".toString()
                 }
             }
         }

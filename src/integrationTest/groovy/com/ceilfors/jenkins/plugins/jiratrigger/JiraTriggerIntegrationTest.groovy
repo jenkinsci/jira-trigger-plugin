@@ -1,9 +1,13 @@
 package com.ceilfors.jenkins.plugins.jiratrigger
 
+import com.atlassian.jira.rest.client.api.RestClientException
+import com.atlassian.jira.rest.client.api.domain.ChangelogGroup
+import com.atlassian.jira.rest.client.api.domain.util.ErrorCollection
 import com.ceilfors.jenkins.plugins.jiratrigger.changelog.CustomFieldChangelogMatcher
 import com.ceilfors.jenkins.plugins.jiratrigger.changelog.JiraFieldChangelogMatcher
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JenkinsRunner
 import com.ceilfors.jenkins.plugins.jiratrigger.integration.JulLogLevelRule
+import com.ceilfors.jenkins.plugins.jiratrigger.jira.JiraClient
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException
 import hudson.model.AbstractBuild
 import hudson.model.FreeStyleProject
@@ -22,6 +26,7 @@ import spock.lang.Specification
 import static org.hamcrest.Matchers.isEmptyOrNullString
 import static org.hamcrest.Matchers.not
 import static org.junit.Assert.assertThat
+
 /**
  * @author ceilfors
  */
@@ -216,5 +221,35 @@ class JiraTriggerIntegrationTest extends Specification {
         then:
         FailingHttpStatusCodeException exception = thrown(FailingHttpStatusCodeException)
         exception.statusCode == 403
+    }
+
+    @Issue('JENKINS-66646')
+    def 'Should not let Jira client exception bubble up'() {
+        given:
+        def testIssueKey = "JENKINS-66646"
+        def testFilter = 'foo = bar'
+        def project = jenkins.createJiraChangelogTriggeredProject(testIssueKey)
+        project.jiraTrigger.jqlFilter = testFilter
+        // I tried to use `Stub` here but couldn't make it work for unclear reason.
+        jenkins.jiraClient = new JiraClient() {
+            @Override
+            void addComment(String issueKey, String comment) {}
+
+            @Override
+            boolean validateIssueKey(String issueKey, String jqlFilter) {
+                throw new RestClientException([new ErrorCollection("Bad JQL")], 400)
+            }
+        }
+
+        when:
+        // JENKINS-66646 is about this failing with exception instead of completing while skipping failed triggers
+        def builds = jenkins.jiraTriggerExecutor.scheduleBuilds(
+                TestUtils.createIssue('TEST-1234'),
+                new ChangelogGroup(null, null, null))
+
+        then:
+        // Test shouldn't fail with exception.
+        builds.size() == 0
+        // and there should be a message in the system log, but how do one asserts that?
     }
 }
