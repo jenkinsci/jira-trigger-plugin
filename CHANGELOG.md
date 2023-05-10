@@ -2,11 +2,17 @@
 
 ## [Unreleased]
 
+## [1.0.3] - 2023-05-10
+
+## Fixed
+
+- [JENKINS-66646](https://issues.jenkins.io/browse/JENKINS-66646) Guard against exceptions when triggering ([duemir](https://github.com/duemir))
+
 ## [1.0.2] - 2023-02-28
 
 ## Fixed
 
-- [JENKINS-58987](https://issues.jenkins.io/browse/JENKINS-66646) Guard against exceptions when triggering ([duemir](https://github.com/zztalker) [rodrigc](https://github.com/duemir))
+- [JENKINS-66646](https://issues.jenkins.io/browse/JENKINS-66646) Guard against exceptions when triggering ([duemir](https://github.com/duemir))
 
 ## [1.0.1] - 2020-10-22
 
