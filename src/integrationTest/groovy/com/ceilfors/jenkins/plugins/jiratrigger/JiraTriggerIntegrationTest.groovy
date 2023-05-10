@@ -228,7 +228,6 @@ class JiraTriggerIntegrationTest extends Specification {
         given:
         def project = jenkins.createJiraChangelogTriggeredProject('JENKINS-66646')
         project.jiraTrigger.jqlFilter = 'foo = bar'
-        // I tried to use `Stub` here but couldn't make it work for unclear reason.
         jenkins.jiraClient = new JiraClient() {
             @Override
             void addComment(String issueKey, String comment) { /* unused */ }
@@ -240,7 +239,6 @@ class JiraTriggerIntegrationTest extends Specification {
         }
 
         when:
-        // JENKINS-66646 is about this failing with exception instead of completing while skipping failed triggers
         def builds = jenkins.jiraTriggerExecutor.scheduleBuilds(
                 TestUtils.createIssue('TEST-1234'),
                 new ChangelogGroup(null, null, null))
@@ -248,6 +246,5 @@ class JiraTriggerIntegrationTest extends Specification {
         then:
         // Test shouldn't fail with exception.
         builds.size() == 0
-        // and there should be a message in the system log, but how do one asserts that?
     }
 }
