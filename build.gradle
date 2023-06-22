@@ -61,35 +61,34 @@ dependencies {
     testImplementation 'org.jenkins-ci.plugins.workflow:workflow-job'
 }
 
-task integrationTest(type: Test) {
+def integrationTest = tasks.register('integrationTest', Test) {
     testClassesDirs = sourceSets.integrationTest.output
     classpath = sourceSets.integrationTest.runtimeClasspath
     mustRunAfter test
 }
-task jiraIntegrationTest(type: Test) {
+tasks.register('jiraIntegrationTest', Test) {
     testClassesDirs = sourceSets.jiraIntegrationTest.output
     classpath = sourceSets.jiraIntegrationTest.runtimeClasspath
     mustRunAfter integrationTest
 }
-check.dependsOn integrationTest
+tasks.named('check').configure {
+    dependsOn integrationTest
+}
 
-tasks.withType(Test) {
-    reports.html.destination = file("${reporting.baseDir}/${name}")
+tasks.withType(Test).configureEach {
+    reports.html.outputLocation.set(file("${reporting.baseDir}/${name}"))
 }
 
 jenkinsPlugin {
     jenkinsVersion = '2.235.1'
-    shortName = 'jira-trigger'
-    displayName = 'JIRA Trigger Plugin'
-    url = 'http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin'
+    pluginId = 'jira-trigger'
+    humanReadableName = 'JIRA Trigger Plugin'
+    homePage = uri('http://wiki.jenkins-ci.org/display/JENKINS/JIRA+Trigger+Plugin')
     gitHubUrl = 'https://github.com/ceilfors/jira-trigger-plugin'
-    compatibleSinceVersion = '0.2.0'
+    minimumJenkinsCoreVersion = '0.2.0'
 
     // enable injection of additional tests for checking the syntax of Jelly and other things
-    disabledTestInjection = false
-
-    // the output directory for the localizer task relative to the project root, defaults to the value shown
-    localizerOutputDir = "${project.buildDir}/generated-src/localizer"
+    generateTests = true
 
     fileExtension = 'jpi'
 
