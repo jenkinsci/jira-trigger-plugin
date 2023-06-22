@@ -32,10 +32,10 @@ sourceSets {
 }
 
 configurations {
-    integrationTestCompile.extendsFrom testCompileClasspath
-    integrationTestRuntime.extendsFrom testRuntimeClasspath
-    jiraIntegrationTestCompile.extendsFrom integrationTestCompile
-    jiraIntegrationTestRuntime.extendsFrom integrationTestRuntime
+    integrationTestCompileClasspath.extendsFrom testCompileClasspath
+    integrationTestRuntimeClasspath.extendsFrom testRuntimeClasspath
+    jiraIntegrationTestCompileClasspath.extendsFrom integrationTestCompileClasspath
+    jiraIntegrationTestRuntimeClasspath.extendsFrom integrationTestRuntimeClasspath
 }
 
 dependencies {
@@ -127,6 +127,6 @@ idea {
     module {
         testSourceDirs += file('src/integrationTest/groovy')
         testSourceDirs += file('src/jiraIntegrationTest/groovy')
-        scopes.TEST.plus += [ configurations.integrationTestCompile, configurations.jiraIntegrationTestRuntime ]
+        scopes.TEST.plus += [ configurations.integrationTestCompileClasspath, configurations.jiraIntegrationTestRuntimeClasspath ]
     }
 }
