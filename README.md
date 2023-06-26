@@ -1,4 +1,4 @@
-# :exclamation: We are looking for a new maintainer for this project. :exclamation:
+# :exclamation: New maintainer needed :exclamation:
 
 I no longer use Jenkins for work, and it's becoming harder for me to support the maintenance of this plugin. If you're heavily using this plugin and would like this plugin to continue being maintained, please reach out to me at [Twitter](https://twitter.com/ceilfors), or create a new ticket in [JENKINS issue tracker](https://issues.jenkins-ci.org/secure/Dashboard.jspa) and assign it to me, I'm more than happy to walk you through what's going on in the codebase.
 
