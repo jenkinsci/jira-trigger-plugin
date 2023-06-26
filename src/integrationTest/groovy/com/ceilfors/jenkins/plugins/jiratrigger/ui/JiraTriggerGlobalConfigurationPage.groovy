@@ -4,7 +4,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlButton
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput
 import com.gargoylesoftware.htmlunit.html.HtmlForm
 import com.gargoylesoftware.htmlunit.html.HtmlPage
-import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput
 
 /**
@@ -36,7 +35,7 @@ class JiraTriggerGlobalConfigurationPage {
         jiraCommentReplyCheckBox.setChecked(active)
     }
 
-    private HtmlPasswordInput getJiraPassword() {
+    private HtmlTextInput getJiraPassword() {
         throwIfNotFound('jiraPassword') {
             configPage.getFirstByXPath('//input[contains(@name, "jiraPassword")]')
         }
